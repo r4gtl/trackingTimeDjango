@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+
+{% block head_title %}
+{% if origine == "prova" %}{{ block.super }} - Operatore già Attivo
+{% else %}{{ block.super }} - Operatore Dimesso{% endif %}
+{% endblock head_title %}
+
+{% block content %}
+<div class="row justify-content-center mt-3">
+    <div class="col-4 text-center">
+        {% if origine == "prova" %}
+        <h4>Operatore già impegnato!</h4>
+        {% else %}
+        <h4>Operatore dimesso!</h4>
+        {% endif %}
+        <a class="btn btn-outline-danger" href="{% url 'cerca_operatore_attivo' pk=dettaglio_attivo.pk %}" role="button"
+                ><i class="bi bi-arrow-counterclockwise"></i> Annulla</a>
+    </div>
+</div>
+{% endblock content %}

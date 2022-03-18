@@ -1,0 +1,159 @@
+{% extends 'base.html' %}
+
+
+{% block head_title %}{{ block.super }} - Dashboard{% endblock head_title %}
+
+
+{% block content %}
+
+<div style="display:fixed;">
+    <h1>Lista Ordini</h1>
+    <a href="{% url 'lista_ordini' %}">Tutti gli ordini</a>
+</div>
+
+<div class="form-inline my-2 my-lg-0">
+  <form class="d-flex" action="{% url 'funzione_cerca' %}">
+    <input
+      name="q"
+      class="form-control me-sm-2"
+      type="search"
+      placeholder="Cosa stai cercando?"
+      aria-label="Search"
+      autofocus="True"
+    />
+    <button class="btn btn-outline-info" type="submit"  >Cerca</button>
+  </form>
+  
+</div>
+<br>
+  <div class="container-fluid">
+    
+  <div class="table-responsive">
+  <table class="table table-hover table-striped table-bordered">
+    <thead class="thead-dark">
+    <tr>        
+      <th>Azioni</th>
+      <th>Nr. Ordine</th>
+      <th>Nr. Commessa</th>
+      <th>Codice</th>
+      <th>Collegamento</th>
+      <th>Data Ordine</th>
+      <th>Cliente</th> 
+      <th>Stato Lavorazione</th>
+                  
+    </tr>
+  </thead>
+    
+    <tbody>
+      {% for dettaglio_ordini in dettaglio_ordini %}
+          <td class="col-md-1" style="text-align: center;"><a href="{{ dettaglio_ordini.get_absolute_url }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+          </svg></a></td>
+          <td class="col-md-1" >{{ dettaglio_ordini.idordine.nordine }}</td>          
+          <td class="col-md-1" >{{ dettaglio_ordini.ncommessa|default_if_none:" " }}</td>  
+          <td class="col-md-1" >{{ dettaglio_ordini.idcomponente.codice|default_if_none:" "  }}</td>
+          <td class="col-md-1">{{ dettaglio_ordini.idcollegamento.codicecollegamento|default_if_none:" " }}</td>
+          <td style="text-align: right;">{{ dettaglio_ordini.idordine.dataordine|date:'d/m/Y' }}</td>          
+          <td>{{ dettaglio_ordini.idordine.idcliente.ragionesociale }}</td> 
+          {% if dettaglio_ordini.inlavoro is False %} 
+          {% if dettaglio_ordini.completato is False %}<td style="background-color: red;">non completato </td>                        
+          {% else %}<td style="background-color: green;">completato</td>           
+          {% endif %}
+          {% else %}
+          <td style="background-color: yellow;">in lavorazione</td>
+          {% endif %}
+        </tr>
+      
+      {% endfor %}
+      
+    </tbody>
+  </table>
+  <!-- <div class="pagination">
+    <span class="step-links">
+        {% if dettaglio_ordini.has_previous %}
+            <a class="btn btn-info" href="?page=1">&laquo; Prima</a>
+            <a class="btn btn-info" href="?page={{ dettaglio_ordini.previous_page_number }}">Precedente &raquo;</a>
+            
+        {% endif %}
+
+        <span class="current">
+            Page {{ dettaglio_ordini.number }} of {{ dettaglio_ordini.paginator.num_pages }}.
+        </span>
+
+        {% if dettaglio_ordini.has_next %}
+        
+            <a class="btn btn-info" href="?page={{ dettaglio_ordini.next_page_number }}">Successiva</a>
+            <a class="btn btn-info" href="?page={{ dettaglio_ordini.paginator.num_pages }}">Ultima &raquo;</a>
+            
+        {% endif %}
+    </span>
+</div> -->
+</div>
+</div>
+  
+  <br>
+  <hr>
+  <br>
+
+
+
+
+  <div style="display:fixed;">
+    <h1>Operatori Attivi</h1>
+</div>
+  <div class="container-fluid">
+  <div class="table-responsive">
+  <table class="table table-hover table-striped table-bordered">
+    <thead class="thead-dark">
+    <tr>              
+      <th>Operatore</th>      
+      <th>Fase</th>
+      <th>Data Inizio</th>
+      <th>Ora Inizio</th>
+      
+    </tr>
+  </thead>
+    <hr>
+    <tbody>
+      {% for operatori_attivi in operatori_attivi %}
+
+          <td>{{ operatori_attivi.idoperatore }}</td>
+           
+          
+          <td>{{ operatori_attivi.idfase|default_if_none:"0" }}</td>    
+          <td>{{ operatori_attivi.datatempo|date:'d/m/Y' }}</td>
+          <td>{{ operatori_attivi.orainizio }}</td>
+          <!-- <td>{{ operatori_attivi.orafine|default_if_none:"" }}</td>        -->
+         
+        </tr>
+      
+      {% endfor %}
+      <hr>
+    </tbody>
+  </table>
+  <!-- <div class="pagination">
+    <span class="step-links">
+        {% if operatori_attivi.has_previous %}
+            <a class="btn btn-info" href="?page=1">&laquo; Prima</a>
+            <a class="btn btn-info" href="?page={{ operator_list.previous_page_number }}">Precedente &raquo;</a>
+            
+        {% endif %}
+
+        <span class="current">
+            Page {{ operatori_attivi.number }} of {{ operatori_attivi.paginator.num_pages }}.
+        </span>
+
+        {% if operatori_attivi.has_next %}
+        
+            <a class="btn btn-info" href="?page={{ operator_list.next_page_number }}">Successiva</a>
+            <a class="btn btn-info" href="?page={{ operator_list.paginator.num_pages }}">Ultima &raquo;</a>
+            
+        {% endif %}
+    </span>
+</div> -->
+</div>
+</div>
+  
+
+
+{% endblock content %}

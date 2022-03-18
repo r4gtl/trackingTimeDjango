@@ -1,0 +1,32 @@
+td.red {
+    
+    background-color: red;
+}
+td.orange {
+    background-color: orange;
+}
+td.green {
+    background-color: green;
+}
+
+
+
+.table-responsive{
+    font-size: 16px;
+  }
+
+
+.navbar-custom {
+    background-color: #005f73;
+}
+
+@media screen and (max-width:768px){
+    .table-responsive{
+        font-size: 12px;
+    }
+    tr, td {   
+        
+        height:10px;               
+        }
+}
+

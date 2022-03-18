@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block head_title %}{{ block.super }} - Crea Tempo{% endblock head_title %}
+
+{% block content %}
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+
+<div class="container">
+<form method="POST" novalidate> {% csrf_token %}
+    
+<div class="form row g-3">
+    <div class="col-md-6">  
+      {{ form.id_linea|as_crispy_field }} 
+             
+    </div>
+    <div class="col-md-6">
+        {{ form.idoperatore|as_crispy_field }} 
+    </div>
+    <div class="col-md-6">
+        {{ form.idfase|as_crispy_field }} 
+    </div>
+    <div class="col-md-6">
+        {{ form.datatempo|as_crispy_field }} 
+        
+    </div>
+    <div class="col-md-6">
+        
+        {{ form.orainizio|as_crispy_field }}         
+    </div>
+    
+    <div class="col-md-6">
+        {{ form.orafine|as_crispy_field }}         
+    </div>
+    <div class="col-md-6">
+        {{ form.quantitatemporiparazione|as_crispy_field }}         
+    </div>
+    <div class="col-md-6">
+        {{ form.note|as_crispy_field }}         
+    </div>
+    <input type="submit" class="btn btn-info" value="Salva">
+
+</div>
+</form>
+</div>
+{% endblock content %}

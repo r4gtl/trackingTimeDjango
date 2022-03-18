@@ -1,0 +1,131 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block head_title %}{{ block.super }} - {{ dettaglio.idordine }}{% endblock head_title %}
+
+
+{% block content %}
+
+<div class="card">
+    <div class="card-header">
+        <h3>Ragione Sociale {{ dettaglio.idordine.idcliente.ragionesociale }} - Ordine N. {{ dettaglio.idordine }} - Data Ordine {{ dettaglio.idordine.dataordine|date:'d/m/Y' }}</h3>
+        <hr>
+        
+        {% if dettaglio.idcollegamento == None %}
+        <h3 class ="card-text">Codice: {{ dettaglio.idcomponente }} | Descrizione: {{ dettaglio.idcomponente.descrizione }}</h3>
+        
+        {% else %}
+        <h3 class ="card-text">Collegamento: {{ dettaglio.idcollegamento }}</h3><h3 class ="card-text">Descrizione: {{ dettaglio.idcollegamento.descrizione }}</h3>
+        
+        {% endif %}
+        <hr>
+        <h4>Commessa: {{ dettaglio.ncommessa }} | Quantità: {{ dettaglio.quantità }} | Data Consegna: {{ dettaglio.dataconsegna|date:'d/m/Y' }}</h4>
+        <h4>Note dall'ufficio: {{ dettaglio.descrizione }}</h4>
+        <hr>
+
+
+        
+        <form class="" method="POST" novalidate>
+            {% csrf_token %}
+            <div class="form row g-3">
+                <div class="col-md-9">
+                    {{ form.noteconteggi|default_if_none:" "|as_crispy_field }} 
+                </div>
+                
+            
+                <div class="col-md-3"> 
+                    <div class="form row g-3" >
+                        {{ form.quantitatempo|default_if_none:" "|as_crispy_field }} 
+                    </div>   
+                    <div class="form row g-3">
+                        <input type="submit" class="btn btn-info" value="Ok">
+                    </div>
+                    <div class="form row g-3 mt-5">
+                        {% if form.completato.value is True %}
+                        <a class="btn btn-outline-success btn-lg" href="{% url 'apri_lavorazione' pk=dettaglio.pk %}" role="button"                       
+                            ><i class="bi bi-alarm"></i> Riapri</a>
+                        
+                        
+                        {% else %}
+                        <a class="btn btn-outline-danger btn-lg" href="{% url 'chiudi_lavorazione' pk=dettaglio.pk %}" role="button"                       
+                            ><i class="bi bi-alarm-fill"></i> Chiudi Lavorazione</a>
+                        {% endif %}
+                        
+                    </div>      
+                </div>
+            </div>  
+
+            
+            
+        </form>
+    </div>
+</div>
+
+<hr>
+
+
+
+<div style="display:fixed;">
+    <h1>Operatori Attivi</h1> 
+    <a class="btn btn-sm btn-info" href="{% url 'crea_tempo' pk=dettaglio.iddettordine %}">Aggiungi operatore manualmente</a>
+    <br>
+    <br>
+    <p>...oppure...</p>
+    
+    <div class="form-inline my-2 my-lg-0">
+        <form class="d-flex" action="{% url 'crea_tempo_barcode' pk=dettaglio.iddettordine  %}">
+          <input
+            name="q"
+            class="form-control me-sm-2"
+            type="search"
+            placeholder="Leggi il codice a barre..."
+            aria-label="Search"
+            autofocus="True"
+          />
+          <button class="btn btn-outline-info" type="submit"  >Cerca</button>
+        </form>
+        
+      </div>
+</div>
+
+<div class="container">
+<div class="table-responsive">
+<table class="table table-hover table-striped table-bordered">
+<thead class="thead-dark">
+<tr>          
+    <th style="text-align: center;">Azioni</th>      
+    <th style="text-align: center;">Operatore</th>    
+    <th style="text-align: center;">Fase</th>
+    <th style="text-align: center;">Data</th>
+    <th style="text-align: center;">Ora Inizio</th>     
+    <th style="text-align: center;">Chiudi</th>
+    <th style="text-align: center;">Cancella</th> 
+    
+                
+</tr>
+</thead>
+<hr>
+<tbody>
+    {% for operatori_attivi in operatori_attivi %}
+        <td style="text-align: center;"><a href="{% url 'aggiorna_operatore' id=dettaglio.pk pk=operatori_attivi.pk %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+        </svg></a></td>
+        <td>{{ operatori_attivi.idoperatore }}</td>
+        <td>{{ operatori_attivi.idfase }}</td>  
+        <td>{{ operatori_attivi.datatempo }}</td>
+        <td>{{ operatori_attivi.orainizio }}</td> 
+        <td style="text-align: center;"><a class="btn btn-outline-success" href="{% url 'chiudi_operatore' pk=operatori_attivi.pk %}" role="button"
+            ><i class="bi bi-alarm"></i> Chiudi</a></td>
+            <td style="text-align: center;"><a class="btn btn-outline-danger" href="{% url 'cancella_operatore' id=dettaglio.pk pk=operatori_attivi.pk %}" role="button"
+                ><i class="bi bi-trash"></i> Cancella</a></td>         
+        
+        
+    </tr>
+    
+    {% endfor %}
+    <hr>
+</tbody>
+</table>
+
+{% endblock content %}
