@@ -18,65 +18,13 @@
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <div class="container-fluid">
-        <div class="container-fluid">
-          <a class="navbar-brand" href="#">
-            <img src="{%  static 'logo_X1.png' %}" alt="" width="100" height="65">
-          </a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarTogglerDemo03" aria-controls="navbarTogglerDemo03" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
-          <div class="collapse navbar-collapse" id="navbarTogglerDemo03">
-
-            <!-- <form class="d-flex">
-              <input class="form-control me-2" type="search" placeholder="Cosa stai cercando?" aria-label="Search">
-              <button class="btn btn-outline-info" type="submit">Cerca</button>
-            </form> -->
-
-           
-              <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="/">Dashboard</a>
-              </li>
-            
-              {% if request.user.is_authenticated %}
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  {{ request.user.username }}
-                </a>                
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                  <li><a class="dropdown-item" href="#">Profilo</a></li>
-                  <li><a class="dropdown-item" href="{% url 'password_change' %}">Aggiorna Password</a></li>
-                  <li><hr class="dropdown-divider"></li>
-                  <li><a class="dropdown-item" href="{% url 'logout' %}">Esci</a></li>
-                </ul>
-              </li> 
-            {% else %}   
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'registration_view' %}">Registrazione</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'login' %}">Login</a>
-              </li>     
-            {% endif %}
-            </ul>
-            
-          </div>
-        </div>
-      </div>
-      </nav>
+    {% include 'partials/_navbar.html' %}
     
 <div class="container-fluid">
 {% block content %}
 
 {% endblock content %}
 </div>
-
-
-
-
-
 
 <!-- Optional JavaScript; choose one of the two! -->
 
