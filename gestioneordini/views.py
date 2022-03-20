@@ -312,6 +312,9 @@ class TempoUpdateView(UpdateView):
         def get_success_url(self):
                 post = self.object.iddettordine 
                 return reverse_lazy( 'visualizza_dettaglio', kwargs={'pk': post.iddettordine})
+        
+        def get_initial(self):
+            return {'datatempo': datetime.date.today}
 
 
 
