@@ -23,15 +23,14 @@ from django.contrib import messages
 
 
 def my_view(request):
-    username = request.POST['username']
-    password = request.POST['password']
-    user = authenticate(request, username=username, password=password)
-    if user is not None:
-        login(request, user)
-        return render(request, "/dashboard.html")
-        
-    else:
-        return render(request, "registration/login.html")
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+                login(request, user)
+                return render(request, "/dashboard.html")
+        else:
+                return render(request, "registration/login.html")
         
 
 
@@ -71,24 +70,24 @@ def visualizza_dettaglio(request, pk):
 
 
 def cerca(request):
-    if "q" in request.GET:
-        querystring = request.GET.get("q")
-        print(querystring)
-        if len(querystring) == 0:
-            return redirect("/cerca/")
-        dettaglio = get_object_or_404(Tbldettaglioordini, pk=querystring)
-        operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio, orafine__isnull = True).order_by('-datatempo')
-        form=FormDettaglio(request.POST or None, instance = dettaglio)
-        context = {"dettaglio": dettaglio, "operatori_attivi": operatori_attivi, 'form':form}        
-        if request.method == 'POST':
-#                 # form=FormDettaglio(request.POST)
-                if form.is_valid():
-                        dettaglio_salvato = form.save(commit=False)
-                        dettaglio_salvato.save()
-                        return HttpResponseRedirect(dettaglio.get_absolute_url())
-        return render(request, "singolo_dettaglio.html", context)
-    else:
-        return render(request, "singolo_dettaglio.html",)
+        if "q" in request.GET:
+                querystring = request.GET.get("q")
+                print(querystring)
+                if len(querystring) == 0:
+                        return redirect("/cerca/")
+                dettaglio = get_object_or_404(Tbldettaglioordini, pk=querystring)
+                operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio, orafine__isnull = True).order_by('-datatempo')
+                form=FormDettaglio(request.POST or None, instance = dettaglio)
+                context = {"dettaglio": dettaglio, "operatori_attivi": operatori_attivi, 'form':form}        
+                if request.method == 'POST':
+        #                 # form=FormDettaglio(request.POST)
+                        if form.is_valid():
+                                dettaglio_salvato = form.save(commit=False)
+                                dettaglio_salvato.save()
+                                return HttpResponseRedirect(dettaglio.get_absolute_url())
+                return render(request, "singolo_dettaglio.html", context)
+        else:
+                return render(request, "singolo_dettaglio.html",)
 
 
 # def visualizza_dettaglio(request, pk):
@@ -153,8 +152,12 @@ class OperatorView(ListView):
 def dashboard(request):
         dettaglio_ordini = Tbldettaglioordini.objects.filter(inlavoro = True).order_by('-iddettordine')[:15]
         operatori_attivi = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')[:15]             
-
-        context = {"dettaglio_ordini": dettaglio_ordini,"operatori_attivi": operatori_attivi,} #"dettaglio_ordini_filter": dettaglio_ordini_filter}        
+        ordini_in_lavoro = Tbldettaglioordini.objects.filter(inlavoro = True).count
+        n_operatori = Tbltempi.objects.filter(orafine__isnull = True).count
+        context = {"dettaglio_ordini": dettaglio_ordini,
+                "operatori_attivi": operatori_attivi, 
+                "ordini_in_lavoro": ordini_in_lavoro,
+                "n_operatori": n_operatori} #"dettaglio_ordini_filter": dettaglio_ordini_filter}        
         
         return render(request, "dashboard.html", context)
 
@@ -314,7 +317,7 @@ class TempoUpdateView(UpdateView):
                 return reverse_lazy( 'visualizza_dettaglio', kwargs={'pk': post.iddettordine})
         
         def get_initial(self):
-            return {'datatempo': datetime.date.today}
+                return {'datatempo': datetime.date.today}
 
 
 

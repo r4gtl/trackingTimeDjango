@@ -36,14 +36,8 @@ class TempoModelForm(forms.ModelForm):
 
         fields = ["id_linea", "idoperatore", "idfase", "datatempo", "orainizio", "orafine", "quantitatemporiparazione", "note", ]
                 
-        widgets = { 
-            # "datatempo": forms.DateInput(format=('%Y-%m-%d'), 
-            #                         attrs={'class': 'form-control', 
-            #                         #'placeholder': 'Select a date',
-            #                         'type': 'date',
-            #                         'value' : "20/03/2022"
-            #                         }),
-            "datatempo": forms.DateInput(attrs={'class':'form-control', 'value': datetime.date.today().strftime("%d-%m-%Y")}),
+        widgets = {             
+            "datatempo": forms.DateInput(attrs={'class':'form-control', 'value': datetime.date.today().strftime("%d-%m-%Y"), 'type': 'date'}),
             "orainizio": forms.TimeInput(attrs={'type': 'time'}),
             "orafine": forms.TimeInput(attrs={'type': 'time'}),            
             "note": forms.Textarea(attrs={'cols': 80, 'rows': 2}),
@@ -61,4 +55,4 @@ class TempoModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TempoModelForm, self).__init__(*args, **kwargs)                
         self.fields['idoperatore'].queryset = Tbloperatori.objects.filter(dimesso__iexact="false").order_by('cognome')# or something else
-        #self.fields['datatempo']= datetime.date.today()
+        

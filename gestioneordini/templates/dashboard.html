@@ -7,7 +7,32 @@
 {% block content %}
 
 <div style="display:fixed;">
-    <h1>Lista Ordini</h1>
+  <!-- card con statistiche -->
+  
+  <div class="row row-cols-1 row-cols-md-2 g-4">
+    <div class="col">
+      <div class="card">        
+        <div class="card-body">
+          <h5 class="card-title">Ordini in lavoro</h5>
+          <p class="card-text">{{ ordini_in_lavoro }} <i class="fas fa-solid fa-rocket fa-3x" style="color: red" ></i></p>
+          
+        </div>
+      </div>
+    </div>
+    <div class="col">
+      <div class="card">        
+        <div class="card-body">
+          <h5 class="card-title">Operatori Impegnati</h5>
+          <p class="card-text">{{ n_operatori }} <i class="fas fa-solid fa-user fa-3x" style="color: red"></i></p> 
+        </div>
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- fine card con statistiche -->
+    <h3>Lista Ordini</h3>
+    
     <a href="{% url 'lista_ordini' %}">Tutti gli ordini</a>
 </div>
 
