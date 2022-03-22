@@ -12,8 +12,9 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import Qryoperatoriattivi, Qryordiniiniziale, TblLineeLav, Tbldettaglioordini, Tblfasi, Tbloperatori, Tbltempi
 from .filters import OrderFilter
 from .forms import FormDettaglio, TempoModelForm
-from datetime import datetime, time
+from datetime import datetime, time, timedelta
 from django.contrib import messages
+from django.utils import timezone
 
 
 # Create your views here.
@@ -154,6 +155,19 @@ def dashboard(request):
         operatori_attivi = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')[:15]             
         ordini_in_lavoro = Tbldettaglioordini.objects.filter(inlavoro = True).count
         n_operatori = Tbltempi.objects.filter(orafine__isnull = True).count
+        # d=timezone.now().date()-timedelta(days=180)
+        # print(d)
+        # query_tempi = Tbltempi.objects.filter(orafine__isnull = False).filter(datatempo__gte=d)
+        # sum_orari= 0
+        # for tempo in query_tempi:
+                
+        #         sum_orari_partial=0                
+        #         ora_inizio = time(tempo.orainizio)
+        #         ora_fine = time(tempo.orafine)
+        #         sum_orari_partial = timedelta(ora_fine-ora_inizio)
+        #         sum_orari += sum_orari_partial
+                
+        # print(sum_orari)
         context = {"dettaglio_ordini": dettaglio_ordini,
                 "operatori_attivi": operatori_attivi, 
                 "ordini_in_lavoro": ordini_in_lavoro,
