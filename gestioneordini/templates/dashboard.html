@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 
 {% block head_title %}{{ block.super }} - Dashboard{% endblock head_title %}
@@ -31,10 +32,11 @@
       <div class="card mb-3 shadow rounded" style="max-width: 540px;">
         <div class="row g-0">
         
-          <div class="col-md-8">
+          <div class="col-md-8 counter">
             <div class="card-body">
               <h5 class="card-title">Operatori Impegnati</h5>
-              <h5><p class="card-text text-end">{{ n_operatori }}</p></h5>
+              <!-- <h5><p class="card-text text-end">{{ n_operatori }}</p></h5> -->
+              <h5><p data-target="{{ n_operatori }}" class="card-text text-end count" >0</p></h5>
             </div>
           </div>
           <div class="col-md-4 align-self-center text-center">        
@@ -52,7 +54,7 @@
           <div class="col-md-8">
             <div class="card-body">
               <h5 class="card-title">Ultimi 7 giorni</h5>
-              <h5><p class="card-text text-end">17</p></h5>
+              <h5><p class="card-text text-end">{{ ore }} ore , {{ minuti }} minuti</p></h5>
             </div>
           </div>
           <div class="col-md-4 align-self-center text-center">        
@@ -221,3 +223,23 @@
 
 
 {% endblock content %}
+<script>
+  const counters = document.querySelectorAll('.count');
+const speed = 200;
+
+counters.forEach((counter) => {
+  const updateCount = () => {
+    const target = parseInt(counter.getAttribute('data-target'));
+    const count = parseInt(counter.innerText);
+    const increment = Math.trunc(target / speed);
+
+    if (count < target) {
+      counter.innerText = count + increment;
+      setTimeout(updateCount, 1);
+    } else {
+      counter.innerText = target;
+    }
+  };
+  updateCount();
+});
+</script>

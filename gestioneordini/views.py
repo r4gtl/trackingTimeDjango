@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy, reverse
-from django.db.models import Count, Q
+from django.db.models import Count, Q, F, DurationField, ExpressionWrapper, Sum
 from django.core.paginator import Paginator
 from django_filters.views import FilterView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -155,23 +155,31 @@ def dashboard(request):
         operatori_attivi = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')[:15]             
         ordini_in_lavoro = Tbldettaglioordini.objects.filter(inlavoro = True).count
         n_operatori = Tbltempi.objects.filter(orafine__isnull = True).count
-        # d=timezone.now().date()-timedelta(days=180)
-        # print(d)
-        # query_tempi = Tbltempi.objects.filter(orafine__isnull = False).filter(datatempo__gte=d)
-        # sum_orari= 0
-        # for tempo in query_tempi:
-                
-        #         sum_orari_partial=0                
-        #         ora_inizio = time(tempo.orainizio)
-        #         ora_fine = time(tempo.orafine)
-        #         sum_orari_partial = timedelta(ora_fine-ora_inizio)
-        #         sum_orari += sum_orari_partial
-                
-        # print(sum_orari)
+        
+        d=timezone.now().date()-timedelta(days=7)
+        
+        query_tempi = Tbltempi.objects.filter(orafine__isnull = False).filter(datatempo__gte=d).annotate(duration=ExpressionWrapper(
+                F('orafine') - F('orainizio'), output_field=DurationField()))
+        total_time = query_tempi.aggregate(total_time=Sum('duration'))
+        sum_time=total_time.get('total_time')        
+        if sum_time is not None:        
+                days=sum_time.days*60 
+                seconds=sum_time.seconds
+                hours=seconds//3600+days
+                minutes=(seconds//60)%60       
+        else:
+                days=0
+                seconds=0
+                hours=0
+                minutes=0
+        
+        
         context = {"dettaglio_ordini": dettaglio_ordini,
                 "operatori_attivi": operatori_attivi, 
                 "ordini_in_lavoro": ordini_in_lavoro,
-                "n_operatori": n_operatori} #"dettaglio_ordini_filter": dettaglio_ordini_filter}        
+                "n_operatori": n_operatori,
+                "ore": hours,
+                "minuti": minutes}
         
         return render(request, "dashboard.html", context)
 
