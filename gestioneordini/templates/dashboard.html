@@ -17,7 +17,9 @@
           <div class="col-md-8">
             <div class="card-body">
               <h5 class="card-title">Ordini in lavoro</h5>
-              <h5><p class="card-text text-end">{{ ordini_in_lavoro }}</p></h5>
+              <!-- <h5><p class="card-text text-end">{{ ordini_in_lavoro }}</p></h5> -->
+              <h5><p class="card-text text-end" id="display_div_ordini"></p></h5>
+              
             </div>
           </div>
           <div class="col-md-4 align-self-center text-center">        
@@ -32,11 +34,10 @@
       <div class="card mb-3 shadow rounded" style="max-width: 540px;">
         <div class="row g-0">
         
-          <div class="col-md-8 counter">
+          <div class="col-md-8 ">
             <div class="card-body">
               <h5 class="card-title">Operatori Impegnati</h5>
-              <!-- <h5><p class="card-text text-end">{{ n_operatori }}</p></h5> -->
-              <h5><p data-target="{{ n_operatori }}" class="card-text text-end count" >0</p></h5>
+              <h5><p class="card-text text-end" id="display_div_id"></p></h5>              
             </div>
           </div>
           <div class="col-md-4 align-self-center text-center">        
@@ -54,7 +55,9 @@
           <div class="col-md-8">
             <div class="card-body">
               <h5 class="card-title">Ultimi 7 giorni</h5>
+              
               <h5><p class="card-text text-end">{{ ore }} ore , {{ minuti }} minuti</p></h5>
+              
             </div>
           </div>
           <div class="col-md-4 align-self-center text-center">        
@@ -68,10 +71,9 @@
   </div>
   
   <hr>
-  
-  
-
   <!-- fine card con statistiche -->
+  <p id="users-count"></p>
+  
     <h3>Lista Ordini</h3>
     
     <a href="{% url 'lista_ordini' %}">Tutti gli ordini</a>
@@ -134,26 +136,7 @@
       
     </tbody>
   </table>
-  <!-- <div class="pagination">
-    <span class="step-links">
-        {% if dettaglio_ordini.has_previous %}
-            <a class="btn btn-info" href="?page=1">&laquo; Prima</a>
-            <a class="btn btn-info" href="?page={{ dettaglio_ordini.previous_page_number }}">Precedente &raquo;</a>
-            
-        {% endif %}
-
-        <span class="current">
-            Page {{ dettaglio_ordini.number }} of {{ dettaglio_ordini.paginator.num_pages }}.
-        </span>
-
-        {% if dettaglio_ordini.has_next %}
-        
-            <a class="btn btn-info" href="?page={{ dettaglio_ordini.next_page_number }}">Successiva</a>
-            <a class="btn btn-info" href="?page={{ dettaglio_ordini.paginator.num_pages }}">Ultima &raquo;</a>
-            
-        {% endif %}
-    </span>
-</div> -->
+  
 </div>
 </div>
   
@@ -182,17 +165,11 @@
     <hr>
     <tbody>
       {% for operatori_attivi in operatori_attivi %}
-
-          <td>{{ operatori_attivi.idoperatore }}</td>
-           
-          
+          <td>{{ operatori_attivi.idoperatore }}</td>         
           <td>{{ operatori_attivi.idfase|default_if_none:"0" }}</td>    
           <td>{{ operatori_attivi.datatempo|date:'d/m/Y' }}</td>
-          <td>{{ operatori_attivi.orainizio }}</td>
-          <!-- <td>{{ operatori_attivi.orafine|default_if_none:"" }}</td>        -->
-         
-        </tr>
-      
+          <td>{{ operatori_attivi.orainizio }}</td>         
+        </tr>      
       {% endfor %}
       <hr>
     </tbody>
@@ -220,26 +197,59 @@
 </div>
 </div>
   
+<script>
+  document.body.onload = function(){
+    incrementCount(0);    
+  }  
+  var counter_list = [0, '{{ n_operatori }}', 0, '{{ ordini_in_lavoro }}'];
+  var str_counter_0 = counter_list[0];  
+  var str_stop_counter_0 = counter_list[1]; 
+  var display_str = "";
+  var display_div = document.getElementById("display_div_id");
 
+  var str_counter_ordini = counter_list[2];  
+  var str_stop_counter_ordini = counter_list[3];
+  var display_str_ordini = "";
+  var display_div_ordini = document.getElementById("display_div_ordini");
+
+
+  function incrementCount(current_count) {
+      setInterval(function () {
+          // clear count
+          while (display_div.hasChildNodes()) {
+              display_div.removeChild(display_div.lastChild);
+          }
+          if (str_counter_0< str_stop_counter_0){
+              str_counter_0++;
+          }
+          
+          while (display_div_ordini.hasChildNodes()) {
+            display_div_ordini.removeChild(display_div_ordini.lastChild);
+          }
+          if (str_counter_ordini< str_stop_counter_ordini){
+            str_counter_ordini++;
+          }
+          
+          display_str = str_counter_0.toString(); //str_counter_2.toString(); + str_counter_1.toString() + str_counter_0.toString();
+          for (var i = 0; i < display_str.length; i++) {
+              var new_span = document.createElement('span');
+              new_span.className = 'num_tiles';
+              new_span.innerText = display_str[i];
+              display_div.appendChild(new_span);
+          }
+
+          display_str_ordini = str_counter_ordini.toString(); //str_counter_2.toString(); + str_counter_1.toString() + str_counter_0.toString();
+          for (var i = 0; i < display_str_ordini.length; i++) {
+              var new_span = document.createElement('span');
+              new_span.className = 'tot_ordini';
+              new_span.innerText = display_str_ordini[i];
+              display_div_ordini.appendChild(new_span);
+          }
+          
+      }, 100);
+      
+  }
+</script>
 
 {% endblock content %}
-<script>
-  const counters = document.querySelectorAll('.count');
-const speed = 200;
 
-counters.forEach((counter) => {
-  const updateCount = () => {
-    const target = parseInt(counter.getAttribute('data-target'));
-    const count = parseInt(counter.innerText);
-    const increment = Math.trunc(target / speed);
-
-    if (count < target) {
-      counter.innerText = count + increment;
-      setTimeout(updateCount, 1);
-    } else {
-      counter.innerText = target;
-    }
-  };
-  updateCount();
-});
-</script>

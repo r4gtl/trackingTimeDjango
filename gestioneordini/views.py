@@ -9,7 +9,7 @@ from django.db.models import Count, Q, F, DurationField, ExpressionWrapper, Sum
 from django.core.paginator import Paginator
 from django_filters.views import FilterView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
-from .models import Qryoperatoriattivi, Qryordiniiniziale, TblLineeLav, Tbldettaglioordini, Tblfasi, Tbloperatori, Tbltempi
+from .models import TblLineeLav, Tbldettaglioordini, Tblfasi, Tbloperatori, Tbltempi
 from .filters import OrderFilter
 from .forms import FormDettaglio, TempoModelForm
 from datetime import datetime, time, timedelta
@@ -91,55 +91,6 @@ def cerca(request):
                 return render(request, "singolo_dettaglio.html",)
 
 
-# def visualizza_dettaglio(request, pk):
-#         dettaglio = get_object_or_404(Tbldettaglioordini, pk=pk)
-#         operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio, orafine__isnull = True).order_by('-datatempo')
-#         form=FormDettaglio(request.POST or None, instance = dettaglio)
-        
-#         if request.method == 'POST':
-#                 # form=FormDettaglio(request.POST)
-#                 if form.is_valid():
-#                         dettaglio_salvato = form.save(commit=False)
-#                         dettaglio_salvato.save()
-#                         return HttpResponseRedirect(dettaglio.get_absolute_url())
-#         else:
-#                 if "q" in request.GET:
-#                         querystring = request.GET.get("q")
-#                         print("QueryString:" + str(querystring))
-#                         dettaglio = get_object_or_404(Tbldettaglioordini, pk=int(querystring))
-#                         print("Prima QueryString:" + str(querystring))
-#                         # return HttpResponseRedirect(dettaglio.get_absolute_url())
-#                         if len(querystring) == 0:
-#                                 print("Non Esiste")
-
-                
-#                 print("Secondo print: " + str(dettaglio))
-
-#                 form = FormDettaglio(instance=dettaglio)
-#         context = {"dettaglio": dettaglio, "operatori_attivi": operatori_attivi, 'form':form}        
-#         return render(request, "singolo_dettaglio.html", context)
-
-
-        
-# def cerca(request):
-#         if "q" in request.GET:
-#                 querystring = request.GET.get("q")
-#                 print(querystring)
-#                 if len(querystring) == 0:
-#                         return redirect("/cerca/")
-#                 dettaglio = get_object_or_404(Tbldettaglioordini, pk=int(querystring))
-#                 print(querystring)
-#                 context = {"dettaglio": dettaglio,}
-#                 return render(request, 'cerca.html', context)
-#         else:
-#                 return render(request, 'cerca.html')
-
-
-
-
-
-
-
 class OperatorView(ListView):
         paginate_by = 10
 
@@ -154,7 +105,7 @@ def dashboard(request):
         dettaglio_ordini = Tbldettaglioordini.objects.filter(inlavoro = True).order_by('-iddettordine')[:15]
         operatori_attivi = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')[:15]             
         ordini_in_lavoro = Tbldettaglioordini.objects.filter(inlavoro = True).count
-        n_operatori = Tbltempi.objects.filter(orafine__isnull = True).count
+        n_operatori = Tbltempi.objects.filter(orafine__isnull = True).count()
         
         d=timezone.now().date()-timedelta(days=7)
         
@@ -163,7 +114,7 @@ def dashboard(request):
         total_time = query_tempi.aggregate(total_time=Sum('duration'))
         sum_time=total_time.get('total_time')        
         if sum_time is not None:        
-                days=sum_time.days*60 
+                days=sum_time.days*24                
                 seconds=sum_time.seconds
                 hours=seconds//3600+days
                 minutes=(seconds//60)%60       
@@ -300,34 +251,6 @@ def aggiungi_operatore_attivo(request, pk):
         context = {'form': form, 'dettaglio': dettaglio}
         return render(request, 'creatempo.html', context)
 
-
-# def aggiorna_operatore(request, pk):
-#                 # dictionary for initial data with
-#         # field names as keys
-#         dettaglio = get_object_or_404(Tbldettaglioordini, pk=pk)
-#         print("Prova")
-#         context ={}
-        
-#         # pass the object as instance in form
-#         form = TempoModelForm(request.POST or None, instance = dettaglio)
-#         # form = TempoModelForm(initial={'dettaglio': dettaglio})
-#         # save the data from the form and
-#         # redirect to detail_view
-        
-#         if form.is_valid():
-                
-#                 # form = TempoModelForm(request.POST)
-#                 form.save()
-#                 # post = obj.iddettordine 
-#                 # return reverse_lazy( 'visualizza_dettaglio', kwargs={'pk': dettaglio})
-#                 return HttpResponseRedirect(dettaglio.get_absolute_url())
-#                 # return render(request, "/dashboard.html")
-        
-#         # add form dictionary to context
-#         # context["form"] = form        
-#         # context = {'form': form, 'dettaglio': dettaglio}
-#         context = {'form': form, 'dettaglio': dettaglio }
-#         return render(request, "creatempo.html", context)
 
 class TempoUpdateView(UpdateView):
         model = Tbltempi
