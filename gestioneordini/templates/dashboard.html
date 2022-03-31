@@ -200,8 +200,20 @@
 <script>
   document.body.onload = function(){
     incrementCount(0);    
-  }  
-  var counter_list = [0, '{{ n_operatori }}', 0, '{{ ordini_in_lavoro }}'];
+  }
+  if ('{{ n_operatori }}') {
+    var count_operatori = '{{ n_operatori }}';
+  } else {
+    var count_operatori = 0;
+  }
+  if ('{{ ordini_in_lavoro }}') {
+    var count_ordini = '{{ ordini_in_lavoro }}';
+  } else {
+    var count_ordini = 0;
+  }
+  // var counter_list = [0, '{{ n_operatori }}', 0, '{{ ordini_in_lavoro }}'];
+  var counter_list = [0, parseInt(count_operatori), 0, parseInt(count_ordini)];
+  console.log(counter_list);
   var str_counter_0 = counter_list[0];  
   var str_stop_counter_0 = counter_list[1]; 
   var display_str = "";

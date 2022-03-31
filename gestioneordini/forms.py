@@ -25,8 +25,8 @@ class FormDettaglio(forms.ModelForm):
         }
 
         labels = {
-            "quantitatempo": mark_safe("<h3>Quantità Tempo</h3>"),
-            "noteconteggi": mark_safe("<h3>Note su Conteggi</h3>"),
+            "quantitatempo": mark_safe("<p>Quantità Tempo</p>"),
+            "noteconteggi": mark_safe("<p>Note su Conteggi</p>"),
         }
 
 
@@ -55,4 +55,5 @@ class TempoModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(TempoModelForm, self).__init__(*args, **kwargs)                
         self.fields['idoperatore'].queryset = Tbloperatori.objects.filter(dimesso__iexact="false").order_by('cognome')# or something else
+        self.fields['idoperatore'].widget.attrs.update({'autofocus': 'autofocus'})
         

@@ -23,6 +23,10 @@ from django.utils import timezone
 
 
 
+def home(request):
+        return render(request, "dashboard.html")
+
+
 def my_view(request):
         username = request.POST['username']
         password = request.POST['password']
@@ -36,9 +40,8 @@ def my_view(request):
 
 
 
-class ListaOrdiniView(FilterView):
+class ListaOrdiniView(FilterView):       
         
-        # model = Qryordiniiniziale
         model = Tbldettaglioordini
 
         context_object_name = 'initial_orders'
@@ -102,12 +105,14 @@ class OperatorView(ListView):
 
 
 def dashboard(request):
+        
+        d=timezone.now().date()-timedelta(days=7)
         dettaglio_ordini = Tbldettaglioordini.objects.filter(inlavoro = True).order_by('-iddettordine')[:15]
         operatori_attivi = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')[:15]             
         ordini_in_lavoro = Tbldettaglioordini.objects.filter(inlavoro = True).count
         n_operatori = Tbltempi.objects.filter(orafine__isnull = True).count()
         
-        d=timezone.now().date()-timedelta(days=7)
+        
         
         query_tempi = Tbltempi.objects.filter(orafine__isnull = False).filter(datatempo__gte=d).annotate(duration=ExpressionWrapper(
                 F('orafine') - F('orainizio'), output_field=DurationField()))
@@ -135,10 +140,6 @@ def dashboard(request):
         return render(request, "dashboard.html", context)
 
 
-
-
-def home(request):
-        return render(request, "dashboard.html")
 
 def chiudi_operatore(request, pk):
         obj = get_object_or_404(Tbltempi, pk=pk) 
@@ -199,11 +200,11 @@ def cerca_operatore(request, pk):
                         return redirect("/cerca/")
                 if Tbltempi.objects.filter(idoperatore=querystring, orafine__isnull=True):
                 
-                        context= {'dettaglio_attivo': dettaglio, 'origine': 'prova'}
+                        context= {'dettaglio_attivo': dettaglio, 'origine': 'occupato'}
                         return render(request, 'messaggio_operatore_attivo.html', context)
 
                 elif Tbloperatori.objects.filter(idoperatore=querystring, dimesso = True):
-                        context= {'dettaglio_attivo': dettaglio, 'origine': 'prova1'}
+                        context= {'dettaglio_attivo': dettaglio, 'origine': 'dimesso'}
                         return render(request, 'messaggio_operatore_attivo.html', context)
                                 
                 else:                                
@@ -230,11 +231,33 @@ def cerca_operatore(request, pk):
 
 
 def aggiungi_operatore_attivo(request, pk):
-
+        
+        current_user = request.user
+        current_time = datetime.now()
+                
+        if current_user.username == "Linea_1":
+                pk_linea = 1                
+        elif current_user.username == "Linea_2":
+                pk_linea = 2
+        elif current_user.username == "Linea_3":
+                pk_linea = 3
+        elif current_user.username == "Linea_4":
+                pk_linea = 4
+        elif current_user.username == "Linea_5":
+                pk_linea = 5
+        else:
+                pk_linea = 1
+        initial_data = {
+                'id_linea': pk_linea,
+                'datatempo': current_time.strftime("%Y-%m-%d"),
+                'orainizio': current_time.strftime("%H:%M"),
+                'idfase': 4
+                
+        }
         dettaglio = Tbldettaglioordini.objects.get(pk=pk)        
         if request.method == 'POST':
-                form = TempoModelForm(request.POST)
-
+                form = TempoModelForm(request.POST, initial={"idlinea": pk_linea})
+                print(pk_linea)
                 if form.is_valid():                       
                         tempo = form.save(commit=False)
                         tempo.iddettordine = dettaglio                        
@@ -245,9 +268,10 @@ def aggiungi_operatore_attivo(request, pk):
 
                         return HttpResponseRedirect(dettaglio.get_absolute_url())
         else:
-                form = TempoModelForm(instance=dettaglio)
+                form = TempoModelForm(instance=dettaglio, initial=initial_data)
                 form.fields['idoperatore'].queryset=Tbloperatori.objects.filter(dimesso__iexact="false").exclude(tbltempi__orafine__isnull=True).order_by('cognome')
-
+                
+                
         context = {'form': form, 'dettaglio': dettaglio}
         return render(request, 'creatempo.html', context)
 

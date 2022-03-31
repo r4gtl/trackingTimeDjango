@@ -9,19 +9,19 @@
 
 <div class="card">
     <div class="card-header">
-        <h3>Ragione Sociale {{ dettaglio.idordine.idcliente.ragionesociale }} - Ordine N. {{ dettaglio.idordine }} - Data Ordine {{ dettaglio.idordine.dataordine|date:'d/m/Y' }}</h3>
+        <p>Ragione Sociale {{ dettaglio.idordine.idcliente.ragionesociale }} - Ordine N. {{ dettaglio.idordine }} - Data Ordine {{ dettaglio.idordine.dataordine|date:'d/m/Y' }}</p>
         <hr>
         
         {% if dettaglio.idcollegamento == None %}
-        <h3 class ="card-text">Codice: {{ dettaglio.idcomponente }} | Descrizione: {{ dettaglio.idcomponente.descrizione }}</h3>
+        <p class ="card-text">Codice: {{ dettaglio.idcomponente }} | Descrizione: {{ dettaglio.idcomponente.descrizione|default_if_none:"" }}</p>
         
         {% else %}
-        <h3 class ="card-text">Collegamento: {{ dettaglio.idcollegamento }}</h3><h3 class ="card-text">Descrizione: {{ dettaglio.idcollegamento.descrizione }}</h3>
+        <p class ="card-text">Collegamento: {{ dettaglio.idcollegamento }}</p><p class ="card-text">Descrizione: {{ dettaglio.idcollegamento.descrizione|default_if_none:"" }}</p>
         
         {% endif %}
         <hr>
-        <h4>Commessa: {{ dettaglio.ncommessa }} | Quantità: {{ dettaglio.quantità }} | Data Consegna: {{ dettaglio.dataconsegna|date:'d/m/Y' }}</h4>
-        <h4>Note dall'ufficio: {{ dettaglio.descrizione }}</h4>
+        <p>Commessa: {{ dettaglio.ncommessa|default_if_none:"Nessuna commessa" }} | Quantità: {{ dettaglio.quantità }} | Data Consegna: {{ dettaglio.dataconsegna|date:'d/m/Y' }}</p>
+        <p>Note dall'ufficio: {{ dettaglio.descrizione|default_if_none:"" }}</p>
         <hr>
 
 
@@ -32,26 +32,21 @@
                 <div class="col-md-9">
                     {{ form.noteconteggi|default_if_none:" "|as_crispy_field }} 
                 </div>
-                
-            
                 <div class="col-md-3"> 
                     <div class="form row g-3" >
                         {{ form.quantitatempo|default_if_none:" "|as_crispy_field }} 
                     </div>   
                     <div class="form row g-3">
-                        <input type="submit" class="btn btn-info" value="Ok">
+                        <input type="submit" class="btn btn-outline-primary" value="Ok">
                     </div>
-                    <div class="form row g-3 mt-5">
+                    <div class="form row g-3 mt-1">
                         {% if form.completato.value is True %}
-                        <a class="btn btn-outline-success btn-lg" href="{% url 'apri_lavorazione' pk=dettaglio.pk %}" role="button"                       
+                        <a class="btn btn-outline-success btn-sm" href="{% url 'apri_lavorazione' pk=dettaglio.pk %}" role="button"                       
                             ><i class="bi bi-alarm"></i> Riapri</a>
-                        
-                        
                         {% else %}
-                        <a class="btn btn-outline-danger btn-lg" href="{% url 'chiudi_lavorazione' pk=dettaglio.pk %}" role="button"                       
+                        <a class="btn btn-outline-danger btn-sm" href="{% url 'chiudi_lavorazione' pk=dettaglio.pk %}" role="button"                       
                             ><i class="bi bi-alarm-fill"></i> Chiudi Lavorazione</a>
                         {% endif %}
-                        
                     </div>      
                 </div>
             </div>  
@@ -67,8 +62,8 @@
 
 
 <div style="display:fixed;">
-    <h1>Operatori Attivi</h1> 
-    <a class="btn btn-sm btn-info" href="{% url 'crea_tempo' pk=dettaglio.iddettordine %}">Aggiungi operatore manualmente</a>
+    <h3>Operatori Attivi</h3> 
+    <a class="btn btn-sm btn-outline-primary" href="{% url 'crea_tempo' pk=dettaglio.iddettordine %}">Aggiungi operatore manualmente</a>
     <br>
     <br>
     <p>...oppure...</p>
@@ -83,7 +78,7 @@
             aria-label="Search"
             autofocus="True"
           />
-          <button class="btn btn-outline-info" type="submit"  >Cerca</button>
+          <button class="btn btn-outline-primary" type="submit"  >Cerca</button>
         </form>
         
       </div>
@@ -115,9 +110,9 @@
         <td>{{ operatori_attivi.idfase }}</td>  
         <td>{{ operatori_attivi.datatempo }}</td>
         <td>{{ operatori_attivi.orainizio }}</td> 
-        <td style="text-align: center;"><a class="btn btn-outline-success" href="{% url 'chiudi_operatore' pk=operatori_attivi.pk %}" role="button"
+        <td style="text-align: center;"><a class="btn btn-outline-success btn-sm" href="{% url 'chiudi_operatore' pk=operatori_attivi.pk %}" role="button"
             ><i class="bi bi-alarm"></i> Chiudi</a></td>
-            <td style="text-align: center;"><a class="btn btn-outline-danger" href="{% url 'cancella_operatore' id=dettaglio.pk pk=operatori_attivi.pk %}" role="button"
+            <td style="text-align: center;"><a class="btn btn-outline-danger btn-sm" href="{% url 'cancella_operatore' id=dettaglio.pk pk=operatori_attivi.pk %}" role="button"
                 ><i class="bi bi-trash"></i> Cancella</a></td>         
         
         
