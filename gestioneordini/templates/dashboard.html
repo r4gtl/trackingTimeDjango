@@ -78,13 +78,15 @@
     
     <a href="{% url 'lista_ordini' %}">Tutti gli ordini</a>
 </div>
+<!-- Alerts -->
+{% include 'partials/_alerts.html' %}
 
 <div class="form-inline my-2 my-lg-0">
   <form class="d-flex" action="{% url 'funzione_cerca' %}">
     <input
       name="q"
       class="form-control me-sm-2"
-      type="search"
+      type="number"
       placeholder="Cosa stai cercando?"
       aria-label="Search"
       autofocus="True"

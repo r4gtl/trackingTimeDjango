@@ -23,4 +23,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')), # importa tutti i link per la gestione degli accounts
     
+    
 ]
+
+handler404 = "gestioneordini.views.page_not_found_view"

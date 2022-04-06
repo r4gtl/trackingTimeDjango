@@ -75,23 +75,31 @@ def visualizza_dettaglio(request, pk):
 
 def cerca(request):
         if "q" in request.GET:
+                
                 querystring = request.GET.get("q")
-                print(querystring)
+                
                 if len(querystring) == 0:
-                        return redirect("/cerca/")
-                dettaglio = get_object_or_404(Tbldettaglioordini, pk=querystring)
-                operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio, orafine__isnull = True).order_by('-datatempo')
-                form=FormDettaglio(request.POST or None, instance = dettaglio)
-                context = {"dettaglio": dettaglio, "operatori_attivi": operatori_attivi, 'form':form}        
-                if request.method == 'POST':
-        #                 # form=FormDettaglio(request.POST)
-                        if form.is_valid():
-                                dettaglio_salvato = form.save(commit=False)
-                                dettaglio_salvato.save()
-                                return HttpResponseRedirect(dettaglio.get_absolute_url())
-                return render(request, "singolo_dettaglio.html", context)
+                        messages.error(request, 'Inserire un numero di ordine')                        
+                        return redirect("dashboard")              
+                # Sistemare passando per elenco ordini filtrati
+                if Tbldettaglioordini.objects.filter(idordine__nordine=querystring):                                        
+                        print(querystring)
+                        dettaglio = Tbldettaglioordini.objects.get(pk=querystring)
+                        operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio, orafine__isnull = True).order_by('-datatempo')
+                        form=FormDettaglio(request.POST or None, instance = dettaglio)
+                        context = {"dettaglio": dettaglio, "operatori_attivi": operatori_attivi, 'form':form}        
+                        if request.method == 'POST':                
+                                if form.is_valid():
+                                        dettaglio_salvato = form.save(commit=False)
+                                        dettaglio_salvato.save()
+                                        return HttpResponseRedirect(dettaglio.get_absolute_url())
+                        return render(request, "singolo_dettaglio.html", context)
+                else:
+                        messages.error(request, 'Il numero ordine digitato non esiste')
+                        return redirect("dashboard")
+        
         else:
-                return render(request, "singolo_dettaglio.html",)
+                return render(request, "dashboard.html",)
 
 
 class OperatorView(ListView):
@@ -197,37 +205,47 @@ def cerca_operatore(request, pk):
                 querystring = request.GET.get("q")
                 
                 if len(querystring) == 0:
-                        return redirect("/cerca/")
-                if Tbltempi.objects.filter(idoperatore=querystring, orafine__isnull=True):
-                
-                        context= {'dettaglio_attivo': dettaglio, 'origine': 'occupato'}
-                        return render(request, 'messaggio_operatore_attivo.html', context)
+                        messages.error(request, 'Inserire un operatore')
+                        return redirect(dettaglio.get_absolute_url())
+                if Tbloperatori.objects.filter(pk=querystring):
+                        
+                        if Tbltempi.objects.filter(idoperatore=querystring, orafine__isnull=True):
+                        
+                                #context= {'dettaglio_attivo': dettaglio, 'origine': 'occupato'}                        
+                                messages.error(request, 'Operatore già occupato')
+                                return redirect(dettaglio.get_absolute_url())
+                                # return render(request, 'messaggio_operatore_attivo.html', context)
+                        
 
-                elif Tbloperatori.objects.filter(idoperatore=querystring, dimesso = True):
-                        context= {'dettaglio_attivo': dettaglio, 'origine': 'dimesso'}
-                        return render(request, 'messaggio_operatore_attivo.html', context)
+                        elif Tbloperatori.objects.filter(idoperatore=querystring, dimesso = True):
+                                #context= {'dettaglio_attivo': dettaglio, 'origine': 'dimesso'}
+                                messages.error(request, 'Operatore dimesso')
+                                return redirect(dettaglio.get_absolute_url())
+                                #return render(request, 'messaggio_operatore_attivo.html', context)
+                                        
+                        else:                                
+                                operatore = get_object_or_404(Tbloperatori, pk=querystring)   
+                                fase=get_object_or_404(Tblfasi, pk=4)                       
+                                linea=get_object_or_404(TblLineeLav, pk=pk_linea)                       
                                 
-                else:                                
-                        operatore = get_object_or_404(Tbloperatori, pk=querystring)   
-                        fase=get_object_or_404(Tblfasi, pk=4)                       
-                        linea=get_object_or_404(TblLineeLav, pk=pk_linea)                       
-                        
 
-                        current_time = datetime.now()
-                        open_time = current_time.strftime("%H:%M:")
-                        open_date = current_time.strftime("%Y-%m-%d")
-                        model = Tbltempi()
-                        model.iddettordine=dettaglio
-                        model.idoperatore=operatore
-                        model.idfase=fase
-                        model.datatempo=open_date
-                        model.orainizio=open_time
-                        model.id_linea=linea
-                        
-                        model.save()
-                        
-                        return HttpResponseRedirect(dettaglio.get_absolute_url())           
-
+                                current_time = datetime.now()
+                                open_time = current_time.strftime("%H:%M:")
+                                open_date = current_time.strftime("%Y-%m-%d")
+                                model = Tbltempi()
+                                model.iddettordine=dettaglio
+                                model.idoperatore=operatore
+                                model.idfase=fase
+                                model.datatempo=open_date
+                                model.orainizio=open_time
+                                model.id_linea=linea
+                                
+                                model.save()
+                                
+                                return HttpResponseRedirect(dettaglio.get_absolute_url())           
+                else:
+                        messages.error(request, 'Operatore inesistente')
+                        return redirect(dettaglio.get_absolute_url())
 
 
 def aggiungi_operatore_attivo(request, pk):
@@ -297,7 +315,8 @@ class CancellaOperatore(DeleteView):
                 return reverse_lazy( 'visualizza_dettaglio', kwargs={'pk': post.iddettordine})
 
 
-
+def page_not_found_view(request, exception):
+        return render(request, 'errors/404.html', status=404)
 
 
 

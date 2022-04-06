@@ -2,14 +2,14 @@
 {% load crispy_forms_tags %}
 
 
-{% block head_title %}{{ block.super }} - {{ dettaglio.idordine }}{% endblock head_title %}
+{% block head_title %}{{ block.super }} - {{ dettaglio.idordine.nordine }}{% endblock head_title %}
 
 
 {% block content %}
 
 <div class="card">
     <div class="card-header">
-        <p>Ragione Sociale {{ dettaglio.idordine.idcliente.ragionesociale }} - Ordine N. {{ dettaglio.idordine }} - Data Ordine {{ dettaglio.idordine.dataordine|date:'d/m/Y' }}</p>
+        <p>Ragione Sociale {{ dettaglio.idordine.idcliente.ragionesociale }} - Ordine N. {{ dettaglio.idordine.nordine }} - Data Ordine {{ dettaglio.idordine.dataordine|date:'d/m/Y' }}</p>
         <hr>
         
         {% if dettaglio.idcollegamento == None %}
@@ -62,11 +62,13 @@
 
 
 <div style="display:fixed;">
-    <h3>Operatori Attivi</h3> 
+    <h5>Operatori Attivi</h5> 
     <a class="btn btn-sm btn-outline-primary" href="{% url 'crea_tempo' pk=dettaglio.iddettordine %}">Aggiungi operatore manualmente</a>
     <br>
     <br>
     <p>...oppure...</p>
+    <!-- Alerts -->
+    {% include 'partials/_alerts.html' %}
     
     <div class="form-inline my-2 my-lg-0">
         <form class="d-flex" action="{% url 'crea_tempo_barcode' pk=dettaglio.iddettordine  %}">
