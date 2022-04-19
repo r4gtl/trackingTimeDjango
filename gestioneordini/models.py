@@ -323,7 +323,8 @@ class Tbltempi(models.Model):
         verbose_name = "tbltempi"
         verbose_name_plural = "tbltempi"
     
-    
+    def get_absolute_url(self):
+        return reverse("visualizza_dettaglio", kwargs={"pk": self.pk})
 
 
 class Tbltipocomponenti(models.Model):

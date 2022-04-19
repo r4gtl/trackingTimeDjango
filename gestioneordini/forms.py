@@ -31,13 +31,15 @@ class FormDettaglio(forms.ModelForm):
 
 
 class TempoModelForm(forms.ModelForm):
+    
     class Meta:
         model = Tbltempi
 
         fields = ["id_linea", "idoperatore", "idfase", "datatempo", "orainizio", "orafine", "quantitatemporiparazione", "note", ]
                 
         widgets = {             
-            "datatempo": forms.DateInput(attrs={'class':'form-control', 'value': datetime.date.today().strftime("%d-%m-%Y"), 'type': 'date'}),
+            # "datatempo": forms.DateInput(attrs={'class':'form-control', 'value': datetime.date.today().strftime("%d-%m-%Y"), 'type': 'date'}),
+            "datatempo": forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control', 'type': 'date'}),
             "orainizio": forms.TimeInput(attrs={'type': 'time'}),
             "orafine": forms.TimeInput(attrs={'type': 'time'}),            
             "note": forms.Textarea(attrs={'cols': 80, 'rows': 2}),

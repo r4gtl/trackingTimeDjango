@@ -275,7 +275,7 @@ def aggiungi_operatore_attivo(request, pk):
         dettaglio = Tbldettaglioordini.objects.get(pk=pk)        
         if request.method == 'POST':
                 form = TempoModelForm(request.POST, initial={"idlinea": pk_linea})
-                print(pk_linea)
+                
                 if form.is_valid():                       
                         tempo = form.save(commit=False)
                         tempo.iddettordine = dettaglio                        
@@ -297,19 +297,20 @@ def aggiungi_operatore_attivo(request, pk):
 class TempoUpdateView(UpdateView):
         model = Tbltempi
         form_class=TempoModelForm        
-        template_name = 'creatempo.html'        
-
-        def get_success_url(self):
-                post = self.object.iddettordine 
-                return reverse_lazy( 'visualizza_dettaglio', kwargs={'pk': post.iddettordine})
+        template_name = 'creatempo.html' 
         
-        def get_initial(self):
-                return {'datatempo': datetime.date.today}
+        def get_success_url(self):
+                tempo = self.object.idtempo 
+                return reverse_lazy( 'aggiorna_operatore', kwargs={'pk': tempo.idtempo})
+        
+        # def get_initial(self):
+        #         return {'datatempo': datetime.date.today}
 
 
 
 class CancellaOperatore(DeleteView):
         model = Tbltempi
+        
         def get_success_url(self):
                 post = self.object.iddettordine 
                 return reverse_lazy( 'visualizza_dettaglio', kwargs={'pk': post.iddettordine})
