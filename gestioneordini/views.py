@@ -49,7 +49,7 @@ class ListaOrdiniView(FilterView):
         filterset_class = OrderFilter
         paginate_by = 30  
         ordering = ['-iddettordine']
-        # queryset = Tbldettaglioordini.objects.order_by('-iddettordine')[:1000]
+        
 
 
 
@@ -300,8 +300,9 @@ class TempoUpdateView(UpdateView):
         template_name = 'creatempo.html' 
         
         def get_success_url(self):
-                tempo = self.object.idtempo 
-                return reverse_lazy( 'aggiorna_operatore', kwargs={'pk': tempo.idtempo})
+                
+                tempo = get_object_or_404(Tbldettaglioordini, pk=self.model.iddettordine)
+                return reverse_lazy( 'visualizza_dettaglio', kwargs={'iddettordine': tempo.iddettordine})
         
         # def get_initial(self):
         #         return {'datatempo': datetime.date.today}

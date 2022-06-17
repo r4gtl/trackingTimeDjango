@@ -35,6 +35,7 @@ urlpatterns = [
     ),
     path("chiudi-operatore/<int:pk>/", views.chiudi_operatore, name="chiudi_operatore"),
     path("dettaglio/<int:id>/aggiorna-operatore/<int:pk>/", views.TempoUpdateView.as_view(), name="aggiorna_operatore"),
+    #path("aggiorna-operatore/<int:pk>/", views.TempoUpdateView.as_view(), name="aggiorna_operatore"),
     path("chiudi-lavorazione/<int:pk>/", views.chiudi_lavorazione, name="chiudi_lavorazione"),
     path("apri-lavorazione/<int:pk>/", views.apri_lavorazione, name="apri_lavorazione"),
 
