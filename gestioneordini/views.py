@@ -12,7 +12,7 @@ from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import TblLineeLav, Tbldettaglioordini, Tblfasi, Tbloperatori, Tbltempi
 from .filters import OrderFilter
 from .forms import FormDettaglio, TempoModelForm
-from datetime import datetime, time, timedelta
+from datetime import datetime, time, timedelta, date
 from django.contrib import messages
 from django.utils import timezone
 
@@ -301,11 +301,11 @@ class TempoUpdateView(UpdateView):
         
         def get_success_url(self):
                 
-                tempo = get_object_or_404(Tbldettaglioordini, pk=self.model.iddettordine)
-                return reverse_lazy( 'visualizza_dettaglio', kwargs={'iddettordine': tempo.iddettordine})
+                post = self.object.iddettordine 
+                return reverse_lazy( 'visualizza_dettaglio', kwargs={'pk': post.iddettordine})
         
-        # def get_initial(self):
-        #         return {'datatempo': datetime.date.today}
+        def get_initial(self):
+                return {'datatempo': date.today}
 
 
 
