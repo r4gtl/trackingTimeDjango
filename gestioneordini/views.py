@@ -119,8 +119,10 @@ def dashboard(request):
         operatori_attivi = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')[:15]             
         ordini_in_lavoro = Tbldettaglioordini.objects.filter(inlavoro = True).count
         n_operatori = Tbltempi.objects.filter(orafine__isnull = True).count()
-        
-        
+        linee = TblLineeLav.objects.all()
+        linee_dettaglio_1=Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')             
+        linee_dettaglio=linee_dettaglio_1.values('id_linea').order_by('id_linea').annotate(count=Count('id_linea'))
+        print(str(linee_dettaglio))
         
         query_tempi = Tbltempi.objects.filter(orafine__isnull = False).filter(datatempo__gte=d).annotate(duration=ExpressionWrapper(
                 F('orafine') - F('orainizio'), output_field=DurationField()))
@@ -143,7 +145,10 @@ def dashboard(request):
                 "ordini_in_lavoro": ordini_in_lavoro,
                 "n_operatori": n_operatori,
                 "ore": hours,
-                "minuti": minutes}
+                "minuti": minutes,
+                "linee": linee,
+                "linee_dettaglio": linee_dettaglio
+                }
         
         return render(request, "dashboard.html", context)
 
