@@ -75,16 +75,18 @@
   <p id="users-count"></p>
   <!-- inizio card con linee impegnate -->
   <div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for linea in linee %}
     <div class="col">
       <div class="card mb-3 shadow rounded" style="max-width: 540px;">
         <div class="row g-0">
         
           <div class="col-md-8">
             <div class="card-body">
-              <h5 class="card-title">Ordini in lavoro</h5>
-              <!-- <h5><p class="card-text text-end">{{ ordini_in_lavoro }}</p></h5> -->
-              <h5><p class="card-text text-end" id="display_div_ordini"></p></h5>
               
+              <h5 class="card-title">{{ linea.descrizione_linea }}</h5>
+              <!-- <h5><p class="card-text text-end">{{ ordini_in_lavoro }}</p></h5> -->
+              <p>Ordine N. {{ linea.get_line.iddettordine.idordine.nordine }} del {{ linea.get_line.iddettordine.idordine.dataordine|date:'d/m/Y' }}</p>
+              <!-- <td class="text-end">{{ chemical.get_sds.rev_date }}</td> -->
             </div>
           </div>
           <div class="col-md-4 align-self-center text-center">        
@@ -94,7 +96,8 @@
           </div>
         </div>
       </div>
-    </div>      
+    </div> 
+    {% endfor %}     
   </div>
   <!-- fine card con linee impegnate -->
     <h3>Lista Ordini</h3>

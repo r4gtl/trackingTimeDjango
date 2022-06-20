@@ -7,6 +7,7 @@
 # Feel free to rename the models, but don't rename db_table values or field names.
 from django.db import models
 from django.urls import reverse
+from django.db.models import Max
 
 
 class TRicerca(models.Model):
@@ -298,6 +299,21 @@ class TblLineeLav(models.Model):
     class Meta:
         managed = False
         db_table = "tbl_linee_lav"
+        
+    
+    # def get_sds(self):
+    #     sds_object = Sds.objects.all()        
+    #     partial_qs=sds_object.values('id_chemical').annotate(latest_rev=Max('rev_date'))
+    #     sds_object=sds_object.filter(rev_date__in=partial_qs.values('latest_rev').order_by('-rev_date')).get(id_chemical=self.id_chemical)             
+    #     return sds_object
+    
+    '''Recupero l'ordine in lavorazione'''
+    def get_line(self):
+        tempi_object = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')               
+        partial_qs=tempi_object.values('id_linea').annotate(ultimo=Max('orainizio'))
+        tempi_object=tempi_object.filter(orainizio__in=partial_qs.values('ultimo').order_by('-orainizio')).get(id_linea=self.id_linea)
+        print(str(tempi_object))   
+        return tempi_object 
 
     def __str__(self):
         return self.descrizione_linea
