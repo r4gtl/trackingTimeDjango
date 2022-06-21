@@ -1,3 +1,7 @@
+body {
+    font-size: 10px;
+}
+
 td.red {
     
     background-color: red;
@@ -12,8 +16,8 @@ td.green {
 
 
 .table-responsive{
-    font-size: 16px;
-  }
+    font-size: 8px;
+}
 
 
 .navbar-custom {
@@ -22,11 +26,13 @@ td.green {
 
 @media screen and (max-width:768px){
     .table-responsive{
-        font-size: 12px;
+        font-size: 8px;
     }
     tr, td {   
         
         height:10px;               
         }
 }
+
+
 

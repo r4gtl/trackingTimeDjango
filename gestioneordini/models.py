@@ -312,7 +312,11 @@ class TblLineeLav(models.Model):
         tempi_object = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')               
         partial_qs=tempi_object.values('id_linea').annotate(ultimo=Max('orainizio'))
         tempi_object=tempi_object.filter(orainizio__in=partial_qs.values('ultimo').order_by('-orainizio')).get(id_linea=self.id_linea)
-        print(str(tempi_object))   
+        
+        print("idtempo: " + str(tempi_object.idtempo))
+        print("iddettordine: " + str(tempi_object.iddettordine))
+        print("Tempi: " + str(tempi_object.idoperatore))
+        print("Tempi: " + str(tempi_object.orainizio))
         return tempi_object 
 
     def __str__(self):

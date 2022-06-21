@@ -1,5 +1,11 @@
 body {
-  font-size: .875rem;
+  font-size: 14px;
+}
+
+
+.card:hover{    
+  box-shadow: 0 15px 10px rgba(31, 31, 31, 0.5);
+  transition: all 0.3s ease;
 }
 
 .feather {
@@ -68,14 +74,15 @@ body {
 /*
  * Navbar
  */
-
+/* 
 .navbar-brand {
-  padding-top: .75rem;
+  /* padding-top: .75rem;
   padding-bottom: .75rem;
   font-size: 1rem;
   background-color: rgba(0, 0, 0, .25);
-  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
-}
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25); 
+} */
+
 
 .navbar .navbar-toggler {
   top: .25rem;
@@ -98,3 +105,37 @@ body {
   border-color: transparent;
   box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
 }
+
+td.red {
+    
+  background-color: red;
+}
+td.orange {
+  background-color: orange;
+}
+td.green {
+  background-color: green;
+}
+
+
+
+.table-responsive{
+  font-size: 14px;
+}
+
+
+.navbar-custom {
+  background-color: #005f73;
+}
+
+@media screen and (max-width:768px){
+  .table-responsive{
+      font-size: 10px;
+  }
+  tr, td {   
+      
+      height:10px;               
+      }
+}
+
+

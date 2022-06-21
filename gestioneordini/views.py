@@ -122,8 +122,9 @@ def dashboard(request):
         linee = TblLineeLav.objects.all()
         linee_dettaglio_1=Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')             
         linee_dettaglio=linee_dettaglio_1.values('id_linea').order_by('id_linea').annotate(count=Count('id_linea'))
-        print(str(linee_dettaglio))
-        print(str(linee))
+        
+        
+        
         
         query_tempi = Tbltempi.objects.filter(orafine__isnull = False).filter(datatempo__gte=d).annotate(duration=ExpressionWrapper(
                 F('orafine') - F('orainizio'), output_field=DurationField()))
