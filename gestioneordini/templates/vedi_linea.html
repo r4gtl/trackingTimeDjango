@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block head_title %}{{ block.super }} - {{ linea.descrizione_linea }}{% endblock head_title %}
+
+
+{% block content %}
+<div class="container">
+    <br>
+    <h5 class="text-end">In lavorazione su {{ linea.descrizione_linea }}</h5>    
+    <hr>
+    <br>
+    <div class="card">
+        <div class="card-header">
+            <p>Ragione Sociale {{ dettaglio.iddettordine.idordine.idcliente.ragionesociale }} - Ordine N. {{ dettaglio.idordine.nordine }} - Data Ordine {{ dettaglio.idordine.dataordine|date:'d/m/Y' }}</p>
+            <hr>
+            
+            {% if dettaglio.iddettordine.idcollegamento == None %}
+            <p class ="card-text">Codice: {{ dettaglio.iddettordine.idcomponente }} | Descrizione: {{ dettaglio.iddettordine.idcomponente.descrizione|default_if_none:"" }}</p>
+            
+            {% else %}
+            <p class ="card-text">Collegamento: {{ dettaglio.iddettordine.idcollegamento }}</p><p class ="card-text">Descrizione: {{ dettaglio.iddettordine.idcollegamento.descrizione|default_if_none:"" }}</p>
+            
+            {% endif %}
+            <hr>
+            <p>Commessa: {{ dettaglio.iddettordine.ncommessa|default_if_none:"Nessuna commessa" }} | Quantità: {{ dettaglio.iddettordine.quantità }} | Data Consegna: {{ dettaglio.iddettordine.dataconsegna|date:'d/m/Y' }}</p>
+            <p>Note dall'ufficio: {{ dettaglio.iddettordine.descrizione|default_if_none:"" }}</p>
+            <hr>
+    
+    
+            
+            
+        </div>
+    </div>
+
+
+{% endblock content %}

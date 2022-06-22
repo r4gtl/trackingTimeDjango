@@ -11,6 +11,7 @@
   function showValuesInModal(firstName,lastName){
     document.getElementById('firstNameValueId').innerHTML = firstName
     document.getElementById('secondNameValueId').innerHTML = lastName
+    $('#id_id_danger').val(firstName);
     $("#modal-div").modal();
 }
 </script>
@@ -103,60 +104,11 @@
               <p>Commessa {{ linea.get_line.iddettordine.ncommessa|default_if_none:" " }}</p>
               <p>Componente {{ linea.get_line.iddettordine.idcomponente.codice|default_if_none:" "  }}</p>
               <p>Collegamento {{ linea.get_line.iddettordine.idcollegamento.codicecollegamento|default_if_none:" " }}</p>
-              <!-- Modal -->
-                          <!-- Button trigger modal -->
-                  <button data-id="{{ linea.pk }}" type="button" onClick = "showValuesInModal('{{ linea.id_linea }}','{{ linea.descrizione_linea }}')" id="btnLaunch" class="btn btn-primary mt-5" data-bs-toggle="modal" data-bs-target="#exampleModal">
-                    Vedi Dettaglio
-                  </button>
-                  <a class="btn btn-info" class="open-modal"  onClick = "showValuesInModal('{{ linea.id_linea }}','{{ linea.descrizione_linea }}')">Edit</a>
-
-                  <!-- Modal -->
-                  <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                      <div class="modal-content">
-                        <div class="modal-header">
-                          <h5 class="modal-title" id="htmlexampleModalLabel">Operatori su {{ linea.descrizione_linea }}</h5>
-                          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">                          
-                          <hr>       
-                          <table class="table table-bordered table-striped">
-                            <thead>
-                                <tr>
-                                  <th class="text-center">Operatore</th>
-                                  <th class="text-center">Data Inizio</th>
-                                  <th class="text-center">Ora Inizio</th>
-                                
-                                
-                                </tr>
-                            </thead>
-                            <tbody id="modal-div">
-                              <p id="firstNameValueId">Some text in the Modal..</p>
-                              <p id="secondNameValueId">Some text in the Modal..</p>
-                                <!-- {% for tempilinea in symbols %}
-                                <tr>           
-                                  <td class="align-middle">{{ symbol.description }}</td>
-                                  <td class="align-middle">{{ symbol.acronym }}</td>
-                                  <td class="text-center align-middle"><img src="{{ symbol.symbol.url }}" alt="logo" style="width: 50px;"></td>        
-                                </tr>
-                                {% endfor %} -->
-                                
-                            </tbody>
-                            </table>
-                          
-                        </div>
-                        <div class="modal-footer">
-                          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>                          
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <!-- fine modal -->
+              <a href="{% url 'vedi-linea' pk=linea.pk %}">vedi dettaglio</a>
 
               {% else %}
               <img src="{%  static 'img/undraw_Mobile_user_re_xta4.png' %}" style="max-width:100%;">
-              {% endif %}  
-                         
+              {% endif %} 
             </div>
           </div>
           
