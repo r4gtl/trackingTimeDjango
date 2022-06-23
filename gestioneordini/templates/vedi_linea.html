@@ -12,26 +12,90 @@
     <hr>
     <br>
     <div class="card">
-        <div class="card-header">
-            <p>Ragione Sociale {{ dettaglio.iddettordine.idordine.idcliente.ragionesociale }} - Ordine N. {{ dettaglio.idordine.nordine }} - Data Ordine {{ dettaglio.idordine.dataordine|date:'d/m/Y' }}</p>
-            <hr>
-            
-            {% if dettaglio.iddettordine.idcollegamento == None %}
-            <p class ="card-text">Codice: {{ dettaglio.iddettordine.idcomponente }} | Descrizione: {{ dettaglio.iddettordine.idcomponente.descrizione|default_if_none:"" }}</p>
-            
-            {% else %}
-            <p class ="card-text">Collegamento: {{ dettaglio.iddettordine.idcollegamento }}</p><p class ="card-text">Descrizione: {{ dettaglio.iddettordine.idcollegamento.descrizione|default_if_none:"" }}</p>
-            
-            {% endif %}
-            <hr>
-            <p>Commessa: {{ dettaglio.iddettordine.ncommessa|default_if_none:"Nessuna commessa" }} | Quantità: {{ dettaglio.iddettordine.quantità }} | Data Consegna: {{ dettaglio.iddettordine.dataconsegna|date:'d/m/Y' }}</p>
-            <p>Note dall'ufficio: {{ dettaglio.iddettordine.descrizione|default_if_none:"" }}</p>
-            <hr>
-    
-    
-            
-            
+        <div class="row">
+        <div class="col-md-8">
+            <div class="card-header">
+                <p>Ragione Sociale {{ dettaglio.iddettordine.idordine.idcliente.ragionesociale }} - Ordine N. {{ dettaglio.idordine.nordine }} - Data Ordine {{ dettaglio.idordine.dataordine|date:'d/m/Y' }}</p>
+                <hr>
+                
+                {% if dettaglio.iddettordine.idcollegamento == None %}
+                <p class ="card-text">Codice: {{ dettaglio.iddettordine.idcomponente }} | Descrizione: {{ dettaglio.iddettordine.idcomponente.descrizione|default_if_none:"" }}</p>
+                
+                {% else %}
+                <p class ="card-text">Collegamento: {{ dettaglio.iddettordine.idcollegamento }}</p><p class ="card-text">Descrizione: {{ dettaglio.iddettordine.idcollegamento.descrizione|default_if_none:"" }}</p>
+                
+                {% endif %}
+                <hr>
+                <p>Commessa: {{ dettaglio.iddettordine.ncommessa|default_if_none:"Nessuna commessa" }}</p>
+                <p>Note dall'ufficio: {{ dettaglio.iddettordine.descrizione|default_if_none:"" }}</p>
+                <hr>
+            </div>
         </div>
+        <div class="col-md-4">
+            <div class="row">
+                <h6>Data Consegna:</h6>
+            </div>
+            <div class="row">
+                <h3 class="text-center">{{ dettaglio.iddettordine.dataconsegna|date:'d/m/Y' }}</h3>
+            </div>
+            <hr>
+            <div class="row">
+                <h6>Quantità:</h6>
+            </div>
+            <div class="row">
+                <h1 class="text-center">{{ dettaglio.iddettordine.quantità|floatformat }}</h1>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <div style="display:fixed;">
+        <h5>Operatori Attivi</h5> 
+        
+            
+          </div>
+        
+    </div>
+    
+    <div class="container">
+    <div class="table-responsive">
+    <table class="table table-hover table-striped table-bordered">
+    <thead class="thead-dark">
+    <tr>          
+        <th style="text-align: center;">Azioni</th>      
+        <th style="text-align: center;">Operatore</th>    
+        <th style="text-align: center;">Fase</th>
+        <th style="text-align: center;">Data</th>
+        <th style="text-align: center;">Ora Inizio</th>     
+        <th style="text-align: center;">Chiudi</th>
+        <th style="text-align: center;">Cancella</th> 
+        
+                    
+    </tr>
+    </thead>
+    <hr>
+    <tbody>
+        {% for operatori_attivi in operatori_attivi %}
+            <td style="text-align: center;"><a href="{% url 'aggiorna_operatore' id=dettaglio.pk pk=operatori_attivi.pk %}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+            </svg></a></td>
+            <td>{{ operatori_attivi.idoperatore }}</td>
+            <td>{{ operatori_attivi.idfase }}</td>  
+            <td>{{ operatori_attivi.datatempo }}</td>
+            <td>{{ operatori_attivi.orainizio }}</td> 
+            <td style="text-align: center;"><a class="btn btn-outline-success btn-sm" href="{% url 'chiudi_operatore' pk=operatori_attivi.pk %}" role="button"
+                ><i class="bi bi-alarm"></i> Chiudi</a></td>
+                <td style="text-align: center;"><a class="btn btn-outline-danger btn-sm" href="{% url 'cancella_operatore' id=dettaglio.pk pk=operatori_attivi.pk %}" role="button"
+                    ><i class="bi bi-trash"></i> Cancella</a></td>         
+            
+            
+        </tr>
+        
+        {% endfor %}
+        <hr>
+    </tbody>
+    </table>
+    </div>
     </div>
 
 

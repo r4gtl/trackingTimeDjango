@@ -332,11 +332,17 @@ def mostra_operatori_linea(request, pk):
         #print("Var2: " + request.GET.get('iddettordine'))
         dettaglio = linea.get_line()
         print(dettaglio.iddettordine.idordine)
-        
+        #operatori_attivi = Tbltempi.objects.all().filter(orafine__isnull = True, iddettordine__exact=dettaglio.iddettordine, id_linea__exact=pk).filter()
         
         #dettaglio = Tbldettaglioordini.objects.all()
-        tempi_object = Tbltempi.objects.filter(orafine__isnull = True).filter(id_linea=pk).order_by('-orainizio')
-        context = {'linea': linea, 'tempi_object': tempi_object, 'dettaglio': dettaglio}
+        tempi_object = Tbltempi.objects.filter(orafine__isnull = True).filter(iddettordine=pk).filter(id_linea=pk).order_by('-orainizio')
+        operatori_attivi=tempi_object
+        print(operatori_attivi)
+        context = {'linea': linea, 
+                        'tempi_object': tempi_object, 
+                        'dettaglio': dettaglio,
+                        'operatori_attivi': operatori_attivi
+                        }
         return render(request, 'vedi_linea.html', context)
 
 
