@@ -7,17 +7,77 @@
 
 {% block content %}
 
-<script>
-  function showValuesInModal(firstName,lastName){
-    document.getElementById('firstNameValueId').innerHTML = firstName
-    document.getElementById('secondNameValueId').innerHTML = lastName
-    $('#id_id_danger').val(firstName);
-    $("#modal-div").modal();
-}
-</script>
 
 
 <div style="display:fixed;">
+  <h3>Lista Ordini</h3>
+    
+    <a class="btn btn-success btn-sm mb-2 " href="{% url 'lista_ordini' %}" role="button">Tutti gli ordini</a>
+
+    <!-- Alerts -->
+{% include 'partials/_alerts.html' %}
+
+<div class="form-inline my-2 my-lg-0">
+  <form class="d-flex" action="{% url 'funzione_cerca' %}">
+    <input
+      name="q"
+      class="form-control me-sm-2"
+      type="number"
+      placeholder="Inserire il codice a barre!"
+      aria-label="Search"
+      autofocus="True"
+    />
+    <button class="btn btn-outline-info" type="submit" >Cerca</button>
+  </form>
+  
+</div>
+<br>
+  <div class="container-fluid">
+    
+    <div class="table-responsive">
+      <table class="table table-hover table-striped table-bordered">
+        <thead class="thead-dark">
+          <tr>        
+            <th>Azioni</th>
+            <th>Nr. Ordine</th>
+            <th>Nr. Commessa</th>
+            <th>Codice</th>
+            <th>Collegamento</th>
+            <th>Data Ordine</th>
+            <th>Cliente</th> 
+            <th>Stato Lavorazione</th>
+                        
+          </tr>
+        </thead>
+        
+        <tbody>
+          {% for dettaglio_ordini in dettaglio_ordini %}
+              <td class="col-md-1" style="text-align: center;"><a href="{{ dettaglio_ordini.get_absolute_url }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
+                <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
+              </svg></a></td>
+              <td class="col-md-1" >{{ dettaglio_ordini.idordine.nordine }}</td>          
+              <td class="col-md-1" >{{ dettaglio_ordini.ncommessa|default_if_none:" " }}</td>  
+              <td class="col-md-1" >{{ dettaglio_ordini.idcomponente.codice|default_if_none:" "  }}</td>
+              <td class="col-md-1">{{ dettaglio_ordini.idcollegamento.codicecollegamento|default_if_none:" " }}</td>
+              <td style="text-align: right;">{{ dettaglio_ordini.idordine.dataordine|date:'d/m/Y' }}</td>          
+              <td>{{ dettaglio_ordini.idordine.idcliente.ragionesociale }}</td> 
+              {% if dettaglio_ordini.inlavoro is False %} 
+                {% if dettaglio_ordini.completato is False %}<td style="background-color: red;">non completato </td>                        
+                {% else %}<td style="background-color: green;">completato</td>           
+                {% endif %}
+              {% else %}
+              <td style="background-color: yellow;">in lavorazione</td>
+              {% endif %}
+            </tr>
+          
+          {% endfor %}
+          
+        </tbody>
+      </table>
+    
+  </div>
+</div>
+<hr>
   <!-- card con statistiche -->  
   <div class="row row-cols-1 row-cols-md-3 g-4">
     <div class="col">
@@ -117,16 +177,16 @@
                 
               {% endif %}  
               {% if linea.get_line.iddettordine.ncommessa != None %}
-              <p class="mt-0">Commessa: {{ linea.get_line.iddettordine.ncommessa }} | Quantità: {{ linea.get_line.iddettordine.quantità|floatformat }} | Data Consegna: <strong>{{ linea.get_line.iddettordine.dataconsegna|date:'d/m/Y' }}</strong></p>
+                <p class="mt-0">Commessa: {{ linea.get_line.iddettordine.ncommessa }} | Quantità: {{ linea.get_line.iddettordine.quantità|floatformat }} | Data Consegna: <strong>{{ linea.get_line.iddettordine.dataconsegna|date:'d/m/Y' }}</strong></p>
               
               {% endif %}
               <div class="text-center">
-              <a class="btn btn-outline-success btn-sm " href="{% url 'vedi-linea' pk=linea.pk %}" role="button">vedi dettaglio</a>
-            </div>
+                <a class="btn btn-outline-success btn-sm " href="{% url 'vedi-linea' pk=linea.pk %}" role="button">vedi dettaglio</a>
+              </div>
               {% else %}
-              <h5 class="card-title" >{{ linea.descrizione_linea }}</h5>              
-              <hr>
-              <img src="{%  static 'img/undraw_Mobile_user_re_xta4.png' %}" style="max-width:100%;">
+                <h5 class="card-title" >{{ linea.descrizione_linea }}</h5>              
+                <hr>
+                <img src="{%  static 'img/undraw_Mobile_user_re_xta4.png' %}" style="max-width:100%;">
               {% endif %} 
             </div>
           </div>
@@ -137,73 +197,9 @@
     {% endfor %}     
   </div>
   <!-- fine card con linee impegnate -->
-    <h3>Lista Ordini</h3>
     
-    <a href="{% url 'lista_ordini' %}">Tutti gli ordini</a>
 </div>
-<!-- Alerts -->
-{% include 'partials/_alerts.html' %}
 
-<div class="form-inline my-2 my-lg-0">
-  <form class="d-flex" action="{% url 'funzione_cerca' %}">
-    <input
-      name="q"
-      class="form-control me-sm-2"
-      type="number"
-      placeholder="Inserire il codice a barre!"
-      aria-label="Search"
-      autofocus="True"
-    />
-    <button class="btn btn-outline-info" type="submit"  >Cerca</button>
-  </form>
-  
-</div>
-<br>
-  <div class="container-fluid">
-    
-  <div class="table-responsive">
-  <table class="table table-hover table-striped table-bordered">
-    <thead class="thead-dark">
-    <tr>        
-      <th>Azioni</th>
-      <th>Nr. Ordine</th>
-      <th>Nr. Commessa</th>
-      <th>Codice</th>
-      <th>Collegamento</th>
-      <th>Data Ordine</th>
-      <th>Cliente</th> 
-      <th>Stato Lavorazione</th>
-                  
-    </tr>
-  </thead>
-    
-    <tbody>
-      {% for dettaglio_ordini in dettaglio_ordini %}
-          <td class="col-md-1" style="text-align: center;"><a href="{{ dettaglio_ordini.get_absolute_url }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-          </svg></a></td>
-          <td class="col-md-1" >{{ dettaglio_ordini.idordine.nordine }}</td>          
-          <td class="col-md-1" >{{ dettaglio_ordini.ncommessa|default_if_none:" " }}</td>  
-          <td class="col-md-1" >{{ dettaglio_ordini.idcomponente.codice|default_if_none:" "  }}</td>
-          <td class="col-md-1">{{ dettaglio_ordini.idcollegamento.codicecollegamento|default_if_none:" " }}</td>
-          <td style="text-align: right;">{{ dettaglio_ordini.idordine.dataordine|date:'d/m/Y' }}</td>          
-          <td>{{ dettaglio_ordini.idordine.idcliente.ragionesociale }}</td> 
-          {% if dettaglio_ordini.inlavoro is False %} 
-          {% if dettaglio_ordini.completato is False %}<td style="background-color: red;">non completato </td>                        
-          {% else %}<td style="background-color: green;">completato</td>           
-          {% endif %}
-          {% else %}
-          <td style="background-color: yellow;">in lavorazione</td>
-          {% endif %}
-        </tr>
-      
-      {% endfor %}
-      
-    </tbody>
-  </table>
-  
-</div>
-</div>
   
   <br>
   <hr>
@@ -212,55 +208,6 @@
 
 
 
-  <div style="display:fixed;">
-    <h1>Operatori Attivi</h1>
-</div>
-  <div class="container-fluid">
-  <div class="table-responsive">
-  <table class="table table-hover table-striped table-bordered">
-    <thead class="thead-dark">
-    <tr>              
-      <th>Operatore</th>      
-      <th>Fase</th>
-      <th>Data Inizio</th>
-      <th>Ora Inizio</th>
-      
-    </tr>
-  </thead>
-    <hr>
-    <tbody>
-      {% for operatori_attivi in operatori_attivi %}
-          <td>{{ operatori_attivi.idoperatore }}</td>         
-          <td>{{ operatori_attivi.idfase|default_if_none:"0" }}</td>    
-          <td>{{ operatori_attivi.datatempo|date:'d/m/Y' }}</td>
-          <td>{{ operatori_attivi.orainizio }}</td>         
-        </tr>      
-      {% endfor %}
-      <hr>
-    </tbody>
-  </table>
-  <!-- <div class="pagination">
-    <span class="step-links">
-        {% if operatori_attivi.has_previous %}
-            <a class="btn btn-info" href="?page=1">&laquo; Prima</a>
-            <a class="btn btn-info" href="?page={{ operator_list.previous_page_number }}">Precedente &raquo;</a>
-            
-        {% endif %}
-
-        <span class="current">
-            Page {{ operatori_attivi.number }} of {{ operatori_attivi.paginator.num_pages }}.
-        </span>
-
-        {% if operatori_attivi.has_next %}
-        
-            <a class="btn btn-info" href="?page={{ operator_list.next_page_number }}">Successiva</a>
-            <a class="btn btn-info" href="?page={{ operator_list.paginator.num_pages }}">Ultima &raquo;</a>
-            
-        {% endif %}
-    </span>
-</div> -->
-</div>
-</div>
   
 <script>
   document.body.onload = function(){
@@ -328,6 +275,13 @@
   }
 
 
+  
+  function showValuesInModal(firstName,lastName){
+    document.getElementById('firstNameValueId').innerHTML = firstName
+    document.getElementById('secondNameValueId').innerHTML = lastName
+    $('#id_id_danger').val(firstName);
+    $("#modal-div").modal();
+}
 
 
 
