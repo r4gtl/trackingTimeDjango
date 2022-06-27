@@ -143,6 +143,7 @@
   <div class="row row-cols-1 row-cols-md-3 g-4">
     {% for linea in linee %}
     <div class="col">
+      
       <div class="card card-h mb-3 shadow rounded" style="max-width: 540px;">
         <div class="row g-0">
         
@@ -151,7 +152,7 @@
               {% if linea.get_line.iddettordine %}
               <div class="row">
                 <div class="col-md-10">
-              <h5 class="card-title" >{{ linea.descrizione_linea }}</h5>
+              <h5 class="card-title" >{{ linea.descrizione_linea }} Prova</h5>
             </div>
             <div class="col-md-2">
               <div class="spinner-grow text-success text-end" role="status">
@@ -191,6 +192,7 @@
           
         </div>
       </div>
+    
     </div> 
     {% endfor %}     
   </div>
