@@ -151,7 +151,7 @@ if DEBUG:
         BASE_DIR / 'static' 
 ]
 else:
-    STATIC_ROOT = '/home/framwebapp/static'
+    STATIC_ROOT = '/home/framwebapp/static-serve/'
     
 # STATICFILES_DIRS =(os.path.join(BASE_DIR, 'static/'),)
 
