@@ -152,7 +152,7 @@
               {% if linea.get_line.iddettordine %}
               <div class="row">
                 <div class="col-md-10">
-              <h5 class="card-title" >{{ linea.descrizione_linea }} Prova</h5>
+              <h5 class="card-title" >{{ linea.descrizione_linea }}</h5>
             </div>
             <div class="col-md-2">
               <div class="spinner-grow text-success text-end" role="status">
@@ -184,7 +184,8 @@
                 <h5 class="card-title" >{{ linea.descrizione_linea }}</h5>              
                 <hr>
                 <div class="col-md-12" style="text-align: center;">
-                  <img src="{%  static 'img/undraw_Mobile_user_re_xta4.png' %}" style="max-width:80%;">
+                  <!-- <img src="{%  static 'img/undraw_Mobile_user_re_xta4.png' %}" style="max-width:80%;"> -->
+                  <p>nessun ordine in lavoro...</p>
                 </div>
               {% endif %} 
             </div>
