@@ -178,7 +178,7 @@
               
               {% endif %}
               <div class="card-footer text-center">
-                <a class="btn btn-outline-success btn-sm " href="{% url 'vedi-linea' pk=linea.pk %}" role="button">vedi dettaglio</a>
+                <a class="btn btn-outline-success btn-sm " href="{% url 'visualizza_dettaglio_da_linea' pk=linea.pk %}" role="button">vedi dettaglio</a>
               </div>
               {% else %}
                 <h5 class="card-title" >{{ linea.descrizione_linea }}</h5>              

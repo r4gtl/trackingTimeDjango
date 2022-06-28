@@ -55,6 +55,7 @@ class ListaOrdiniView(FilterView):
 def visualizza_dettaglio(request, pk):
         dettaglio = get_object_or_404(Tbldettaglioordini, pk=pk)
         operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio, orafine__isnull = True).order_by('-datatempo')
+        
         form=FormDettaglio(request.POST or None, instance = dettaglio)
 
         if request.method == 'POST':
@@ -66,9 +67,51 @@ def visualizza_dettaglio(request, pk):
         else:
 
                 form = FormDettaglio(instance=dettaglio)
-        context = {"dettaglio": dettaglio, "operatori_attivi": operatori_attivi, 'form':form}
+                
+        context = {"dettaglio": dettaglio, "operatori_attivi": operatori_attivi, "form": form}
         return render(request, "singolo_dettaglio.html", context)
 
+def mostra_operatori_linea(request, pk):
+        linea = TblLineeLav.objects.get(id_linea=pk)
+        print("Linea: " + str(linea))
+        query_dettaglio = linea.get_line()
+        print("Linea: " + str(query_dettaglio))
+        dettaglio = get_object_or_404(Tbldettaglioordini, pk=query_dettaglio.iddettordine.pk)
+        
+        tempi_object = Tbltempi.objects.filter(orafine__isnull = True).filter(id_linea=pk).filter(iddettordine=dettaglio).order_by('-orainizio')
+        operatori_attivi=tempi_object
+        form=FormDettaglio(request.POST or None, instance = dettaglio)
+
+        if request.method == 'POST':
+                # form=FormDettaglio(request.POST)
+                if form.is_valid():
+                        dettaglio_salvato = form.save(commit=False)
+                        dettaglio_salvato.save()
+                        return render(request, "dashboard.html",)
+        else:
+
+                form = FormDettaglio(instance=dettaglio)
+                
+        context = {'linea': linea, 
+                        'tempi_object': tempi_object, 
+                        'dettaglio': dettaglio,
+                        'operatori_attivi': operatori_attivi,
+                        'form': form
+                        }
+        return render(request, 'singolo_dettaglio.html', context)
+
+# def mostra_operatori_linea(request, pk):
+#         linea = TblLineeLav.objects.get(id_linea=pk)
+#         dettaglio = linea.get_line()
+#         print(dettaglio.iddettordine.idordine)
+#         tempi_object = Tbltempi.objects.filter(orafine__isnull = True).filter(id_linea=pk).filter(iddettordine=dettaglio.iddettordine.iddettordine).order_by('-orainizio')
+#         operatori_attivi=tempi_object
+#         context = {'linea': linea, 
+#                         'tempi_object': tempi_object, 
+#                         'dettaglio': dettaglio,
+#                         'operatori_attivi': operatori_attivi
+#                         }
+#         return render(request, 'vedi_linea.html', context)
 
 
 def cerca(request):
@@ -318,18 +361,7 @@ class CancellaOperatore(DeleteView):
                 return reverse_lazy( 'visualizza_dettaglio', kwargs={'pk': post.iddettordine})
 
 
-def mostra_operatori_linea(request, pk):
-        linea = TblLineeLav.objects.get(id_linea=pk)
-        dettaglio = linea.get_line()
-        print(dettaglio.iddettordine.idordine)
-        tempi_object = Tbltempi.objects.filter(orafine__isnull = True).filter(id_linea=pk).filter(iddettordine=dettaglio.iddettordine.iddettordine).order_by('-orainizio')
-        operatori_attivi=tempi_object
-        context = {'linea': linea, 
-                        'tempi_object': tempi_object, 
-                        'dettaglio': dettaglio,
-                        'operatori_attivi': operatori_attivi
-                        }
-        return render(request, 'vedi_linea.html', context)
+
 
 
 def page_not_found_view(request, exception):

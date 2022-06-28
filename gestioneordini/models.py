@@ -313,10 +313,11 @@ class TblLineeLav(models.Model):
         partial_qs=tempi_object.values('id_linea').annotate(ultimo=Max('orainizio'))
         tempi_object=tempi_object.filter(orainizio__in=partial_qs.values('ultimo').order_by('-orainizio')).get(id_linea=self.id_linea)
         
-        # print("idtempo: " + str(tempi_object.idtempo))
-        # print("iddettordine: " + str(tempi_object.iddettordine))
-        # print("Tempi: " + str(tempi_object.idoperatore))
-        # print("Tempi: " + str(tempi_object.orainizio))
+        print("idtempo: " + str(tempi_object.idtempo))
+        print("iddettordine: " + str(tempi_object.iddettordine))
+        print("Operatore: " + str(tempi_object.idoperatore))
+        print("Ora Inizio: " + str(tempi_object.orainizio))
+        print("Linea: " + str(tempi_object.id_linea))
         return tempi_object 
 
     def __str__(self):
@@ -344,7 +345,7 @@ class Tbltempi(models.Model):
         verbose_name_plural = "tbltempi"
     
     def get_absolute_url(self):
-        return reverse("visualizza_dettaglio", kwargs={"pk": self.pk})
+        return reverse("visualizza_dettaglio", kwargs={"pk": self.idtempo})
 
 
 class Tbltipocomponenti(models.Model):

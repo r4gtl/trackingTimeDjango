@@ -7,6 +7,7 @@ from .views import dashboard, home
 urlpatterns = [
     path('lista_ordini/', views.ListaOrdiniView.as_view(), name="lista_ordini"),
     path('dettaglio/<int:pk>/', views.visualizza_dettaglio, name="visualizza_dettaglio"),
+    path('dettaglio_da_linea/<int:pk>/', views.mostra_operatori_linea, name="visualizza_dettaglio_da_linea"),
     path('cerca/', views.cerca, name="funzione_cerca"),
 
     path('dashboard/', views.dashboard, name="dashboard"),
