@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load widget_tweaks %}
 
 {% block head_title %}{{ block.super }} - Lista Ordini{% endblock head_title %}
 
@@ -32,15 +32,27 @@
             
             <tbody>
             <tr>
-              <td style="width: 20%">{{ filter.form.n_ordine }}
-                
+              <td style="width: 20%">                
+                {% render_field filter.form.n_ordine class="form-control" %}
               </td>
               
-              <td style="width: 20%">{{ filter.form.ncommessa }}</td>
-              <td style="width: 20%">{{ filter.form.cod_comp }}</td>
-              <td style="width: 20%">{{ filter.form.cod_coll }}</td>
-              <td style = "text-align:center; width: 15%" >{{ filter.form.inlavoro|default_if_none:" " }}</td>
-              <td style = "text-align:center; width: 15%" >{{ filter.form.completato|default_if_none:" " }}</td>
+              <td style="width: 20%">
+                {% render_field filter.form.ncommessa class="form-control" %}
+              </td>
+              <td style="width: 20%">
+                {% render_field filter.form.cod_comp class="form-control" %}
+              </td>
+              <td style="width: 20%">
+                {% render_field filter.form.cod_coll class="form-control" %}
+              </td>
+              <td style = "text-align:center; width: 15%" >{{ filter.form.inlavoro|default_if_none:" " }}
+                
+
+              </td>
+              <td style = "text-align:center; width: 15%" >{{ filter.form.completato|default_if_none:" " }}
+                
+
+              </td>
             </tr>
       
             

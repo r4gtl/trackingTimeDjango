@@ -41,8 +41,8 @@ class TempoModelForm(forms.ModelForm):
             # "datatempo": forms.DateInput(attrs={'class':'form-control', 'value': datetime.date.today().strftime("%d-%m-%Y"), 'type': 'date'}),
             "idtempo": forms.HiddenInput(),
             "datatempo": forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control', 'type': 'date'}),
-            "orainizio": forms.TimeInput(attrs={'type': 'time'}),
-            "orafine": forms.TimeInput(attrs={'type': 'time'}),            
+            "orainizio": forms.TimeInput(format=('%H:%M:%S'),attrs={'type': 'time'}),
+            "orafine": forms.TimeInput(format=('%H:%M:%S'), attrs={'type': 'time'}),            
             "note": forms.Textarea(attrs={'cols': 80, 'rows': 2}),
             # "idoperatore": forms.ChoiceField(choices = Tbloperatori.objects.filter(dimesso__iexact="false").exclude(tbltempi__orafine__isnull=True).order_by('cognome'), initial=0)
             

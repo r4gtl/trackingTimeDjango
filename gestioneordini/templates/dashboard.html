@@ -29,7 +29,7 @@
 </div>
 <br>
   <div class="container-fluid">
-    
+    {% if dettaglio_ordini %}
     <div class="table-responsive">
       <table class="table table-hover table-striped table-bordered">
         <thead class="thead-dark">
@@ -72,6 +72,9 @@
       </table>
     
   </div>
+  {% else %}
+    <h5>Nessun ordine in lavoro...</h5>
+  {% endif %}
 </div>
 <hr>
   <!-- card con statistiche -->  

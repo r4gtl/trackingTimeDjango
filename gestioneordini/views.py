@@ -197,8 +197,11 @@ def chiudi_operatore(request, pk):
         obj = get_object_or_404(Tbltempi, pk=pk)
         post= obj.iddettordine
         current_time = datetime.now()
-        close_time = current_time.strftime("%H:%M:")
-        obj.orafine = close_time
+        print("current:" + str(current_time))
+        # close_time = current_time.strftime("%H:%M:%S:%f")
+        # print("Close Time: " + str(close_time))
+        
+        obj.orafine = current_time
         obj.save()
 
         return HttpResponseRedirect(post.get_absolute_url())
@@ -213,7 +216,7 @@ def chiudi_lavorazione(request, pk):
 
                 current_time = datetime.now()
                 close_time = current_time.strftime("%H:%M:")
-                operatore.orafine = close_time
+                operatore.orafine = current_time
                 operatore.save()
 
         return HttpResponseRedirect(dettaglio.get_absolute_url())
@@ -312,7 +315,7 @@ def aggiungi_operatore_attivo(request, pk):
         initial_data = {
                 'id_linea': pk_linea,
                 'datatempo': current_time.strftime("%Y-%m-%d"),
-                'orainizio': current_time.strftime("%H:%M"),
+                'orainizio': current_time.strftime("%H:%M:%S"),
                 'idfase': 4
 
         }
