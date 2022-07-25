@@ -43,7 +43,6 @@ def my_view(request):
 class ListaOrdiniView(FilterView):
 
         model = Tbldettaglioordini
-
         context_object_name = 'initial_orders'
         template_name = "listaordini.html"
         filterset_class = OrderFilter

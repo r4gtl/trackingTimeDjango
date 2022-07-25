@@ -9,10 +9,15 @@ from crispy_forms.bootstrap import InlineRadios
 
 
 class OrderFilter(django_filters.FilterSet):
+        
         n_ordine=django_filters.CharFilter(field_name='idordine__nordine', lookup_expr='icontains', widget=forms.TextInput(attrs={'style': 'width: 90%; margin-left: 5%'}))
+        
         cod_comp=django_filters.CharFilter(field_name='idcomponente__codice', lookup_expr='icontains', widget=forms.TextInput(attrs={'style': 'width: 90%; margin-left: 7%'}))
+        
         cod_coll=django_filters.CharFilter(field_name='idcollegamento__codicecollegamento' , lookup_expr='icontains', widget=forms.TextInput(attrs={'style': 'width: 90%; margin-left: 7%'}))
+        
         ncommessa=django_filters.CharFilter(field_name='ncommessa' , lookup_expr='icontains', widget=forms.TextInput(attrs={'style': 'width: 90%; margin-left: 7%'}))
+        
         class Meta:
             # model = Qryordiniiniziale
             model = Tbldettaglioordini
