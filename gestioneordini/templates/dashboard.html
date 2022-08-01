@@ -148,6 +148,7 @@
     <div class="col">
       
       <div class="card card-h mb-3 shadow rounded" style="max-width: 540px;">
+        
         <div class="row g-0">        
           <div class="col-md-12">            
               {% if linea.get_line.iddettordine %}
@@ -184,7 +185,8 @@
                   <hr>
                   <div class="col-md-12" style="text-align: center;">
                     <!-- <img src="{%  static 'img/undraw_Mobile_user_re_xta4.png' %}" style="max-width:80%;"> -->
-                    <p>nessun ordine in lavoro...</p>
+                    <!-- <a class="btn btn-outline-success btn-sm " href="{% url 'lista_ordini' %}" role="button">inizia</a> -->
+                    <p class="text-muted">...non ci sono ordini in lavoro...</p>
                   </div>
                 </div>
               {% endif %} 
@@ -192,6 +194,7 @@
           </div>
           
         </div>
+      
       </div>
     
     </div> 
