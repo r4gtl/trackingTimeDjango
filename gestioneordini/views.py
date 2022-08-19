@@ -5,7 +5,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth import authenticate, login
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy, reverse
-from django.db.models import Count, Q, F, DurationField, ExpressionWrapper, Sum
+from django.db.models import Count, Q, F, DurationField, ExpressionWrapper, Sum, Max
 from django.core.paginator import Paginator
 from django_filters.views import FilterView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
@@ -157,7 +157,7 @@ def dashboard(request):
         dettaglio_ordini = Tbldettaglioordini.objects.filter(inlavoro = True).order_by('-iddettordine')[:15]
         operatori_attivi = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')[:15]
         ordini_in_lavoro = Tbldettaglioordini.objects.filter(inlavoro = True).count
-        n_operatori = Tbltempi.objects.filter(orafine__isnull = True).count()
+        n_operatori = Tbltempi.objects.filter(orafine__isnull = True).count()        
         linee = TblLineeLav.objects.all()
         linee_dettaglio_1=Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')
         linee_dettaglio=linee_dettaglio_1.values('id_linea').order_by('id_linea').annotate(count=Count('id_linea'))
@@ -298,7 +298,8 @@ def aggiungi_operatore_attivo(request, pk):
 
         current_user = request.user
         current_time = datetime.now()
-
+        last_time_recorded=Tbltempi.objects.aggregate(Max('idtempo')) 
+        print('last_time_recorded: ' + str(last_time_recorded['idtempo__max']+1))
         if current_user.username == "Linea_1":
                 pk_linea = 1
         elif current_user.username == "Linea_2":
@@ -324,6 +325,7 @@ def aggiungi_operatore_attivo(request, pk):
 
                 if form.is_valid():
                         tempo = form.save(commit=False)
+                        #tempo.idtempo=str(last_time_recorded['idtempo__max']+1)
                         tempo.iddettordine = dettaglio
                         dettaglio.inlavoro = True
                         dettaglio.completato = False
