@@ -1,0 +1,64 @@
+<!-- card con statistiche -->  
+<div class="row row-cols-1 row-cols-md-3 g-4">
+<div class="col">
+    <div class="card mb-3 shadow rounded" style="max-width: 540px;">
+    <div class="row g-0">
+    
+        <div class="col-md-8">
+        <div class="card-body">
+            <h5 class="card-title">Ordini in lavoro</h5>
+            <!-- <h5><p class="card-text text-end">{{ ordini_in_lavoro }}</p></h5> -->
+            <h5><p class="card-text text-end" id="display_div_ordini"></p></h5>
+            
+        </div>
+        </div>
+        <div class="col-md-4 align-self-center text-center">        
+        <span class="material-icons-outlined" style="font-size: 48px; color: green">
+            rocket_launch
+        </span>           
+        </div>
+    </div>
+    </div>
+</div>      
+<div class="col">
+    <div class="card mb-3 shadow rounded" style="max-width: 540px;">
+    <div class="row g-0">
+    
+        <div class="col-md-8 ">
+        <div class="card-body">
+            <h5 class="card-title">Operatori Impegnati</h5>
+            <h5><p class="card-text text-end" id="display_div_id"></p></h5>              
+        </div>
+        </div>
+        <div class="col-md-4 align-self-center text-center">        
+        <span class="material-icons-outlined" style="font-size: 48px; color: green">
+            manage_accounts
+        </span>           
+        </div>
+    </div>
+    </div>
+</div>
+<div class="col">
+    <div class="card mb-3 shadow rounded" style="max-width: 540px;">
+    <div class="row g-0">
+    
+        <div class="col-md-8">
+        <div class="card-body">
+            <h5 class="card-title">Ultimi 7 giorni</h5>
+            
+            <h5><p class="card-text text-end">{{ ore }} ore , {{ minuti }} minuti</p></h5>
+            
+        </div>
+        </div>
+        <div class="col-md-4 align-self-center text-center">        
+        <span class="material-icons-outlined" style="font-size: 48px; color: green">
+            watch_later
+        </span>           
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+
+<hr>
+<!-- fine card con statistiche -->
