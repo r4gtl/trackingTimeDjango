@@ -72,9 +72,9 @@ def visualizza_dettaglio(request, pk):
 
 def mostra_operatori_linea(request, pk):
         linea = TblLineeLav.objects.get(id_linea=pk)
-        print("Linea: " + str(linea))
+        
         query_dettaglio = linea.get_line()
-        print("Linea: " + str(query_dettaglio))
+        
         dettaglio = get_object_or_404(Tbldettaglioordini, pk=query_dettaglio.iddettordine.pk)
         
         tempi_object = Tbltempi.objects.filter(orafine__isnull = True).filter(id_linea=pk).filter(iddettordine=dettaglio).order_by('-orainizio')
@@ -98,20 +98,6 @@ def mostra_operatori_linea(request, pk):
                         'form': form
                         }
         return render(request, 'singolo_dettaglio.html', context)
-
-# def mostra_operatori_linea(request, pk):
-#         linea = TblLineeLav.objects.get(id_linea=pk)
-#         dettaglio = linea.get_line()
-#         print(dettaglio.iddettordine.idordine)
-#         tempi_object = Tbltempi.objects.filter(orafine__isnull = True).filter(id_linea=pk).filter(iddettordine=dettaglio.iddettordine.iddettordine).order_by('-orainizio')
-#         operatori_attivi=tempi_object
-#         context = {'linea': linea, 
-#                         'tempi_object': tempi_object, 
-#                         'dettaglio': dettaglio,
-#                         'operatori_attivi': operatori_attivi
-#                         }
-#         return render(request, 'vedi_linea.html', context)
-
 
 def cerca(request):
         if "q" in request.GET:
@@ -196,9 +182,7 @@ def chiudi_operatore(request, pk):
         obj = get_object_or_404(Tbltempi, pk=pk)
         post= obj.iddettordine
         current_time = datetime.now()
-        print("current:" + str(current_time))
-        # close_time = current_time.strftime("%H:%M:%S:%f")
-        # print("Close Time: " + str(close_time))
+        
         
         obj.orafine = current_time
         obj.save()
@@ -297,9 +281,7 @@ def cerca_operatore(request, pk):
 def aggiungi_operatore_attivo(request, pk):
 
         current_user = request.user
-        current_time = datetime.now()
-        last_time_recorded=Tbltempi.objects.aggregate(Max('idtempo')) 
-        print('last_time_recorded: ' + str(last_time_recorded['idtempo__max']+1))
+        current_time = datetime.now()        
         if current_user.username == "Linea_1":
                 pk_linea = 1
         elif current_user.username == "Linea_2":

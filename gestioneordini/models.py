@@ -299,24 +299,12 @@ class TblLineeLav(models.Model):
     class Meta:
         managed = False
         db_table = "tbl_linee_lav"
-        
-    
-    # def get_sds(self):
-    #     sds_object = Sds.objects.all()        
-    #     partial_qs=sds_object.values('id_chemical').annotate(latest_rev=Max('rev_date'))
-    #     sds_object=sds_object.filter(rev_date__in=partial_qs.values('latest_rev').order_by('-rev_date')).get(id_chemical=self.id_chemical)             
-    #     return sds_object
     
     '''Recupero l'ordine in lavorazione'''
     def get_line(self):
         tempi_object = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')                       
         partial_qs=tempi_object.values('id_linea').annotate(ultimo=Max('orainizio'))        
-        tempi_object=tempi_object.filter(orainizio__in=partial_qs.values('ultimo').order_by('-orainizio')).get(id_linea=self.id_linea)        
-        print("idtempo: " + str(tempi_object.idtempo))
-        print("iddettordine: " + str(tempi_object.iddettordine))
-        print("Operatore: " + str(tempi_object.idoperatore))
-        print("Ora Inizio: " + str(tempi_object.orainizio))
-        print("Linea: " + str(tempi_object.id_linea))
+        tempi_object=tempi_object.filter(orainizio__in=partial_qs.values('ultimo').order_by('-orainizio')).get(id_linea=self.id_linea)                
         return tempi_object 
 
     def __str__(self):
