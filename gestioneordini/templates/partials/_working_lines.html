@@ -42,6 +42,7 @@
                 <!-- <img src="{%  static 'img/undraw_Mobile_user_re_xta4.png' %}" style="max-width:80%;"> -->
                 <!-- <a class="btn btn-outline-success btn-sm " href="{% url 'lista_ordini' %}" role="button">inizia</a> -->
                 <p class="text-muted">...non ci sono ordini in lavoro...</p>
+                <a class="btn btn-outline-info btn-sm " href="{% url 'add-to-line' pk=linea.pk %}" role="button">aggiungine uno</a>
                 </div>
             </div>
             {% endif %} 

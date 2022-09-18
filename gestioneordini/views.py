@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy, reverse
 from django.db.models import Count, Q, F, DurationField, ExpressionWrapper, Sum, Max
-from django.core.paginator import Paginator
+from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django_filters.views import FilterView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import TblLineeLav, Tbldettaglioordini, Tblfasi, Tbloperatori, Tbltempi
@@ -53,7 +53,8 @@ class ListaOrdiniView(FilterView):
 
 def visualizza_dettaglio(request, pk):
         dettaglio = get_object_or_404(Tbldettaglioordini, pk=pk)
-        operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio, orafine__isnull = True).order_by('-datatempo')
+        # operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio, orafine__isnull = True).order_by('-datatempo')
+        operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio).order_by('-datatempo')
         
         form=FormDettaglio(request.POST or None, instance = dettaglio)
 
@@ -355,3 +356,30 @@ def page_not_found_view(request, exception):
 
 
 
+'''Prova inserimento direttamente da card linea nella dashboard'''
+
+def add_line_search_order(request, pk):
+        linea=TblLineeLav.objects.get(id_linea=pk)        
+        filterset = OrderFilter(request.GET, queryset=Tbldettaglioordini.objects.all().order_by('-iddettordine'))
+        initial_orders=Tbldettaglioordini.objects.all().order_by('-iddettordine')[:50]
+        paginator = Paginator(filterset.qs, 30)
+
+        page = request.GET.get('page')
+        try:
+                response = paginator.page(page)
+        except PageNotAnInteger:
+                response = paginator.page(1)
+        except EmptyPage:
+                response = paginator.page(paginator.num_pages)
+        context={'linea': linea, 'filter':filterset, 'initial_orders': initial_orders}
+        
+        return render(request, 'add_line_search_order.html', context)
+
+
+
+
+
+
+
+
+'''Fine prova inserimento direttamente da card linea nella dashboard'''
