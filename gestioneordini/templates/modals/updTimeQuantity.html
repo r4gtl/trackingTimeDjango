@@ -1,0 +1,35 @@
+<!-- Modal -->
+{% load crispy_forms_tags %}
+<!-- MODAL -->
+<div class="modal fade" id="updateModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+      <div class="modal-content">
+      <div class="modal-header">
+        <h5><i class="bi bi-pencil-square"></i>&nbsp;&nbsp; Modifica quantità presa tempo</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+          <div id="alert-box"></div>
+          
+              <div class="form-group">
+                <form id="update-form" method="POST">
+                  <div class="row justify-content-center">
+                    <div class="col-6">
+                      {% csrf_token %}
+                      
+                      {{ form.idtempomaster.as_hidden }}
+                      {{ form.quantity|as_crispy_field }}
+                    
+                    </div>
+                  </div>
+                  <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                      <button type="submit" class="btn btn-primary btn-sm" >Aggiorna</button>
+                  </div>
+                </form>
+              </div>
+            
+    </div>
+  </div>
+  </div>
+  <!-- FINE MODAL -->

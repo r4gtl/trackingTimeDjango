@@ -1,0 +1,36 @@
+{% extends 'modals/baseModal.html' %}
+
+
+<!-- Modal ID -->
+{% block modal-id %} id="confirmDeleteModal" caller-id="" {% endblock modal-id %}
+<!-- Modal Title -->
+{% block modal-title %}
+<h5><i class="bi bi-question-circle"></i>&nbsp;&nbsp; Sei sicuro?</h5>          
+{% endblock modal-title %}
+      <!-- Modal Body -->
+{% block modal-body %}
+<p>Sei sicuro di voler cancellare questa presa tempo?</p>
+
+{% endblock modal-body %}
+
+
+<!-- Modal Footer -->
+{% block modal-footer %}
+        
+        <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" id="confirmDeleteButtonModal">Cancella Riga</button>
+
+
+<script>
+
+$(document).on('click', '.confirm-delete', function () {
+  $("#confirmDeleteModal").attr("caller-id", $(this).attr("id"));
+});
+
+$(document).on('click', '#confirmDeleteButtonModal', function () {
+  var caller = $("#confirmDeleteButtonModal").closest(".modal").attr("caller-id");
+  console.log("Indirizzo:" + $("#".concat(caller)).attr("href"))
+  window.location = $("#".concat(caller)).attr("href");
+});
+</script>
+{% endblock modal-footer %}
+

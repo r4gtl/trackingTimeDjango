@@ -1,0 +1,48 @@
+{% extends 'modals/baseModal.html' %}
+
+
+<!-- Modal ID -->
+{% block modal-id %} id="delConfirmOperator" caller-id="" {% endblock modal-id %}
+
+<!-- Modal Title -->
+{% block modal-title %}
+<h5><i class="bi bi-question-circle"></i>&nbsp;&nbsp; Sei sicuro?</h5>          
+{% endblock modal-title %}
+
+<!-- Modal Body -->
+{% block modal-body %}
+<p>Sei sicuro di voler cancellare questa presa tempoooooo?</p>
+
+{% endblock modal-body %}
+
+<!-- Modal Footer -->
+{% block modal-footer %}
+
+<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" id="confirmDeleteButtonModal"> Cancella riga</button>
+        
+
+<script type="text/javascript">
+    $(document).on('click', '.confirm-delete', function () {
+      console.log("deletebutton")
+        $("#delConfirmOperator").attr("caller-id", $(this).attr("id"));
+        console.log("#delconfirmoperator: " + ($("#delConfirmOperator").attr("caller-id")))
+        });
+        
+      $(document).on('click', '#confirmDeleteButtonModal', function () {
+        console.log("Prova")
+        var caller = $("#confirmDeleteButtonModal").closest(".modal").attr("caller-id");
+        console.log("Caller delconfirm: " + caller)
+        //window.location = $("#".concat(caller)).attr("href");
+        console.log("Indirizzo:" + $("#".concat(caller)).attr("href"))
+        window.location = $("#".concat(caller)).attr("href");
+        
+        
+      });
+      $("#delConfirmOperator").on("hidden.bs.modal", function(){
+        $("caller-id").html("");
+    });
+    </script>
+
+{% endblock modal-footer %}
+
+

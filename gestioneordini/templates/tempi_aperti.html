@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+
+
+
+{% block head_title %}{{ block.super }} - Tempi Aperti{% endblock head_title %}
+
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-between">
+    <div class="col-md-2 mt-2">
+        <a class="btn btn-outline-success btn-sm" href="{% url 'gestioneordini:dashboard' %}" role="button"                       
+        ><i class="bi bi-house"></i> Homepage</a>
+    </div>
+    <div class="col-md-4 mt-2">
+        <h4 class="mt-2 mb-2">Lista tempi aperti</h4>
+    </div>
+</div>
+</div>
+<div class="container">
+    <div class="table-responsive">
+    <table class="table table-hover table-striped table-bordered">
+        <thead class="thead-dark">
+        <tr>
+        <th>Azioni</th>        
+        <th>Presa tempo</th>
+        <th>Data presa tempo</th>
+        <th>Ordine</th>        
+        <th>Data Ordine</th>
+        <th>Cliente</th> 
+                    
+        </tr>
+    </thead>
+        
+        <tbody>
+        {% for tempo_aperto in object_list %}
+        <tr>
+            <td class="col-md-1" style="text-align: center;">
+                <a href="{% url 'gestioneordini:visualizza_dettaglio_da_linea' pk=tempo_aperto.iddettordine.iddettordine id_linea=tempo_aperto.id_linea.id_linea idtempomaster=tempo_aperto.pk %}">
+                    <i class="bi bi-pencil"></i>
+            </a></td>
+            <td class="col-md-2">{{ tempo_aperto.pk }}</td>
+            <td class="col-md-2">{{ tempo_aperto.datatempo|date:'d/m/Y' }}</td>  
+            <td class="col-md-1">{{ tempo_aperto.iddettordine.idordine.nordine  }}</td>
+            <td class="col-md-2">{{ tempo_aperto.iddettordine.idordine.dataordine|date:'d/m/Y' }}</td>
+            <td class="col-md-4">{{ tempo_aperto.iddettordine.idordine.idcliente.ragionesociale }}</td>
+            
+        </tr>
+        
+        {% endfor %}
+        
+        </tbody>
+    </table>
+        <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a class="btn btn-info btn-sm" href="?page=1">&laquo; Prima</a>
+                <a class="btn btn-info btn-sm" href="?page={{ page_obj.previous_page_number }}">Precedente &raquo;</a>
+                
+            {% endif %}
+
+            <span class="current">
+                Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+            
+                <a class="btn btn-info btn-sm" href="?page={{ page_obj.next_page_number }}">Successiva</a>
+                <a class="btn btn-info btn-sm" href="?page={{ page_obj.paginator.num_pages }}">Ultima &raquo;</a>
+                
+            {% endif %}
+        </span>
+    </div>
+</div>
+
+{% endblock content %}

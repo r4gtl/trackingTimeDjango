@@ -1,0 +1,20 @@
+<div class="modal" id="closeConfirmOperator1" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-question-circle"></i>&nbsp;&nbsp; Sei sicuro?</h5>          
+        </div>
+        <div class="modal-body">
+          <p>Sei sicuro di voler chiudere questa presa tempo?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Annulla</button>          
+          <form action="{% url 'gestioneordini:chiudi_operatore' idtempo=operatori_attivi.pk %}" method="POST">
+            
+          {% csrf_token %}            
+            <button class="btn btn-outline-danger btn-sm" type="submit" ><i class="bi bi-stopwatch-fill"></i>&nbsp;&nbsp; Chiudi presa tempo</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

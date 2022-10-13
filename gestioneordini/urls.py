@@ -1,19 +1,27 @@
 from .models import Tbldettaglioordini
 from django.urls import path
 from . import views
-from .views import dashboard, home
+from .views import OpenTimeView, dashboard, home
 
+app_name="gestioneordini"
 
 urlpatterns = [
     path('lista_ordini/', views.ListaOrdiniView.as_view(), name="lista_ordini"),
-    path('dettaglio/<int:pk>/', views.visualizza_dettaglio, name="visualizza_dettaglio"),
-    path('dettaglio_da_linea/<int:pk>/', views.mostra_operatori_linea, name="visualizza_dettaglio_da_linea"),
+    path('dettaglio/<int:pk>/<int:id_linea>/<int:idtempomaster>/', views.visualizza_dettaglio, name="visualizza_dettaglio"),
+    # path('dettaglio_da_linea/<int:pk>/<int:id_linea>/', views.mostra_operatori_linea, name="visualizza_dettaglio_da_linea"),
+    path('dettaglio_da_linea/<int:pk>/<int:id_linea>/<int:idtempomaster>/', views.mostra_operatori_linea, name="visualizza_dettaglio_da_linea"),
     path('cerca/', views.cerca, name="funzione_cerca"),
 
     path('dashboard/', views.dashboard, name="dashboard"),
     path('prova/', views.OperatorView.as_view(), name="visualizza_operatori"),
+    # path(
+    #     "dettaglio/<int:pk>/<int:pk_linea>/crea_tempo/",
+    #     views.aggiungi_operatore_attivo,
+    #     name="crea_tempo",
+    # ),
+    
     path(
-        "dettaglio/<int:pk>/crea_tempo/",
+        "dettaglio/<int:pk>/<int:pk_linea>/<int:idtempomaster>/crea_tempo/",
         views.aggiungi_operatore_attivo,
         name="crea_tempo",
     ),
@@ -23,12 +31,37 @@ urlpatterns = [
         name="crea_tempo_barcode",
     ),
 
-    path('', dashboard, name='homeview'),
     path(
-        "dettaglio/<int:id>/elimina-operatore/<int:pk>/",
-        views.CancellaOperatore.as_view(),
+        'tempi_aperti/', OpenTimeView.as_view(),
+        name="tempi_aperti"    
+        
+    ),
+    
+    path('', dashboard, name='homeview'),
+    # path(
+    #     "dettaglio/<int:id>/elimina-operatore/<int:pk>/<int:id_linea>/",
+    #     views.CancellaOperatore.as_view(),
+    #     name="cancella_operatore",
+    # ),
+    
+    # path(
+    #     "dettaglio/<int:idtempo>/elimina-operatore/",
+    #     views.delete_operatore,
+    #     name="cancella_operatore",
+    # ),
+    
+    # path(
+    #     "dettaglio/<int:pk>/elimina-operatore/<int:idtempo>/",
+    #     views.delete_operatore,
+    #     name="cancella_operatore",
+    # ),
+    
+    path(
+        "dettaglio/elimina-operatore/<int:idtempo>/",
+        views.delete_operatore,
         name="cancella_operatore",
     ),
+    
     path(
         "dettaglio/<int:pk>/",
         views.cerca_operatore,
@@ -40,19 +73,27 @@ urlpatterns = [
         name="vedi-linea",
         
     ),
-    path("chiudi-operatore/<int:pk>/", views.chiudi_operatore, name="chiudi_operatore"),
-    path("dettaglio/<int:id>/aggiorna-operatore/<int:pk>/", views.TempoUpdateView.as_view(), name="aggiorna_operatore"),
+    path("chiudi-operatore/<int:idtempo>/", views.chiudi_operatore, name="chiudi_operatore"),
+    # path("dettaglio/<int:id>/aggiorna-operatore/<int:pk>/", views.TempoUpdateView.as_view(), name="aggiorna_operatore"),
+    path("dettaglio/<int:pk>/aggiorna-operatore/<int:iddett>/", views.aggiorna_operatore_attivo, name="aggiorna_operatore"),
     #path("aggiorna-operatore/<int:pk>/", views.TempoUpdateView.as_view(), name="aggiorna_operatore"),
-    path("chiudi-lavorazione/<int:pk>/", views.chiudi_lavorazione, name="chiudi_lavorazione"),
-    path("apri-lavorazione/<int:pk>/", views.apri_lavorazione, name="apri_lavorazione"),
+    path("chiudi-lavorazione/<int:pk>/<int:id_linea>/", views.chiudi_lavorazione, name="chiudi_lavorazione"),
+    path("apri-lavorazione/<int:pk>/<int:id_linea>/", views.apri_lavorazione, name="apri_lavorazione"),
     #Prova inserimento direttamente da card linea nella dashboard
     path(
-        "add-to-line/<int:pk>/",
+        "add-to-line/<int:id_linea>/",
         views.add_line_search_order,        
         name="add-to-line",
         
     ),
+    path(
+        "add-master/<int:pk>/<int:id_linea>/",
+        views.add_master_time,
+        name="add-master"
+    ),
     
-
-
+    # path("quantity/<int:pk>/update/",
+    #     views.QuantityUpdateView.as_view(), 
+    #     name='update-quantity-time'
+    #     ),
     ]

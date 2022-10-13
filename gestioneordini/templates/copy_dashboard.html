@@ -12,31 +12,15 @@
 
 
 <hr>
-{% if tempi_aperti_count > 0 %}
-<div class="row mb-2 justify-content-end">
-    
-    <div class="col-md-2 me-2">
-        
-    <button onclick="goToOpenTimes()" type="button" class="btn btn-primary btn-sm position-relative float-end ">
-        Tempi aperti
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {{ tempi_aperti_count }}
-        <span class="visually-hidden">tempi aperti</span>
-        </span>
-    </button>
-</div>
-</div>
-        
-{% endif %}
 {% include 'partials/_stats_cards.html' %}
-<p id="users-count"></p>
+  <p id="users-count"></p>
 
-{% include 'partials/_working_lines.html' %}
-
+  {% include 'partials/_working_lines.html' %}
+    
 </div>
-<br>
-<hr>
-<br>
+  <br>
+  <hr>
+  <br>
 
 
 {% endblock content %}
@@ -117,13 +101,6 @@
     $('#id_id_danger').val(firstName);
     $("#modal-div").modal();
     }
-
-    
-    function goToOpenTimes(){
-        document.location.href = "{% url 'gestioneordini:tempi_aperti' %}"
-        
-    }
-    
 </script>
 
 <script src="{% static 'js/dashboard.js' %}"></script>

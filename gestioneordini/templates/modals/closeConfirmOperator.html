@@ -1,0 +1,38 @@
+{% extends 'modals/baseModal.html' %}
+
+<!-- Modal ID -->
+{% block modal-id %} id="closeConfirmOperator" caller-id=""{% endblock modal-id %}
+
+<!-- Modal Title -->
+{% block modal-title %}
+<h5><i class="bi bi-question-circle"></i>&nbsp;&nbsp; Sei sicuro?</h5>
+{% endblock modal-title %}
+
+<!-- Modal Body -->
+{% block modal-body %}
+<br>
+
+<p>Sei sicuro di voler chiudere questa presa tempo?</p>
+{% endblock modal-body %}
+
+<!-- Modal Footer -->
+{% block modal-footer %}
+<button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" id="confirmCloseButtonModal"> Chiudi Tempo</button>
+        
+
+<script type="text/javascript">
+    $(document).on('click', '.confirm-close', function () {
+        console.log("Cliccato")
+        $("#closeConfirmOperator").attr("caller-id", $(this).attr("id"));
+        
+        });
+        
+      $(document).on('click', '#confirmCloseButtonModal', function () {
+        console.log("Prova")
+        var caller = $("#confirmCloseButtonModal").closest(".modal").attr("caller-id");
+        window.location = $("#".concat(caller)).attr("href");
+        console.log("Indirizzo:" + $("#".concat(caller)).attr("href"))
+        
+      });
+    </script>
+{% endblock modal-footer %}

@@ -32,7 +32,7 @@
                 {% endif %}
             </div>
             <div class="card-footer text-center">
-                <a class="btn btn-outline-success btn-sm " href="{% url 'gestioneordini:visualizza_dettaglio_da_linea' pk=linea.get_line.iddettordine.pk id_linea=linea.pk idtempomaster=linea.get_line.pk %}" role="button">vedi dettaglio</a>
+                <a class="btn btn-outline-success btn-sm " href="{% url 'gestioneordini:visualizza_dettaglio_da_linea' pk=linea.get_line.iddettordine.pk id_linea=linea.pk %}" role="button">vedi dettaglio</a>
             </div>
             {% else %}
             <div class="card-body">

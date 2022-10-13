@@ -1,0 +1,20 @@
+<div class="modal" id="closeConfirmTime1" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title"><i class="bi bi-question-circle"></i>&nbsp;&nbsp; Sei sicuro?</h5>          
+        </div>
+        <div class="modal-body">
+          <p>Sei sicuro di voler chiudere i tempi di questo dettaglio?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Annulla</button>          
+          <form action="{% url 'gestioneordini:chiudi_lavorazione' pk=dettaglio.pk id_linea=linea.id_linea %}" method="POST">
+            
+          {% csrf_token %}            
+            <button class="btn btn-outline-danger btn-sm" type="submit" ><i class="bi bi-stopwatch-fill"></i>&nbsp;&nbsp; Chiudi tempi</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>

@@ -14,7 +14,7 @@
         {% else %}
         <h4>Operatore dimesso!</h4>
         {% endif %}
-        <a class="btn btn-outline-danger" href="{% url 'cerca_operatore_attivo' pk=dettaglio_attivo.pk %}" role="button"
+        <a class="btn btn-outline-danger" href="{% url 'gestioneordini:cerca_operatore_attivo' pk=dettaglio_attivo.pk %}" role="button"
                 ><i class="bi bi-arrow-counterclockwise"></i> Annulla</a>
     </div>
 </div>

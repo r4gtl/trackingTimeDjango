@@ -1,0 +1,23 @@
+{% extends 'modals/baseModal.html' %}
+
+<!-- Modal ID -->
+{% block modal-id %} id="closeConfirmTime" {% endblock modal-id %}
+
+<!-- Modal Title -->
+{% block modal-title %}
+<h5><i class="bi bi-question-circle"></i>&nbsp;&nbsp; Sei sicuro?</h5> 
+{% endblock modal-title %}
+
+<!-- Modal Body -->
+{% block modal-body %}
+<p>Sei sicuro di voler chiudere i tempi di questo dettaglio?</p>
+{% endblock modal-body %}
+
+<!-- Modal Footer -->
+{% block modal-footer %}
+<form action="{% url 'gestioneordini:chiudi_lavorazione' pk=tempomaster.pk id_linea=linea.id_linea %}" method="POST">
+            
+    {% csrf_token %}            
+      <button class="btn btn-outline-danger btn-sm" type="submit" ><i class="bi bi-stopwatch-fill"></i>&nbsp;&nbsp; Chiudi tempi</button>
+    </form>
+{% endblock modal-footer %}

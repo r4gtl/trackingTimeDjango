@@ -64,8 +64,8 @@
 
         
 
-		    <button class="btn btn-primary" type="submit">Cerca</button>
-		  
+      <button class="btn btn-primary" type="submit">Cerca</button>
+    </form>
     
 		</div>
 	</div>
@@ -90,10 +90,8 @@
   </thead>
     
     <tbody>
-      {% for dettaglio_ordini in initial_orders %}
-          <td style="text-align: center;"><a href="{{ dettaglio_ordini.get_absolute_url }}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil" viewBox="0 0 16 16">
-            <path d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"/>
-          </svg></a></td>
+      {% for dettaglio_ordini in filter_paginated %}
+          <td style="text-align: center;"><a href="{% url 'gestioneordini:add-master' pk=dettaglio_ordini.iddettordine id_linea=linea.pk %}"><i class="bi bi-pencil"></i></a></td>
           <td class="col-md-1">{{ dettaglio_ordini.idordine.nordine }}</td>
           <td class="col-md-2">{{ dettaglio_ordini.ncommessa|default_if_none:" " }}</td>  
           <td class="col-md-2">{{ dettaglio_ordini.idcomponente.codice|default_if_none:" "  }}</td>
@@ -115,20 +113,20 @@
   </table>
    <div class="pagination">
     <span class="step-links">
-        {% if page_obj.has_previous %}
+        {% if filter_paginated.has_previous %}
             <a class="btn btn-info" href="?page=1">&laquo; Prima</a>
-            <a class="btn btn-info" href="?page={{ page_obj.previous_page_number }}">Precedente &raquo;</a>
+            <a class="btn btn-info" href="?page={{ filter_paginated.previous_page_number }}">Precedente &raquo;</a>
             
         {% endif %}
 
         <span class="current">
-            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+            Page {{ filter_paginated.number }} of {{ filter_paginated.paginator.num_pages }}.
         </span>
 
-        {% if page_obj.has_next %}
+        {% if filter_paginated.has_next %}
         
-            <a class="btn btn-info" href="?page={{ page_obj.next_page_number }}">Successiva</a>
-            <a class="btn btn-info" href="?page={{ page_obj.paginator.num_pages }}">Ultima &raquo;</a>
+            <a class="btn btn-info" href="?page={{ filter_paginated.next_page_number }}">Successiva</a>
+            <a class="btn btn-info" href="?page={{ filter_paginated.paginator.num_pages }}">Ultima &raquo;</a>
             
         {% endif %}
     </span>

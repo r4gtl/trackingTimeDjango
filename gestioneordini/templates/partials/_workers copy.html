@@ -1,7 +1,7 @@
 {% load static %}
 
 
-
+{% include 'modals/closeConfirmOperator.html' %}
 <!-- inizio operatori attivi -->
 <div class="table-responsive">
     <table class="table table-hover table-striped table-bordered">
@@ -30,18 +30,23 @@
             <td>{{ operatori_attivi.orafine|default_if_none:" " }}</td>
             <td style="text-align: center;">
                 <!-- Button trigger modal -->
-                
-                <a href="{% url 'gestioneordini:chiudi_operatore' idtempo=operatori_attivi.pk %}" title="Close" data-bs-toggle="modal" data-bs-target="#closeConfirmOperator" id="{{ operatori_attivi.pk }}" class="btn btn-sm btn-outline-success confirm-close"><i class="bi bi-alarm"></i> Chiudi</a>
+                <button type="button" class="btn btn-outline-success btn-sm" id="closeConfirmOperator" data-bs-toggle="modal" data-bs-target="#closeConfirmOperator">
+                    <span class="bi bi-alarm"> Chiudi</span>
+                </button>
                 
             </td>
             <td>
-            <!-- Button trigger modal -->
-            
-            
-            <a href="{% url 'gestioneordini:cancella_operatore' idtempo=operatori_attivi.pk %}" class="btn btn-sm btn-outline-danger confirm-delete" title="Delete" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal" id="deleteButton{{operatori_attivi.pk}}"><i class="bi bi-trash"></i> Elimina</a>
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-outline-danger btn-sm" id="delConfirmOperator" data-bs-toggle="modal" data-bs-target="#delConfirmOperator{{ operatori_attivi.pk }}">
+                    <span class="bi bi-trash"> {{ operatori_attivi.pk }}</span>
+                </button>
+                
+                
+            </td>
+            {% include 'modals/delConfirm.html' %}
 
-        </td>
-        
+                  
+            
         </tr>
         
         {% endfor %}

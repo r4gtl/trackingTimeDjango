@@ -5,6 +5,7 @@
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
 #   * Remove `managed = True` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
+from enum import unique
 from django.db import models
 from django.urls import reverse
 from django.db.models import Max
@@ -164,7 +165,7 @@ class Tblcomponenti(models.Model):
 
 
 class Tbldettaglioordini(models.Model):
-    iddettordine = models.IntegerField(primary_key=True)
+    iddettordine = models.IntegerField(primary_key=True, unique=True)
     idordine = models.ForeignKey('Tblordini', models.DO_NOTHING, db_column='idordine', blank=True, null= True)
     idcollegamento = models.ForeignKey('TblCollegamenti', models.DO_NOTHING, db_column='idcollegamento',  blank=True, null= True)
     posizione = models.FloatField(blank=True, null=True)
@@ -301,20 +302,41 @@ class TblLineeLav(models.Model):
         db_table = "tbl_linee_lav"
     
     '''Recupero l'ordine in lavorazione'''
+    # Modifica effettuata in data 04/10/2022 perchè serve prendere più tempi per un singolo dettaglio
+    # def get_line(self):
+    #     tempi_object = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')                       
+    #     partial_qs=tempi_object.values('id_linea').annotate(ultimo=Max('orainizio'))        
+    #     tempi_object=tempi_object.filter(orainizio__in=partial_qs.values('ultimo').order_by('-orainizio')).filter(id_linea=self.id_linea).first()
+    #     #print("tempi_object: " + str(tempi_object))
+    #     return tempi_object 
     def get_line(self):
-        tempi_object = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')                       
-        partial_qs=tempi_object.values('id_linea').annotate(ultimo=Max('orainizio'))        
-        tempi_object=tempi_object.filter(orainizio__in=partial_qs.values('ultimo').order_by('-orainizio')).filter(id_linea=self.id_linea).first()
+        tempi_object = tblTempiMaster.objects.filter(completato=False).order_by('-datatempo')                       
+        partial_qs=tempi_object.values('id_linea').annotate(ultimo=Max('datatempo'))        
+        tempi_object=tempi_object.filter(datatempo__in=partial_qs.values('ultimo').order_by('-datatempo')).filter(id_linea=self.id_linea).first()
+        
         return tempi_object 
 
     def __str__(self):
         return self.descrizione_linea
 
-
+class tblTempiMaster(models.Model):
+    idtempomaster = models.AutoField(primary_key=True)
+    iddettordine = models.ForeignKey(Tbldettaglioordini, on_delete=models.DO_NOTHING, to_field='iddettordine', db_column='iddettordine', blank=True, null=True)
+    datatempo = models.DateField(blank=True, null=True, verbose_name="Data")  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.
+    quantity = models.FloatField(blank=True, null=True, verbose_name="Quantità Presa Tempo")
+    id_linea = models.ForeignKey(TblLineeLav, on_delete=models.DO_NOTHING, db_column='id_linea',blank=True, null=True)
+    completato = models.BooleanField(blank=True, null=True, default=False)
+    inlavoro = models.BooleanField(blank=True, null=True, default=True)
+    
+    class Meta:
+        managed = True
+        db_table = 'tbltempimaster'
+        verbose_name = "tbltempimaster"
+        verbose_name_plural = "tbltempimaster"
 
 class Tbltempi(models.Model):
     idtempo = models.AutoField(primary_key=True)
-    iddettordine = models.ForeignKey(Tbldettaglioordini, on_delete=models.DO_NOTHING, db_column='iddettordine', blank=True, null=True)
+    iddettordine = models.ForeignKey(Tbldettaglioordini, on_delete=models.DO_NOTHING, to_field='iddettordine', db_column='iddettordine', blank=True, null=True)
     idoperatore = models.ForeignKey(Tbloperatori, on_delete=models.DO_NOTHING, db_column='idoperatore', blank=False, null=False)
     idfase = models.ForeignKey(Tblfasi, on_delete=models.DO_NOTHING, db_column='idfase', blank=True, null=True)
     datatempo = models.DateField(blank=True, null=True, verbose_name="Data")  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.
@@ -323,7 +345,7 @@ class Tbltempi(models.Model):
     note = models.CharField(max_length=10485760, blank=True, null=True, verbose_name="Note")
     quantitatemporiparazione = models.FloatField(blank=True, null=True, verbose_name="Quantità Riparati")
     id_linea = models.ForeignKey(TblLineeLav, on_delete=models.DO_NOTHING, db_column='id_linea', blank=True, null=True)
-
+    idtempomaster =  models.ForeignKey(tblTempiMaster, on_delete=models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = True

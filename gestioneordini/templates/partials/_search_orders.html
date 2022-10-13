@@ -1,12 +1,12 @@
 <h3>Lista Ordini</h3>
     
-    <a class="btn btn-success btn-sm mb-2 " href="{% url 'lista_ordini' %}" role="button">Tutti gli ordini</a>
+    <a class="btn btn-success btn-sm mb-2 " href="{% url 'gestioneordini:lista_ordini' %}" role="button">Tutti gli ordini</a>
 
     <!-- Alerts -->
 {% include 'partials/_alerts.html' %}
 
 <div class="form-inline my-2 my-lg-0">
-    <form class="d-flex" action="{% url 'funzione_cerca' %}">
+    <form class="d-flex" action="{% url 'gestioneordini:funzione_cerca' %}">
     <input
         name="q"
         class="form-control me-sm-2"
