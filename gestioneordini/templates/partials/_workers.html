@@ -25,14 +25,16 @@
             </a></td>
             <td>{{ operatori_attivi.idoperatore }}</td>
             <td>{{ operatori_attivi.idfase }}</td>  
-            <td>{{ operatori_attivi.datatempo }}</td>
+            <td>{{ operatori_attivi.datatempo|date:'d/m/Y' }}</td>
             <td>{{ operatori_attivi.orainizio }}</td> 
             <td>{{ operatori_attivi.orafine|default_if_none:" " }}</td>
             <td style="text-align: center;">
                 <!-- Button trigger modal -->
-                
+                {% if operatori_attivi.orafine %}
+                <a href="#" class="btn btn-sm btn-outline-success disabled "><i class="bi bi-alarm"></i> Chiudi</a>
+                {% else %}                
                 <a href="{% url 'gestioneordini:chiudi_operatore' idtempo=operatori_attivi.pk %}" title="Close" data-bs-toggle="modal" data-bs-target="#closeConfirmOperator" id="{{ operatori_attivi.pk }}" class="btn btn-sm btn-outline-success confirm-close"><i class="bi bi-alarm"></i> Chiudi</a>
-                
+                {% endif %}
             </td>
             <td>
             <!-- Button trigger modal -->

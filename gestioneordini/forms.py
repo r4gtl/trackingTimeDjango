@@ -56,7 +56,7 @@ class TempoModelForm(forms.ModelForm):
             # "datatempo": forms.DateInput(attrs={'class':'form-control', 'value': datetime.date.today().strftime("%d-%m-%Y"), 'type': 'date'}),            
             
             "iddettordine": forms.HiddenInput(), 
-            "idtempo": forms.HiddenInput(),
+            "idtempo": forms.HiddenInput(),            
             "datatempo": forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control', 'type': 'date'}),
             "orainizio": forms.TimeInput(format=('%H:%M:%S'),attrs={'type': 'time', 'id': 'id_date_select'}),
             "orafine": forms.TimeInput(format=('%H:%M:%S'), attrs={'type': 'time'}),            

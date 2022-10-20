@@ -171,34 +171,34 @@ def cerca_operatore(request, pk):
                         messages.error(request, 'Operatore inesistente')
                         return redirect(dettaglio.get_absolute_url())
 
-# update view for details
-def aggiorna_operatore_attivo(request, pk, iddett):
-        # dictionary for initial data with
-        # field names as keys
-        context ={}
+# # update view for details
+# def aggiorna_operatore_attivo(request, pk, iddett):
+#         # dictionary for initial data with
+#         # field names as keys
+#         context ={}
 
-        # fetch the object related to passed id
-        obj = get_object_or_404(Tbltempi, pk = pk)
+#         # fetch the object related to passed id
+#         obj = get_object_or_404(Tbltempi, pk = pk)
         
-        linea = TblLineeLav.objects.get(id_linea=obj.id_linea.id_linea)
-        dettaglio = Tbldettaglioordini.objects.get(iddettordine=iddett)
-        print("DettaglioAggiorna: " + str(dettaglio))
-        # pass the object as instance in form
-        form = TempoModelForm(request.POST or None, instance = obj)
+#         linea = TblLineeLav.objects.get(id_linea=obj.id_linea.id_linea)
+#         dettaglio = Tbldettaglioordini.objects.get(iddettordine=iddett)
+#         print("DettaglioAggiorna: " + str(dettaglio))
+#         # pass the object as instance in form
+#         form = TempoModelForm(request.POST or None, instance = obj)
 
-        # save the data from the form and
-        # redirect to detail_view
-        if form.is_valid():
-                tempo = form.save(commit=False)
-                #tempo.idtempo=str(last_time_recorded['idtempo__max']+1)
-                tempo.iddettordine = dettaglio
-                form.save()
-                url_match= reverse_lazy('gestioneordini:visualizza_dettaglio', kwargs={'pk': dettaglio.iddettordine, 'id_linea': linea.id_linea})
-                return redirect(url_match)
+#         # save the data from the form and
+#         # redirect to detail_view
+#         if form.is_valid():
+#                 tempo = form.save(commit=False)
+#                 #tempo.idtempo=str(last_time_recorded['idtempo__max']+1)
+#                 tempo.iddettordine = dettaglio
+#                 form.save()
+#                 url_match= reverse_lazy('gestioneordini:visualizza_dettaglio', kwargs={'pk': dettaglio.iddettordine, 'id_linea': linea.id_linea, 'idtempo': pk})
+#                 return redirect(url_match)
 
-        # add form dictionary to context
-        context = {'form': form, 'dettaglio': dettaglio, 'linea': linea}
-        return render(request, 'creatempo.html', context)
+#         # add form dictionary to context
+#         context = {'form': form, 'dettaglio': dettaglio, 'linea': linea}
+#         return render(request, 'creatempo.html', context)
         
 
 
@@ -439,15 +439,47 @@ def aggiungi_operatore_attivo(request, pk, pk_linea, idtempomaster):
         
         else:
                 form = TempoModelForm(instance=dettaglio, initial=initial_data)
-                form.fields['idoperatore'].queryset=Tbloperatori.objects.filter(dimesso__iexact="false").exclude(tbltempi__orafine__isnull=True).order_by('cognome')
+                # form.fields['idoperatore'].queryset=Tbloperatori.objects.filter(dimesso__iexact="false").exclude(tbltempi__orafine__isnull=True).order_by('cognome')
+                
 
 
         context = {'form': form, 'dettaglio': dettaglio, 'linea': linea, 'tempomaster': tempomaster}
         return render(request, 'creatempo.html', context)
 
 
+# update view for details
+def aggiorna_operatore_attivo(request, pk, iddett):
+        # dictionary for initial data with
+        # field names as keys
+        context ={}
+
+        # fetch the object related to passed id
+        obj = get_object_or_404(Tbltempi, pk = pk)
+        tempomaster=tblTempiMaster.objects.get(pk=obj.idtempomaster.idtempomaster)
+        linea = TblLineeLav.objects.get(id_linea=obj.id_linea.id_linea)
+        dettaglio = Tbldettaglioordini.objects.get(iddettordine=iddett)
+        print("DettaglioAggiorna: " + str(dettaglio))
+        # pass the object as instance in form
+        form = TempoModelForm(request.POST or None, instance = obj)
+
+        # save the data from the form and
+        # redirect to detail_view
+        if form.is_valid():
+                tempo = form.save(commit=False)
+                #tempo.idtempo=str(last_time_recorded['idtempo__max']+1)
+                tempo.iddettordine = dettaglio
+                form.save()
+                return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=dettaglio.iddettordine, id_linea=linea.id_linea, idtempomaster=tempomaster.pk)
+                #url_match= reverse_lazy('gestioneordini:visualizza_dettaglio_da_linea', kwargs={'pk': dettaglio.iddettordine, 'id_linea': linea.id_linea, 'idtempomaster': tempomaster.pk})
+                #return redirect(url_match)
+
+        # add form dictionary to context
+        context = {'form': form, 'dettaglio': dettaglio, 'linea': linea, 'tempomaster': tempomaster}
+        return render(request, 'creatempo.html', context)
+
 def chiudi_operatore(request, idtempo):
         dettaglio = get_object_or_404(Tbltempi, idtempo=idtempo)
+        print("dettaglio_chiudi: " + str(dettaglio))
         linea = dettaglio.id_linea
         tempomaster=tblTempiMaster.objects.get(pk=dettaglio.idtempomaster.pk)
         print("tempomaster_chiudi:" + str(tempomaster))
@@ -484,7 +516,7 @@ class OpenTimeView(ListView):
         ordering = ['-datatempo']      
 
         def get_queryset(self):
-                object_list = tblTempiMaster.objects.filter(inlavoro=True)                
+                object_list = tblTempiMaster.objects.filter(inlavoro=True).order_by('datatempo', 'pk')               
                 return object_list
 
 

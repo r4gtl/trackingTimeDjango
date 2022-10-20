@@ -33,7 +33,7 @@ DEBUG = env('DEBUG')
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
-# SECRET_KEY = 'django-insecure-h&=#e_f5b&5_1*y7v2%&z=5!u56pdqh*mcsr_^cj4b)*0qt6wr'
+
 SECRET_KEY = env('SECRET_KEY')
 
 ALLOWED_HOSTS = ['*']

@@ -20,7 +20,8 @@
         
         {{ form.idtempo.as_hidden }}
         {{ form.idtempomaster|as_crispy_field }}
-        {{ form.id_linea|as_crispy_field }}                 
+        <h3>Linea {{ linea.id_linea }}</h3>
+        {{ form.id_linea.as_hidden }}                         
     </div>
     <div class="col-md-6">
         {{ form.idoperatore|as_crispy_field }} 
