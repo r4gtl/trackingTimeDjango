@@ -120,7 +120,7 @@
     {% include 'partials/_alerts.html' %}
     
     <div class="form-inline my-2 my-lg-0">
-        <form class="d-flex" action="{% url 'gestioneordini:crea_tempo_barcode' pk=dettaglio.iddettordine  %}">
+        <form class="d-flex" action="{% url 'gestioneordini:crea_tempo_barcode' pk=dettaglio.iddettordine pk_linea=linea.id_linea idtempomaster=tempomaster.pk  %}">
           <input
             name="q"
             class="form-control me-sm-2"

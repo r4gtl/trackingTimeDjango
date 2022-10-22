@@ -166,7 +166,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Messages
 from django.contrib.messages import constants as messages
 MESSAGE_TAGS = {
-    messages.ERROR: 'danger'
+    messages.ERROR: 'danger',
+    messages.SUCCESS: 'success'
 }
 
 # EMAIL_BACKEND = 'django.core.mail.console.EmailBackend'

@@ -40,7 +40,7 @@ urlpatterns = [
     ),
     
     path(
-        "dettaglio/<int:pk>/crea_tempo_barcode/",
+        "dettaglio/<int:pk>/<int:pk_linea>/<int:idtempomaster>/crea_tempo_barcode/",
         views.cerca_operatore,
         name="crea_tempo_barcode",
     ),
