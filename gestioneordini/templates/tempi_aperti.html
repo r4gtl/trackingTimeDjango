@@ -26,6 +26,7 @@
         <th>Azioni</th>        
         <th>Presa tempo</th>
         <th>Data presa tempo</th>
+        <th>Linea</th>
         <th>Ordine</th>        
         <th>Data Ordine</th>
         <th>Cliente</th> 
@@ -42,6 +43,7 @@
             </a></td>
             <td class="col-md-2">{{ tempo_aperto.pk }}</td>
             <td class="col-md-2">{{ tempo_aperto.datatempo|date:'d/m/Y' }}</td>  
+            <td class="col-md-2">{{ tempo_aperto.id_linea }}</td>  
             <td class="col-md-1">{{ tempo_aperto.iddettordine.idordine.nordine  }}</td>
             <td class="col-md-2">{{ tempo_aperto.iddettordine.idordine.dataordine|date:'d/m/Y' }}</td>
             <td class="col-md-4">{{ tempo_aperto.iddettordine.idordine.idcliente.ragionesociale }}</td>

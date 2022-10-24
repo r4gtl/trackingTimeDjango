@@ -345,7 +345,7 @@ class Tbltempi(models.Model):
     note = models.CharField(max_length=10485760, blank=True, null=True, verbose_name="Note")
     quantitatemporiparazione = models.FloatField(blank=True, null=True, verbose_name="Quantità Riparati")
     id_linea = models.ForeignKey(TblLineeLav, on_delete=models.DO_NOTHING, db_column='id_linea', blank=True, null=True)
-    idtempomaster =  models.ForeignKey(tblTempiMaster, on_delete=models.DO_NOTHING, blank=True, null=True)
+    idtempomaster =  models.ForeignKey(tblTempiMaster, on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         managed = True

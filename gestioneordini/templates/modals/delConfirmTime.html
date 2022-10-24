@@ -1,0 +1,23 @@
+{% extends 'modals/baseModal.html' %}
+
+<!-- Modal ID -->
+{% block modal-id %} id="delConfirmTime" {% endblock modal-id %}
+
+<!-- Modal Title -->
+{% block modal-title %}
+<h5 style="color:#dc3545"><i class="bi bi-dash-circle-fill" style="color: #dc3545"></i>&nbsp;&nbsp; ATTENZIONE!</h5> 
+{% endblock modal-title %}
+
+<!-- Modal Body -->
+{% block modal-body %}
+<p class="text-align-center">Stai per eliminare questa presa tempo! Sei sicuro?</p>
+{% endblock modal-body %}
+
+<!-- Modal Footer -->
+{% block modal-footer %}
+<form action="{% url 'gestioneordini:cancella_lavorazione' pk=tempomaster.pk  %}" method="POST">
+            
+    {% csrf_token %}            
+      <button class="btn btn-outline-danger btn-sm" type="submit" ><i class="bi bi-trash-fill"></i>&nbsp;&nbsp; Elimina</button>
+    </form>
+{% endblock modal-footer %}

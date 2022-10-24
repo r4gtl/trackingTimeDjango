@@ -9,6 +9,7 @@
 
 
 {% include 'modals/closeConfirmTime.html' %}
+{% include 'modals/delConfirmTime.html' %}
 <br>
 <div class="row">
     <div class="col md-2">
@@ -78,22 +79,21 @@
                     <div class="col-md-8">
                         
                     </div>
-                    <div class="col-md-2">
-                        
-                    </div>
-                    <div class="col-md-2">
-                        <div class="form row g-3 mt-1">
-                            {% if form.completato.value is True %}
-                                <a class="btn btn-outline-success btn-sm" href="{% url 'gestioneordini:apri_lavorazione' pk=tempomaster.pk id_linea=linea.id_linea %}" role="button"                       
-                                    ><i class="bi bi-alarm"></i> Riapri</a>
-                            {% else %}                      
-                                <!-- Button trigger modal -->
-                                <button type="button" class="btn btn-outline-danger btn-sm" id="closeConfirmTime" data-bs-toggle="modal" data-bs-target="#closeConfirmTime" >
-                                    <span class="bi bi-stopwatch-fill"> Chiudi Lavorazione</span>
-                                </button>
-                                
-                                
-                            {% endif %}
+                    
+                    <div class="col-md-4">
+                        <div class="form row g-3 mt-1">                                                
+                            <!-- Button trigger modal -->
+                            
+                                <div class="col">
+                                    <button type="button" class="btn btn-outline-success btn-sm" id="closeConfirmTime" data-bs-toggle="modal" data-bs-target="#closeConfirmTime" >
+                                        <span class="bi bi-stopwatch-fill"> Chiudi Lavorazione</span>
+                                    </button>
+                                </div>
+                                <div class="col">
+                                    <button type="button" class="btn btn-outline-danger btn-sm" id="delConfirmTime" data-bs-toggle="modal" data-bs-target="#delConfirmTime" >
+                                        <span class="bi bi-trash-fill"> Elimina Presa Tempo</span>
+                                    </button> 
+                                </div>
                             
                         </div> 
                     

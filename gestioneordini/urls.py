@@ -85,6 +85,10 @@ urlpatterns = [
         views.apri_lavorazione,
         name="apri_lavorazione"),
     
+    path("cancella-lavorazione/<int:pk>/",
+        views.delete_tempo_master,
+        name="cancella_lavorazione"),
+    
     path(
         "add-to-line/<int:id_linea>/",
         views.add_line_search_order,        

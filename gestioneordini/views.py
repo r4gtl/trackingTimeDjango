@@ -362,12 +362,17 @@ def cerca_operatore(request, pk, pk_linea, idtempomaster):
                         messages.error(request, 'Inserire un operatore')
                         return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=pk_linea, idtempomaster=idtempomaster)
                 # Controllo che il barcode passato sia relativo agli operatori
-                verificabarcode=querystring 
-                verifica, codice = verificabarcode.split('-')
-                if verifica.lower()!="operatori":
-                        messages.error(request, 'Stai passando un barcode sbagliato. Il barcode che stai passando è relativo a ' + verifica)
+                verificabarcode=querystring
+                delimiter='-'
+                if delimiter in verificabarcode:
+                        verifica, codice = verificabarcode.split('-')
+                        if verifica.lower()!="operatori":
+                                messages.error(request, 'Stai passando un barcode sbagliato. Il barcode che stai passando è relativo a ' + verifica)
+                                return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=pk_linea, idtempomaster=idtempomaster)
+                else:
+                        messages.error(request, 'Barcode non valido')
                         return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=pk_linea, idtempomaster=idtempomaster)
-                
+                        
                 querystring=codice
                 if Tbloperatori.objects.filter(pk=querystring):
                         operatore = get_object_or_404(Tbloperatori, pk=querystring)
@@ -443,18 +448,22 @@ def chiudi_operatore(request, idtempo):
 
 
 def delete_operatore(request, idtempo):        
-        # fetch the object related to passed id
-        deleteobject = get_object_or_404(Tbltempi, idtempo = idtempo)
         
+        deleteobject = get_object_or_404(Tbltempi, idtempo = idtempo)        
         dettaglio=deleteobject.iddettordine           
         linea = deleteobject.id_linea  
-        tempomaster=deleteobject.idtempomaster
-        
-        # if request.method =="POST":                
+        tempomaster=deleteobject.idtempomaster      
         deleteobject.delete()
         url_match= reverse_lazy('gestioneordini:visualizza_dettaglio_da_linea', kwargs={'pk':dettaglio.pk, 'id_linea': linea.id_linea, 'idtempomaster': tempomaster.pk})      
         return redirect(url_match)
 
+def delete_tempo_master(request, pk):        
+        '''
+        Cancello il tempo master e in cascate i corrispettivi TblTempi
+        '''
+        deleteobject = get_object_or_404(tblTempiMaster, pk = pk)
+        deleteobject.delete()
+        return redirect('gestioneordini:dashboard')
 
 
 class OpenTimeView(ListView):
