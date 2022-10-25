@@ -15,6 +15,7 @@ from .forms import FormDettaglio, TempoModelForm, FormMaster, QuantityModelForm
 from datetime import datetime, time, timedelta, date
 from django.contrib import messages
 from django.utils import timezone
+from .utilities import check_barcode, check_barcode_type
 
 
 def home(request):
@@ -361,19 +362,19 @@ def cerca_operatore(request, pk, pk_linea, idtempomaster):
                 if len(querystring) == 0:
                         messages.error(request, 'Inserire un operatore')
                         return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=pk_linea, idtempomaster=idtempomaster)
-                # Controllo che il barcode passato sia relativo agli operatori
-                verificabarcode=querystring
-                delimiter='-'
-                if delimiter in verificabarcode:
-                        verifica, codice = verificabarcode.split('-')
-                        if verifica.lower()!="operatori":
-                                messages.error(request, 'Stai passando un barcode sbagliato. Il barcode che stai passando è relativo a ' + verifica)
-                                return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=pk_linea, idtempomaster=idtempomaster)
-                else:
-                        messages.error(request, 'Barcode non valido')
+                
+                # Controllo che il barcode passato sia valido                
+                if check_barcode(querystring)[0] == True:
+                        messages.error(request, check_barcode(querystring)[1])
                         return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=pk_linea, idtempomaster=idtempomaster)
-                        
-                querystring=codice
+                
+                # Controllo che il barcode passato sia relativo agli operatori
+                if check_barcode_type(querystring, 'operatori')[0] == False:                        
+                        messages.error(request, check_barcode_type(querystring, 'operatori')[1])
+                        return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=pk_linea, idtempomaster=idtempomaster)
+                
+                querystring=check_barcode_type(querystring, 'operatori')[1]              
+                
                 if Tbloperatori.objects.filter(pk=querystring):
                         operatore = get_object_or_404(Tbloperatori, pk=querystring)
                         if Tbltempi.objects.filter(idoperatore=querystring, orafine__isnull=True):                                
