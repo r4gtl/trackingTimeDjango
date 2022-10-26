@@ -110,30 +110,30 @@
 
 
 <div class="container">
-<div style="display:fixed;">
-    <h5>Operatori Attivi</h5> 
-    <a class="btn btn-sm btn-outline-primary" href="{% url 'gestioneordini:crea_tempo' pk=dettaglio.iddettordine pk_linea=linea.id_linea idtempomaster=tempomaster.pk %}">Aggiungi operatore manualmente</a>
-    <br>
-    <br>
-    <p>...oppure...</p>
-    <!-- Alerts -->
-    {% include 'partials/_alerts.html' %}
-    
-    <div class="form-inline my-2 my-lg-0">
-        <form class="d-flex" action="{% url 'gestioneordini:crea_tempo_barcode' pk=dettaglio.iddettordine pk_linea=linea.id_linea idtempomaster=tempomaster.pk  %}">
-          <input
-            name="q"
-            class="form-control me-sm-2"
-            type="search"
-            placeholder="Leggi il codice a barre..."
-            aria-label="Search"
-            autofocus="True"
-          />
-          <button class="btn btn-outline-primary" type="submit"  >Cerca</button>
-        </form>
+    <div style="display:fixed;">
+        <h5>Operatori Attivi</h5> 
+        <a class="btn btn-sm btn-outline-primary" href="{% url 'gestioneordini:crea_tempo' pk=dettaglio.iddettordine pk_linea=linea.id_linea idtempomaster=tempomaster.pk %}">Aggiungi operatore manualmente</a>
+        <br>
+        <br>
+        <p>...oppure...</p>
+        <!-- Alerts -->
+        {% include 'partials/_alerts.html' %}
         
-      </div>
-</div>
+        <div class="form-inline my-2 my-lg-0">
+            <form class="d-flex" action="{% url 'gestioneordini:crea_tempo_barcode' pk=dettaglio.iddettordine pk_linea=linea.id_linea idtempomaster=tempomaster.pk  %}">
+            <input
+                name="q"
+                class="form-control me-sm-2"
+                type="search"
+                placeholder="Leggi il codice a barre..."
+                aria-label="Search"
+                autofocus="True"
+            />
+            <button class="btn btn-outline-primary" type="submit"  >Cerca</button>
+            </form>
+            
+        </div>
+    </div>
 </div>
 
 <div class="container">

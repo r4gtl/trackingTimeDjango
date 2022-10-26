@@ -100,33 +100,10 @@ urlpatterns = [
         views.add_master_time,
         name="add-master"
     ),
+    
+    path(
+        "add-master-barcode/<int:id_linea>/",
+        views.add_master_time_barcode,
+        name="add-master-barcode"
+    ),
 ]
-    # path("quantity/<int:pk>/update/",
-    #     views.QuantityUpdateView.as_view(), 
-    #     name='update-quantity-time'
-    #     ),
-    # path('dettaglio_da_linea/<int:pk>/<int:id_linea>/', views.mostra_operatori_linea, name="visualizza_dettaglio_da_linea"),
-    # path(
-    #     "dettaglio/<int:id>/elimina-operatore/<int:pk>/<int:id_linea>/",
-    #     views.CancellaOperatore.as_view(),
-    #     name="cancella_operatore",
-    # ),
-    
-    # path(
-    #     "dettaglio/<int:idtempo>/elimina-operatore/",
-    #     views.delete_operatore,
-    #     name="cancella_operatore",
-    # ),
-    
-    # path(
-    #     "dettaglio/<int:pk>/elimina-operatore/<int:idtempo>/",
-    #     views.delete_operatore,
-    #     name="cancella_operatore",
-    # ),
-    # path(
-    #     "dettaglio/<int:pk>/<int:pk_linea>/crea_tempo/",
-    #     views.aggiungi_operatore_attivo,
-    #     name="crea_tempo",
-    # ),
-    # path("dettaglio/<int:id>/aggiorna-operatore/<int:pk>/", views.TempoUpdateView.as_view(), name="aggiorna_operatore"),
-    #path("aggiorna-operatore/<int:pk>/", views.TempoUpdateView.as_view(), name="aggiorna_operatore"),

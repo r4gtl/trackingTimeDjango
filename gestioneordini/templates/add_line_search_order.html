@@ -7,9 +7,19 @@
 {% block content %}
 
 
-<div style="display:fixed;">
+<div class="mb-3"style="display:fixed;">
     <h5>Cerca un ordine da aggiungere alla {{ linea }}</h5>
 </div>
+
+<!-- Inizio form barcode -->
+<!-- Alerts -->
+{% include 'partials/_alerts.html' %}
+{% include 'partials/_barcode_order_search.html' %}        
+
+<!-- Fine form barcode -->
+<br>
+<p>...oppure...</p>
+
 <div class="row">
 	<div class="col">
 		<div class="card card-body">

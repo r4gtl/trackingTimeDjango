@@ -1,0 +1,15 @@
+
+<div class="form-inline my-3 my-lg-0 ">
+    <form class="d-flex" action="{% url 'gestioneordini:add-master-barcode' id_linea=linea.pk  %}">
+    <input
+        name="q"
+        class="form-control me-sm-2"
+        type="search"
+        placeholder="Leggi il codice a barre..."
+        aria-label="Search"
+        autofocus="True"
+    />
+    <button class="btn btn-outline-primary" type="submit"  >Cerca</button>
+    </form>
+    
+</div>
