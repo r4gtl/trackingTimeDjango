@@ -147,7 +147,7 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
-#if DEBUG:
+#if DEBUG
 STATICFILES_DIRS = [
     BASE_DIR / 'static' 
 ]

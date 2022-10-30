@@ -105,5 +105,11 @@ urlpatterns = [
         "add-master-barcode/<int:id_linea>/",
         views.add_master_time_barcode,
         name="add-master-barcode"
+    ),    
+    
+    path(
+        "ask-for-close/<int:idtempo>/<int:iddettaglio>/<int:pk_linea>/<int:idtempomaster>/",
+        views.ask_for_close_operator,
+        name="ask-for-close"
     ),
 ]

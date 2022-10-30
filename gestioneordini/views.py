@@ -1,7 +1,7 @@
 from django.forms.forms import Form
 from django.forms.models import ModelChoiceField
 from django.shortcuts import get_object_or_404, redirect, render
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 from django.contrib.auth import authenticate, login
 from django.views.generic.list import ListView
 from django.urls import reverse_lazy, reverse
@@ -11,7 +11,11 @@ from django_filters.views import FilterView
 from django.views.generic.edit import CreateView, DeleteView, UpdateView
 from .models import TblLineeLav, Tbldettaglioordini, Tblfasi, Tbloperatori, Tbltempi, tblTempiMaster
 from .filters import OrderFilter
-from .forms import FormDettaglio, TempoModelForm, FormMaster, QuantityModelForm
+from .forms import (
+        FormDettaglio, TempoModelForm,
+        FormMaster, QuantityModelForm,
+        AskForCloseModelForm
+)
 from datetime import datetime, time, timedelta, date
 from django.contrib import messages
 from django.utils import timezone
@@ -105,11 +109,6 @@ def apri_lavorazione(request, pk, id_linea):
                 form = FormDettaglio(instance=dettaglio)
         context = {"dettaglio": dettaglio, "operatori_attivi": operatori_attivi, "linea": linea, 'form': form}
         return render(request, "singolo_dettaglio.html", context)
-
-
-def page_not_found_view(request, exception):
-        return render(request, 'errors/404.html', status=404)
-
 
 
 '''
@@ -433,9 +432,13 @@ def cerca_operatore(request, pk, pk_linea, idtempomaster):
                 
                 if Tbloperatori.objects.filter(pk=querystring):
                         operatore = get_object_or_404(Tbloperatori, pk=querystring)
-                        if Tbltempi.objects.filter(idoperatore=querystring, orafine__isnull=True):                                
-                                messages.error(request, 'Operatore ' + str(operatore) + ' già occupato')                                
-                                return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=pk_linea, idtempomaster=idtempomaster)
+                        if Tbltempi.objects.filter(idoperatore=querystring, orafine__isnull=True):
+                                tempo= Tbltempi.objects.get(idoperatore=querystring, orafine__isnull=True)
+                                idtempo=tempo.idtempo
+                                return redirect('gestioneordini:ask-for-close', idtempo=idtempo, iddettaglio=dettaglio.pk, pk_linea=linea.pk, idtempomaster=tempomaster.pk)
+                                # print("IDTempo che occupa l'operatore: " + str(idtempo))
+                                # messages.error(request, 'Operatore ' + str(operatore) + ' già occupato')                                
+                                # return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=pk_linea, idtempomaster=idtempomaster)
 
                         elif Tbloperatori.objects.filter(idoperatore=querystring, dimesso = True):                                
                                 messages.error(request, 'Operatore ' + str(operatore) + ' dimesso')
@@ -467,23 +470,19 @@ def cerca_operatore(request, pk, pk_linea, idtempomaster):
                         return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=pk_linea, idtempomaster=idtempomaster)
 
 # view di aggiornamento operatori
-def aggiorna_operatore_attivo(request, pk, iddett):
-        # dictionary for initial data with
-        # field names as keys
-        context ={}
-
-        # fetch the object related to passed id
+def aggiorna_operatore_attivo(request, pk, iddett):        
+        context ={}        
         obj = get_object_or_404(Tbltempi, pk = pk)
         tempomaster=tblTempiMaster.objects.get(pk=obj.idtempomaster.idtempomaster)
         linea = TblLineeLav.objects.get(id_linea=obj.id_linea.id_linea)
         dettaglio = Tbldettaglioordini.objects.get(iddettordine=iddett)        
-        # pass the object as instance in form
+        
         form = TempoModelForm(request.POST or None, instance = obj)
-        # save the data from the form and
-        # redirect to detail_view
+        
         if form.is_valid():
                 tempo = form.save(commit=False)                
                 tempo.iddettordine = dettaglio
+                print("data:" + str(tempo.datatempo))
                 form.save()
                 return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=dettaglio.iddettordine, id_linea=linea.id_linea, idtempomaster=tempomaster.pk)
                 
@@ -532,8 +531,37 @@ class OpenTimeView(ListView):
                 object_list = tblTempiMaster.objects.filter(inlavoro=True).order_by('datatempo', 'pk')               
                 return object_list
 
+'''
+View da chiamare in caso di operatore occupato
+idtempo=pk del tempo aperto relativo all'operatore
+iddettaglio=pk del dettaglio da passare per tornare alla pagina precedente
+pk_linea=pk della linea da passare per tornare alla pagina precedente
+idtempomaster=pk del tempomaster da passare per tornare alla pagina precedente
+'''
+def ask_for_close_operator(request, idtempo, iddettaglio, pk_linea, idtempomaster):
+        dettaglio = Tbldettaglioordini.objects.get(pk=iddettaglio)
+        linea = TblLineeLav.objects.get(id_linea=pk_linea)
+        tempomaster=get_object_or_404(tblTempiMaster, pk=idtempomaster)
+        tempo= get_object_or_404(Tbltempi, pk = idtempo)
+        
+        form = AskForCloseModelForm(request.POST or None, instance = tempo)
+        
+        if form.is_valid():
+                print("Valido")
+                tempo = form.save(commit=False)                               
+                tempo.save()              
+                
+                return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=dettaglio.iddettordine, id_linea=linea.id_linea, idtempomaster=tempomaster.pk)
+        
+        context = {'form': form, 'dettaglio': dettaglio, 'linea': linea, 'tempomaster': tempomaster, 'tempo': tempo}
+        return render(request, 'ask_for_close.html', context)
+        
 
-'''Fine prova inserimento direttamente da card linea nella dashboard'''
+'''
+Custom 404 template
+'''
+def page_not_found_view(request, exception):
+        return render(request, 'errors/404.html', status=404)
 
 
 

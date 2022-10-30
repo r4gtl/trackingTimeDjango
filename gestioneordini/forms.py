@@ -90,3 +90,29 @@ class QuantityModelForm(forms.ModelForm):
         widgets = {
             "quantity": forms.NumberInput(attrs={'class': 'input', 'style': 'text-align:right; ', 'required': 'true', 'autofocus': True}),             
         }
+        
+class AskForCloseModelForm(forms.ModelForm):
+
+    class Meta:
+        model = Tbltempi
+
+        fields = ["idtempo","id_linea", "iddettordine", "idoperatore", "idfase", "datatempo", "orainizio", "orafine", "quantitatemporiparazione", "note", "idtempomaster"]
+                
+        widgets = {
+            "iddettordine": forms.HiddenInput(), 
+            "idtempo": forms.HiddenInput(),            
+            "datatempo": forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control', 'type': 'date'}),            
+            "orainizio": forms.HiddenInput(),
+            "orafine": forms.TimeInput(format=('%H:%M:%S'), attrs={'type': 'time'}),            
+            "note": forms.HiddenInput(),
+            "idtempomaster": forms.HiddenInput(),
+            "idoperatore": forms.HiddenInput()            
+        }
+        labels = {
+            "id_linea": "Linea",
+            "idoperatore": "Operatore",
+            "idfase": "Fase",
+            "datatempo": "Data",
+            "orafine": "Ora fine"
+
+        }
