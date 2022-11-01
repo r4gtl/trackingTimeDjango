@@ -7,49 +7,44 @@
 
 {% block content %}
 
-<div class="container">
-    <h5 class="text-center">Attenzione!</h5>
-    <h5 class="text-center">L'operatore {{ tempo.idoperatore }} selezionato</h5>
-    <h5 class="text-center">risulta impegnato sulla linea {{ linea.id_linea }}</h5>
-    <h5 class="text-center">in lavoro con l'ordine {{ dettaglio.idordine }}</h5>
-    
-    <h5 class="text-center">Cliente: {{ dettaglio.idordine.idcliente.ragionesociale }}</h5>    
-    <h5 class="text-center">Presa tempo del {{ tempomaster.datatempo }}, su {{ linea.descrizione_linea }}</h5>
-    <h5 class="text-center">Codice: {{ dettaglio.idcomponente }} | Descrizione: {{ dettaglio.idcomponente.descrizione|default_if_none:"" }} | Quantità Ordine N. {{ dettaglio.quantità|floatformat }}</h5>
-    <h5 class="text-center">Se desideri chiudere quella presa tempo e inserire l'operatore in questa</h5>
-    <h5 class="text-center">inserisci l'ora di chiusura e premi "Chiudi e inserisci"</h5>
-
-    <form method="POST" novalidate> {% csrf_token %}
-        
-    <div class="form row g-3 justify-content-center">
-        
-        <div class="col-md-6">  
-        
-            {{ form.idtempo.as_hidden }}
-            {{ form.idtempomaster.as_hidden }}            
-            {{ form.id_linea.as_hidden }}  
-            {{ form.idoperatore.as_hidden }}  
-            {{ form.idfase.as_hidden }} 
-            {{ form.orainizio.as_hidden }}
-            {{ form.quantitatemporiparazione.as_hidden }}                    
-        </div>
-        <div class="invisible">data{{ form.datatempo|as_crispy_field }}</div>
-        <div class="col-md-2 align-self-center">
-            {{ form.orafine|as_crispy_field }}         
-        </div>
-        
-                <div class="row justify-content-center">
-                    <div class="col-md-4 text-end">
-                        <input type="submit" class="btn btn-xl btn-success" value="Chiudi e inserisci">
-                    </div>
-                    <div class="col-md-4 text-start">
-                        <a class="btn btn-xl btn-danger" 
-                            href="{% url 'gestioneordini:visualizza_dettaglio_da_linea' pk=dettaglio.iddettordine id_linea=linea.id_linea idtempomaster=tempomaster.pk %}">Annulla</a>
-                    </div>
+    <div class="row justify-content-center mt-3">
+        <div class="col-auto">
+            <div class="card text-center border-warning">
+                <div class="card-header">
+                    <h5><i class="bi bi-exclamation-circle"></i> Attenzione!</h5>
                 </div>
-            
-    </div>
-    </form>
-    </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ tempo.idoperatore }} è occupato!</h5>
+                    <p class="card-text">{{ tempo.idoperatore }} risulta impegnato sulla linea {{ linea.id_linea }}</p>
+                    <p class="card-text">al lavoro sull'ordine {{ dettaglio.idordine }}</p>
+                    <p class="card-text">del cliente: {{ dettaglio.idordine.idcliente.ragionesociale }}</p>
+                    <p class="card-text">Se desideri chiudere quella presa tempo e inserire l'operatore in questa,</p>
+                    <p class="card-text">inserisci l'ora di chiusura e premi "Chiudi e inserisci"</p>
+                    <form method="POST" novalidate> {% csrf_token %}        
+                        <div class="form row g-3 justify-content-center ">                    
+                            <div class="col-md-12">                   
+                                {{ form.idtempo.as_hidden }}{{ form.idtempomaster.as_hidden }}{{ form.id_linea.as_hidden }}  
+                                {{ form.idoperatore.as_hidden }}{{ form.idfase.as_hidden }}{{ form.orainizio.as_hidden }}
+                                {{ form.quantitatemporiparazione.as_hidden }}                    
+                            </div>
+                            <div class="col-3 align-self-center mt-0">
+                                {{ form.orafine|as_crispy_field }}         
+                            </div>
+                            
+                            <div class="invisible mt-0 mb-0">data{{ form.datatempo|as_crispy_field }}</div>
+                    
+                </div>
+                <div class="card-footer">
+                    
+                    
+                    <button class="btn btn-success btn-sm" type="submit" ><i class="bi bi-person-check-fill"></i>&nbsp;&nbsp; Chiudi e Inserisci</button>
+                    <a class="btn btn-danger btn-sm" 
+                        href="{% url 'gestioneordini:visualizza_dettaglio_da_linea' pk=dettaglio.iddettordine id_linea=linea.id_linea idtempomaster=tempomaster.pk %}"><i class="bi bi-arrow-counterclockwise"></i>&nbsp;&nbsp; Annulla</a>
+                </div>
+            </form>
+            </div>
+        </div>
+</div>
+
     
 {% endblock content %}

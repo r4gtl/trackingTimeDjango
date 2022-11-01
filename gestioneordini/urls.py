@@ -112,4 +112,11 @@ urlpatterns = [
         views.ask_for_close_operator,
         name="ask-for-close"
     ),
+    
+    path(
+        "add-operator-auto/<int:pk>/<int:id_operatore>/<int:id_linea>/<int:id_tempomaster>/",
+        views.aggiungi_operatore_auto,
+        name="add-auto"
+    ),
+    
 ]
