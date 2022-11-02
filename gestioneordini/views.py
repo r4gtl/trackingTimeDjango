@@ -88,8 +88,6 @@ class OperatorView(ListView):
 
 def apri_lavorazione(request, pk, id_linea):
         dettaglio = get_object_or_404(Tbldettaglioordini, pk=pk)
-        
-                
         linea = TblLineeLav.objects.get(id_linea=id_linea)
         
         dettaglio.inlavoro = True
@@ -117,11 +115,8 @@ Questo comporta il dover gestire il tutto con una nuova tabella (tblTempiMaster)
 mettiamo in collegamento i tempi e il dettaglio ordini. 
 '''
 def dashboard(request):
-
-        tempimaster=tblTempiMaster.objects.filter(completato=False)
-        
-        tempi_aperti_count=tblTempiMaster.objects.filter(inlavoro=True).count()
-        print("tempi aperti:" + str(tempi_aperti_count))
+        tempimaster=tblTempiMaster.objects.filter(completato=False)        
+        tempi_aperti_count=tblTempiMaster.objects.filter(inlavoro=True).count()        
         d=timezone.now().date()-timedelta(days=7)
         dettaglio_ordini = Tbldettaglioordini.objects.filter(inlavoro = True).order_by('-iddettordine')[:15]
         operatori_attivi = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')[:15]
@@ -288,10 +283,12 @@ def add_master_time(request, pk, id_linea):
         return render(request, "add_master.html", context)
 
 
-def add_master_time_barcode(request, id_linea):
-        
-        linea=TblLineeLav.objects.get(id_linea=id_linea)
-        
+
+def add_master_time_barcode(request, id_linea):  
+        '''
+        Aggiungere un ordine ad un time master usando il barcode
+        '''      
+        linea=TblLineeLav.objects.get(id_linea=id_linea)        
         
         if "q" in request.GET:
                 querystring = request.GET.get("q")
@@ -317,11 +314,11 @@ def add_master_time_barcode(request, id_linea):
                         
                         form = FormMaster(request.POST or None, initial = initial_data)
                         context={
-                                        'form': form,
-                                        'dettaglio': dettaglio,
-                                        'linea': linea,
-                                        
-                                }
+                                'form': form,
+                                'dettaglio': dettaglio,
+                                'linea': linea,
+                                
+                        }
                         if request.method == 'POST':
                                 # form=FormDettaglio(request.POST)
                                 if form.is_valid():
@@ -386,10 +383,14 @@ def aggiungi_operatore_attivo(request, pk, pk_linea, idtempomaster):
         
         if request.method == 'POST':
                 form = TempoModelForm(request.POST, initial={"idlinea": pk_linea})
-
+                
                 if form.is_valid():
                         tempo = form.save(commit=False)
-                        
+                        if Tbltempi.objects.filter(idoperatore=tempo.idoperatore, orafine__isnull=True):
+                                tempo_aperto= Tbltempi.objects.get(idoperatore=tempo.idoperatore, orafine__isnull=True)
+                                idtempo=tempo_aperto.idtempo
+                                return redirect('gestioneordini:ask-for-close', idtempo=idtempo, iddettaglio=dettaglio.pk, pk_linea=linea.pk, idtempomaster=tempomaster.pk)
+                                
                         tempo.iddettordine = dettaglio
                         dettaglio.inlavoro = True
                         dettaglio.completato = False
@@ -400,11 +401,13 @@ def aggiungi_operatore_attivo(request, pk, pk_linea, idtempomaster):
         
         else:
                 form = TempoModelForm(instance=dettaglio, initial=initial_data)
-                # form.fields['idoperatore'].queryset=Tbloperatori.objects.filter(dimesso__iexact="false").exclude(tbltempi__orafine__isnull=True).order_by('cognome')
-                
 
-
-        context = {'form': form, 'dettaglio': dettaglio, 'linea': linea, 'tempomaster': tempomaster}
+        context = {
+                'form': form, 
+                'dettaglio': dettaglio,
+                'linea': linea,
+                'tempomaster': tempomaster
+                }
         return render(request, 'creatempo.html', context)
 
 
@@ -467,11 +470,12 @@ def cerca_operatore(request, pk, pk_linea, idtempomaster):
                         messages.error(request, 'Operatore inesistente')
                         return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=pk_linea, idtempomaster=idtempomaster)
 
-'''
-View da richiamare per aggiungere un operatore automaticamente da barcode
-pk=chiave primaria dettaglio ordine
-'''
+
 def aggiungi_operatore_auto(request, pk, id_operatore, id_linea, id_tempomaster):
+        '''
+        View da richiamare per aggiungere un operatore automaticamente da barcode
+        pk=chiave primaria dettaglio ordine
+        '''
         dettaglio = Tbldettaglioordini.objects.get(pk=pk)
         operatore = get_object_or_404(Tbloperatori, pk=id_operatore)
         fase=get_object_or_404(Tblfasi, pk=4)
@@ -490,8 +494,7 @@ def aggiungi_operatore_auto(request, pk, id_operatore, id_linea, id_tempomaster)
         model.idtempomaster=tempomaster
 
         model.save()
-        messages.success(request, 'Operatore ' + str(operatore) + ' aggiunto')
-        #return redirect('gestioneordini:add-auto', pk=dettaglio.pk, id_operatore=operatore.pk, id_linea=linea.pk, id_tempomaster=id_tempomaster)                                
+        messages.success(request, 'Operatore ' + str(operatore) + ' aggiunto')        
         return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=pk, id_linea=4, idtempomaster=id_tempomaster)
         
 
@@ -526,9 +529,7 @@ def chiudi_operatore(request, idtempo):
         return redirect(url_match)
 
 
-
-def delete_operatore(request, idtempo):        
-        
+def delete_operatore(request, idtempo): 
         deleteobject = get_object_or_404(Tbltempi, idtempo = idtempo)        
         dettaglio=deleteobject.iddettordine           
         linea = deleteobject.id_linea  
@@ -536,6 +537,7 @@ def delete_operatore(request, idtempo):
         deleteobject.delete()
         url_match= reverse_lazy('gestioneordini:visualizza_dettaglio_da_linea', kwargs={'pk':dettaglio.pk, 'id_linea': linea.id_linea, 'idtempomaster': tempomaster.pk})      
         return redirect(url_match)
+
 
 def delete_tempo_master(request, pk):        
         '''
@@ -557,26 +559,30 @@ class OpenTimeView(ListView):
                 object_list = tblTempiMaster.objects.filter(inlavoro=True).order_by('datatempo', 'pk')               
                 return object_list
 
-'''
-View da chiamare in caso di operatore occupato
-idtempo=pk del tempo aperto relativo all'operatore
-iddettaglio=pk del dettaglio da passare per tornare alla pagina precedente
-pk_linea=pk della linea da passare per tornare alla pagina precedente
-idtempomaster=pk del tempomaster da passare per tornare alla pagina precedente
-'''
+
 def ask_for_close_operator(request, idtempo, iddettaglio, pk_linea, idtempomaster):
+        '''
+        View da chiamare in caso di operatore occupato
+        idtempo=pk del tempo aperto relativo all'operatore
+        iddettaglio=pk del dettaglio da passare per tornare alla pagina precedente
+        pk_linea=pk della linea da passare per tornare alla pagina precedente
+        idtempomaster=pk del tempomaster da passare per tornare alla pagina precedente
+        '''
         dettaglio = Tbldettaglioordini.objects.get(pk=iddettaglio)
         linea = TblLineeLav.objects.get(id_linea=pk_linea)
         tempomaster=get_object_or_404(tblTempiMaster, pk=idtempomaster)
         tempo = get_object_or_404(Tbltempi, pk = idtempo)
         operatore = get_object_or_404(Tbloperatori, pk=tempo.idoperatore.pk)
-        form = AskForCloseModelForm(request.POST or None, instance = tempo)
+        current_time = datetime.now() 
+        initial_data = {
+                'orafine': current_time.strftime("%H:%M:%S"),
+        }
+        form = AskForCloseModelForm(request.POST or None, instance = tempo, initial=initial_data)
         
         if form.is_valid():                
                 tempo = form.save(commit=False)                               
                 tempo.save()              
                 return redirect('gestioneordini:add-auto', pk=dettaglio.pk, id_operatore=operatore.pk, id_linea=linea.pk, id_tempomaster=idtempomaster)
-                #return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=dettaglio.iddettordine, id_linea=linea.id_linea, idtempomaster=tempomaster.pk)
         
         context = {'form': form, 'dettaglio': dettaglio, 'linea': linea, 'tempomaster': tempomaster, 'tempo': tempo}
         return render(request, 'ask_for_close.html', context)

@@ -103,7 +103,7 @@ class AskForCloseModelForm(forms.ModelForm):
             "idtempo": forms.HiddenInput(),            
             "datatempo": forms.DateInput(format=('%Y-%m-%d'), attrs={'class':'form-control', 'type': 'date'}),            
             "orainizio": forms.HiddenInput(),
-            "orafine": forms.TimeInput(format=('%H:%M:%S'), attrs={'type': 'time'}),            
+            "orafine": forms.TimeInput(format=('%H:%M:%S'), attrs={'type': 'time', 'required': 'true'}),            
             "note": forms.HiddenInput(),
             "idtempomaster": forms.HiddenInput(),
             "idoperatore": forms.HiddenInput()            

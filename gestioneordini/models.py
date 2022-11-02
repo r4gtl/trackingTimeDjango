@@ -263,10 +263,10 @@ class Tbloperatori(models.Model):
         verbose_name = "tbloperatori"
         verbose_name_plural = "tbloperatori"
 
-    def __str__(self):
-        
+    def __str__(self):        
         return str(self.cognome) + " " + str(self.nome)
-
+    
+    
 class Tblordini(models.Model):
     idordine = models.IntegerField(primary_key=True)
     nordine = models.CharField(max_length=50, blank=True, null=True)
