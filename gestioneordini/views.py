@@ -548,6 +548,24 @@ def delete_tempo_master(request, pk):
         return redirect('gestioneordini:dashboard')
 
 
+def update_quantity_tempo_master(request, pk):        
+        '''
+        Aggiorno la quantità della presa tempo
+        '''
+                
+        obj = get_object_or_404(tblTempiMaster, pk = pk)
+                
+        
+        form = QuantityModelForm(request.POST or None, instance = obj)
+        print("Ecolo")
+        #if form.is_valid():
+        tempo = form.save(commit=False)                
+                
+        tempo.save()
+        
+        return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=obj.iddettordine.iddettordine, id_linea=obj.id_linea.id_linea, idtempomaster=obj.pk)
+        
+
 class OpenTimeView(ListView):
 
         model = tblTempiMaster        
