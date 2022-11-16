@@ -1,0 +1,30 @@
+<div class="card-body">
+    <div class="row">
+    <div class="col-md-10">
+        <h5 class="card-title" >{{ linea.descrizione_linea }}</h5>    
+    </div>
+
+    <div class="col-md-2">
+        <div class="spinner-grow text-success text-end" 
+        role="status">              
+        </div>
+    </div>
+    </div>
+    <hr>
+    
+    <h6>{{ linea.get_line.iddettordine.idordine.idcliente.ragionesociale }}</h6>
+    <hr>
+    <p class="my-0">Ordine N. <strong>{{ linea.get_line.iddettordine.idordine.nordine }}</strong> del <strong>{{ linea.get_line.iddettordine.idordine.dataordine|date:'d/m/Y' }}</strong></p>              
+    {% if linea.get_line.iddettordine.idcollegamento == None %}
+        <p class ="card-text my-0">Codice: {{ linea.get_line.iddettordine.idcomponente }} | Descrizione: {{ linea.get_line.iddettordine.idcomponente.descrizione|default_if_none:"" }}</p>                    
+    {% else %}
+        <p class ="card-text my-0">Collegamento: {{ linea.get_line.iddettordine.idcollegamento }}</p><p class ="card-text">Descrizione: {{ linea.get_line.iddettordine.idcollegamento.codicecollegamento|default_if_none:"" }}</p>                    
+    {% endif %}  
+    {% if linea.get_line.iddettordine.ncommessa != None %}
+        <p class="mt-0">Commessa: {{ linea.get_line.iddettordine.ncommessa }} | Quantità: {{ linea.get_line.iddettordine.quantità|floatformat }} | Data Consegna: <strong>{{ linea.get_line.iddettordine.dataconsegna|date:'d/m/Y' }}</strong></p>                  
+    {% endif %}
+</div>
+<div class="card-footer text-center">
+    <a class="btn btn-outline-success btn-sm " href="{% url 'gestioneordini:visualizza_dettaglio_da_linea' pk=linea.get_line.iddettordine.pk id_linea=linea.pk idtempomaster=linea.get_line.pk %}" role="button">vedi dettaglio</a>
+    <a class="btn btn-outline-primary btn-sm " href="{% url 'gestioneordini:add-to-line' id_linea=linea.pk %}" role="button">aggiungi nuova presa tempo</a>
+</div>

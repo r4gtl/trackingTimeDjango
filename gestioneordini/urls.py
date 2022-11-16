@@ -123,4 +123,10 @@ urlpatterns = [
         name="add-auto"
     ),
     
+    path(
+        "view-single-line/<int:id_linea>/",
+        views.view_single_line_open_times,
+        name="single-line"
+    ),
+    
 ]

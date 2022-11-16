@@ -138,8 +138,7 @@ def dashboard(request):
         n_operatori = Tbltempi.objects.filter(orafine__isnull = True).count()        
         linee = TblLineeLav.objects.all()        
         linee_dettaglio_1=tblTempiMaster.objects.filter(completato=False).order_by('-datatempo')
-        linee_dettaglio=linee_dettaglio_1.values('id_linea').order_by('id_linea').annotate(count=Count('id_linea'))
-        print("Linee dettaglio: " + str(linee_dettaglio[1]))
+        linee_dettaglio=linee_dettaglio_1.values('id_linea').order_by('id_linea').annotate(count=Count('id_linea'))        
         query_tempi = Tbltempi.objects.filter(orafine__isnull = False).filter(datatempo__gte=d).annotate(duration=ExpressionWrapper(
                 F('orafine') - F('orainizio'), output_field=DurationField()))
         total_time = query_tempi.aggregate(total_time=Sum('duration'))
@@ -169,6 +168,22 @@ def dashboard(request):
                 }
 
         return render(request, "dashboard.html", context)
+
+
+def view_single_line_open_times(request, id_linea):
+        '''
+        view aggiunta per vedere i tempi aperti su una singola linea 
+        per poter selezionare quello da chiudere come da richiesta del 16/11/2022
+        '''
+        linea=TblLineeLav.objects.get(pk=id_linea)
+        tempimaster=tblTempiMaster.objects.filter(inlavoro=True).filter(id_linea=linea)
+        print("Linea: " + str(linea))
+        context={
+                "linea":linea,
+                "tempimaster": tempimaster
+        }
+        return render(request, "single_line.html", context)
+        
 
 
 def add_line_search_order(request, id_linea):
