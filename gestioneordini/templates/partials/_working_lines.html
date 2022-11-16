@@ -11,6 +11,14 @@
                 <div class="row">
                 <div class="col-md-10">
                     <h5 class="card-title" >{{ linea.descrizione_linea }}</h5>
+                    {% for item in linee_dettaglio %}
+                        {% if item.id_linea == linea.id_linea %}
+                        <p>Tempi aperti: {{ item.count }}</p>
+                        {% endif %}
+                    {% endfor %}
+                        
+                    
+                    
                 </div>
                 <div class="col-md-2">
                     <div class="spinner-grow text-success text-end" 

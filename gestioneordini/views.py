@@ -22,6 +22,25 @@ from django.utils import timezone
 from .utilities import check_barcode
 
 
+'''
+In data 04/09/2022 Vanessa dice che devono prendere più tempi per una sola riga di dettaglio.
+Questo comporta il dover gestire il tutto con una nuova tabella (tblTempiMaster), in cui
+mettiamo in collegamento i tempi e il dettaglio ordini. 
+
+In data 16/11/2022 Vanessa e Paolo dicono che serve inserire una presa tempo nuova prima che 
+quella precedente sia finita. Per fare questo, hanno deciso che vogliono che nella card della linea
+il programma gestisca in questo modo:
+- se c'è una sola presa tempo, allora va bene vedere quell'unica presa tempo, aggiungendo 
+però un pulsante che permetta di aggiungerne una seconda;
+- se c'è più di una presa tempo, la card deve visualizzare solo il conteggio delle prese tempo aperte
+aperte su quella linea e ci deve essere un pulsante che rimanda ad una pagina html con 
+l'elenco sotto forma di card delle prese tempo aperte con i relativi dettagli e un pulsante
+per aprire la presa tempo.
+
+'''
+
+
+
 def home(request):
         return render(request, "dashboard.html")
 
@@ -109,11 +128,6 @@ def apri_lavorazione(request, pk, id_linea):
         return render(request, "singolo_dettaglio.html", context)
 
 
-'''
-In data 04/09/2022 Vanessa dice che devono prendere più tempi per una sola riga di dettaglio.
-Questo comporta il dover gestire il tutto con una nuova tabella (tblTempiMaster), in cui
-mettiamo in collegamento i tempi e il dettaglio ordini. 
-'''
 def dashboard(request):
         tempimaster=tblTempiMaster.objects.filter(completato=False)        
         tempi_aperti_count=tblTempiMaster.objects.filter(inlavoro=True).count()        
@@ -125,7 +139,7 @@ def dashboard(request):
         linee = TblLineeLav.objects.all()        
         linee_dettaglio_1=tblTempiMaster.objects.filter(completato=False).order_by('-datatempo')
         linee_dettaglio=linee_dettaglio_1.values('id_linea').order_by('id_linea').annotate(count=Count('id_linea'))
-        
+        print("Linee dettaglio: " + str(linee_dettaglio[1]))
         query_tempi = Tbltempi.objects.filter(orafine__isnull = False).filter(datatempo__gte=d).annotate(duration=ExpressionWrapper(
                 F('orafine') - F('orainizio'), output_field=DurationField()))
         total_time = query_tempi.aggregate(total_time=Sum('duration'))
@@ -557,8 +571,7 @@ def update_quantity_tempo_master(request, pk):
                 
         
         form = QuantityModelForm(request.POST or None, instance = obj)
-        print("Ecolo")
-        #if form.is_valid():
+        
         tempo = form.save(commit=False)                
                 
         tempo.save()
