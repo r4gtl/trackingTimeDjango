@@ -9,6 +9,7 @@ from enum import unique
 from django.db import models
 from django.urls import reverse
 from django.db.models import Max
+import datetime
 
 
 class TRicerca(models.Model):
@@ -352,6 +353,14 @@ class Tbltempi(models.Model):
         db_table = 'tbltempi'
         verbose_name = "tbltempi"
         verbose_name_plural = "tbltempi"
+        
+        constraints = [
+        models.CheckConstraint(
+            check=models.Q(orainizio__lte=datetime.time(6, 00, 00)),
+            name='created_at_cannot_be_past_date'
+        )
+        ]
+        
     
     def get_absolute_url(self):
         return reverse("visualizza_dettaglio", kwargs={"pk": self.idtempo})

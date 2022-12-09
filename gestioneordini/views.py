@@ -17,9 +17,10 @@ from .forms import (
         AskForCloseModelForm
 )
 from datetime import datetime, time, timedelta, date
+# import datetime
 from django.contrib import messages
 from django.utils import timezone
-from .utilities import check_barcode
+from .utilities import check_barcode, check_start_time
 
 
 '''
@@ -415,6 +416,15 @@ def aggiungi_operatore_attivo(request, pk, pk_linea, idtempomaster):
                 
                 if form.is_valid():
                         tempo = form.save(commit=False)
+                        '''
+                        Controllo se l'orario inserito è compreso 
+                        nell'intervallo deciso da Ivano il 09/12/2022
+                        '''
+                        if check_start_time(tempo.orainizio)[0]==True:                                       
+                                messages.error(request, check_start_time(tempo.orainizio)[1])
+                                
+                                context = {'form': form, 'dettaglio': dettaglio, 'linea': linea, 'tempomaster': tempomaster}
+                                return render(request, 'creatempo.html', context)
                         if Tbltempi.objects.filter(idoperatore=tempo.idoperatore, orafine__isnull=True):
                                 tempo_aperto= Tbltempi.objects.get(idoperatore=tempo.idoperatore, orafine__isnull=True)
                                 idtempo=tempo_aperto.idtempo
@@ -537,10 +547,20 @@ def aggiorna_operatore_attivo(request, pk, iddett):
         
         form = TempoModelForm(request.POST or None, instance = obj)
         
-        if form.is_valid():
-                tempo = form.save(commit=False)                
+        if form.is_valid():                                
+                tempo = form.save(commit=False)
+                '''
+                Controllo se l'orario inserito è compreso 
+                nell'intervallo deciso da Ivano il 09/12/2022
+                '''
+                if check_start_time(tempo.orainizio)[0]==True:                                       
+                        messages.error(request, check_start_time(tempo.orainizio)[1])
+                        
+                        context = {'form': form, 'dettaglio': dettaglio, 'linea': linea, 'tempomaster': tempomaster}
+                        return render(request, 'creatempo.html', context)
+                
                 tempo.iddettordine = dettaglio
-                print("data:" + str(tempo.datatempo))
+                
                 form.save()
                 return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=dettaglio.iddettordine, id_linea=linea.id_linea, idtempomaster=tempomaster.pk)
                 
