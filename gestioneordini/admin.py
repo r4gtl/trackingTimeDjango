@@ -18,6 +18,12 @@ class tblTempiMasterModelAdmin(admin.ModelAdmin):
                     ]
     search_fields = ["datatempo"]
 
+class TblTempiModelAdmin(admin.ModelAdmin):
+    model = Tbltempi
+    list_display = ['idtempo', 'orainizio']
+    search_fields = ['orainizio']
+    ordering = ['orainizio']
+    
 
 admin.site.register(TRicerca)
 admin.site.register(Tblazienda)
@@ -33,7 +39,7 @@ admin.site.register(Tblmec)
 admin.site.register(Tbloperatori)
 admin.site.register(Tblordini)
 admin.site.register(Tblpoli)
-admin.site.register(Tbltempi)
+admin.site.register(Tbltempi, TblTempiModelAdmin)
 admin.site.register(Tbltipocomponenti)
 admin.site.register(Tblxrmecclienti)
 admin.site.register(tblTempiMaster, tblTempiMasterModelAdmin)

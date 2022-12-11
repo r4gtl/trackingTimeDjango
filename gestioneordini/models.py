@@ -1,15 +1,18 @@
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = True` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
+
 from enum import unique
 from django.db import models
 from django.urls import reverse
-from django.db.models import Max
+from django.db.models import Max, Q, F
 import datetime
+from django.core.exceptions import ValidationError
+
+
+'''
+Le prossime due variabili indicano ora di inizio e l'ora di fine
+del range valido per l'inserimento
+'''
+START_TIME=datetime.time(6, 00, 00)
+END_TIME=datetime.time(19, 00, 00)
 
 
 class TRicerca(models.Model):
@@ -354,13 +357,11 @@ class Tbltempi(models.Model):
         verbose_name = "tbltempi"
         verbose_name_plural = "tbltempi"
         
-        constraints = [
-        models.CheckConstraint(
-            check=models.Q(orainizio__lte=datetime.time(6, 00, 00)),
-            name='created_at_cannot_be_past_date'
-        )
-        ]
+    def clean(self):
+        if self.orainizio<START_TIME or self.orainizio>END_TIME:
+            raise ValidationError({'orainizio':(f'L\'orario di inizio deve essere compreso tra le {START_TIME} e le {END_TIME}!') })
         
+    
     
     def get_absolute_url(self):
         return reverse("visualizza_dettaglio", kwargs={"pk": self.idtempo})

@@ -118,7 +118,7 @@ urlpatterns = [
     ),
     
     path(
-        "add-operator-auto/<int:pk>/<int:id_operatore>/<int:id_linea>/<int:id_tempomaster>/",
+        "add-operator-auto/<int:pk>/<int:id_operatore>/<int:id_linea>/<int:id_tempomaster>/<str:starttime>/",
         views.aggiungi_operatore_auto,
         name="add-auto"
     ),
