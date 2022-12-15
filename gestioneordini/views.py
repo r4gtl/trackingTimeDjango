@@ -522,8 +522,7 @@ def aggiungi_operatore_auto(request, pk, id_operatore, id_linea, id_tempomaster,
         linea=get_object_or_404(TblLineeLav, pk=id_linea)
         tempomaster=get_object_or_404(tblTempiMaster, pk=id_tempomaster)
         current_time = datetime.now()
-        print("Start time: " + str(starttime))
-        print("Start time type: " + str(type(starttime)))
+        
         format = "%H:%M:%S"        
         open_time = datetime.strptime(starttime, format)         
         open_time = datetime.time(open_time)
@@ -571,10 +570,12 @@ def aggiorna_operatore_attivo(request, pk, iddett):
 def chiudi_operatore(request, idtempo):
         dettaglio = get_object_or_404(Tbltempi, idtempo=idtempo)        
         linea = dettaglio.id_linea
+        orainizio=dettaglio.orainizio        
         tempomaster=tblTempiMaster.objects.get(pk=dettaglio.idtempomaster.pk) 
-        current_time = datetime.time(datetime.now())       
-        if check_end_time(current_time)[0]==True:
-                messages.error(request, check_end_time(current_time)[1])                
+        current_time = datetime.time(datetime.now())
+        
+        if check_end_time(current_time,orainizio)[0]==True:
+                messages.error(request, check_end_time(current_time,orainizio)[1])                
                 url_match= reverse_lazy('gestioneordini:visualizza_dettaglio_da_linea', kwargs={'pk':dettaglio.iddettordine.iddettordine, 'id_linea': linea.id_linea, 'idtempomaster': tempomaster.pk})      
                 return redirect(url_match)
         

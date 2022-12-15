@@ -360,7 +360,11 @@ class Tbltempi(models.Model):
     def clean(self):
         if self.orainizio<START_TIME or self.orainizio>END_TIME:
             raise ValidationError({'orainizio':(f'L\'orario di inizio deve essere compreso tra le {START_TIME} e le {END_TIME}!') })
-        
+        if self.orafine:
+            if self.orafine<START_TIME or self.orafine>END_TIME:
+                raise ValidationError({'orafine':(f'L\'orario di fine deve essere compreso tra le {START_TIME} e le {END_TIME}!') })
+            if self.orafine<self.orainizio:
+                raise ValidationError({'orafine':(f'L\'orario di fine deve essere maggiore dell\'orario di inizio!') })
     
     
     def get_absolute_url(self):

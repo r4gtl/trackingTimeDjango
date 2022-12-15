@@ -40,17 +40,19 @@ def check_start_time(start_time):
 
 
 
-def check_end_time(end_time):
+def check_end_time(end_time, start_time):
     '''
     Controlla se l'orario di fine inserito è compreso tra le 06.00 e le 19.00
-    come richiesto da Ivano in data 09/12/2022
+    come richiesto da Ivano in data 09/12/2022.
+    Inoltre controllo che l'orario di fine sia maggiore dell'orario di inizio.
     '''  
-    print("end_time: " + str(type(end_time)))    
-    print("START_TIME: " + str(START_TIME) + str(type(START_TIME)))
-    print("END_TIME: " + str(END_TIME))
+    
     if end_time<START_TIME or end_time>END_TIME:
         codice='L\'orario di fine lavorazione deve essere compreso tra le 06.00 e le 19.00!'
-        return (True, codice)
+        return (True, codice)    
+    if end_time<start_time:
+        codice='L\'orario di fine lavorazione deve essere superiore all\'orario di inizio!'
+        return (True, codice)  
     
     return(False,)
         
