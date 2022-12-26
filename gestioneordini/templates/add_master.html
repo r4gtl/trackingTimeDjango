@@ -49,8 +49,15 @@
             <div class="row">
                 <h1 class="text-center">{{ dettaglio.quantità|floatformat }}</h1>
             </div>
+            <div class="row mb-3 justify-content-center">
+                <div class="col-md-6 ">
+                    <a class="btn btn-warning btn-xl" 
+                            href="{% url 'core:pdf_view' %}" target="_blank"><i class="bi bi-printer"></i>&nbsp;&nbsp; Tabella Griglie</a>
+                </div>
+            </div>
         </div>
         </div>
+        
     </div>
 
 <form method="POST">

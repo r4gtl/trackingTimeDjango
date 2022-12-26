@@ -8,6 +8,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('gestioneordini.urls')),
+    path('core/', include('core.urls')),
     path('accounts/', include('accounts.urls')),
     path('accounts/', include('django.contrib.auth.urls')), # importa tutti i link per la gestione degli accounts
     

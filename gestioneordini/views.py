@@ -23,6 +23,8 @@ from django.utils import timezone
 from .utilities import check_barcode, check_start_time, check_end_time, check_time_range
 
 
+
+
 '''
 In data 04/09/2022 Vanessa dice che devono prendere più tempi per una sola riga di dettaglio.
 Questo comporta il dover gestire il tutto con una nuova tabella (tblTempiMaster), in cui
@@ -674,6 +676,8 @@ Custom 404 template
 '''
 def page_not_found_view(request, exception):
         return render(request, 'errors/404.html', status=404)
+
+
 
 
 
