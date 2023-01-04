@@ -1,0 +1,52 @@
+<h5>Archivio prese tempo sulla {{ linea }}</h5>
+<br>
+
+<div class="row row-cols-1 row-cols-md-3 g-4">
+    {% for tempo in tempimaster_all %}    
+        {% if tempo.id_linea.id_linea == linea.id_linea %}
+            <div class="col">        
+            <div class="card card-h mb-3 shadow rounded" style="max-width: 540px;">          
+                <div class="row g-0">        
+                <div class="col-md-12">            
+                    <div class="card-body">
+                        <div class="row">
+                        <div class="col-md-10">
+                            <h5 class="card-title" >{{ tempo.id_linea }}</h5>    
+                        </div>
+                    
+                        <div class="col-md-2">
+                            <!-- <div class="spinner-grow text-success text-end" 
+                            role="status">              
+                            </div> -->
+                        </div>
+                        </div>
+                        <hr>
+                        <p>Presa tempo del {{ tempo.datatempo }}</p> 
+                        <h6>{{ tempo.iddettordine.idordine.idcliente.ragionesociale }}</h6>
+                        <hr>
+                        <p class="my-0">Ordine N. <strong>{{ tempo.iddettordine.idordine.nordine }}</strong> del <strong>{{ tempo.iddettordine.idordine.dataordine|date:'d/m/Y' }}</strong></p>              
+                        {% if tempo.iddettordine.idcollegamento == None %}
+                            <p class ="card-text my-0">Codice: {{ tempo.iddettordine.idcomponente }} | Descrizione: {{ tempo.iddettordine.idcomponente.descrizione|default_if_none:"" }}</p>                    
+                        {% else %}
+                            <p class ="card-text my-0">Collegamento: {{ tempo.iddettordine.idcollegamento }}</p><p class ="card-text">Descrizione: {{ tempo.iddettordine.idcollegamento.codicecollegamento|default_if_none:"" }}</p>                    
+                        {% endif %}  
+                        {% if tempo.iddettordine.ncommessa != None %}
+                            <p class="mt-0">Commessa: {{ tempo.iddettordine.ncommessa }} | Quantità: {{ tempo.iddettordine.quantità|floatformat }} | Data Consegna: <strong>{{ tempo.iddettordine.dataconsegna|date:'d/m/Y' }}</strong></p>                  
+                        {% endif %}
+                    </div>
+                    <div class="card-footer text-center">
+                        <a class="btn btn-outline-success btn-sm " href="{% url 'gestioneordini:visualizza_dettaglio_da_linea' pk=tempo.iddettordine.pk id_linea=tempo.id_linea.id_linea idtempomaster=tempo.pk %}" role="button">vedi dettaglio</a>                
+                    </div>
+                    
+                    
+                    
+                </div>
+                
+                </div>
+            
+            </div>
+            
+            </div> 
+            {% endif %}
+    {% endfor %}     
+    </div>

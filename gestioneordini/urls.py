@@ -129,5 +129,11 @@ urlpatterns = [
         name="single-line"
     ),
     
+    path(
+        "view-all-tracked/",
+        views.view_all_tracked,
+        name="view-all-tracked"
+    ),
+    
     
 ]

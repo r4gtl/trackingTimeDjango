@@ -180,8 +180,7 @@ def view_single_line_open_times(request, id_linea):
         '''
         linea=TblLineeLav.objects.get(pk=id_linea)
         tempimaster=tblTempiMaster.objects.filter(inlavoro=True).filter(id_linea=linea)
-        tempimaster_all=tblTempiMaster.objects.filter(inlavoro=False).filter(id_linea=linea).order_by('-datatempo')
-        #print("Linea: " + str(linea))
+        tempimaster_all=tblTempiMaster.objects.filter(inlavoro=False).filter(id_linea=linea).order_by('-datatempo')        
         context={
                 "linea":linea,
                 "tempimaster": tempimaster,
@@ -189,7 +188,19 @@ def view_single_line_open_times(request, id_linea):
         }
         return render(request, "single_line.html", context)
         
-
+def view_all_tracked(request):
+        '''
+        view aggiunta per vedere tutte le prese tempo come da richiesta di Ivano
+        del 20/12/2022
+        '''
+        linee=TblLineeLav.objects.all()
+        #tempimaster=tblTempiMaster.objects.filter(inlavoro=True).filter(id_linea=linea)
+        tempimaster_all=tblTempiMaster.objects.filter(inlavoro=False).order_by('-datatempo')        
+        context={
+                "linee":linee,                
+                "tempimaster_all": tempimaster_all
+        }
+        return render(request, "archivio_prese_tempo.html", context)
 
 def add_line_search_order(request, id_linea):
         linea=TblLineeLav.objects.get(id_linea=id_linea)  

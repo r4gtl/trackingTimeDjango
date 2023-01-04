@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block head_title %}{{ block.super }} - Archivio Prese Tempo{% endblock head_title %}
+
+
+{% block content %}
+
+
+
+    {% for linea in linee %}
+    
+      
+            {% include 'partials/_archivio_prese_tempo.html' %}
+        
+    {% endfor %} 
+
+
+
+
+
+
+
+ 
+
+{% endblock content %}

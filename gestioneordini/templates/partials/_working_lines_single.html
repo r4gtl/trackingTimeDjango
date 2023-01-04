@@ -23,6 +23,9 @@
     {% if linea.get_line.iddettordine.ncommessa != None %}
         <p class="mt-0">Commessa: {{ linea.get_line.iddettordine.ncommessa }} | Quantità: {{ linea.get_line.iddettordine.quantità|floatformat }} | Data Consegna: <strong>{{ linea.get_line.iddettordine.dataconsegna|date:'d/m/Y' }}</strong></p>                  
     {% endif %}
+    <div class="text-end">
+        <a class="btn btn-outline-warning btn-sm" href="{% url 'gestioneordini:single-line' id_linea=linea.pk %}" role="button">Archivio</a>
+    </div>
 </div>
 <div class="card-footer text-center">
     <a class="btn btn-outline-success btn-sm " href="{% url 'gestioneordini:visualizza_dettaglio_da_linea' pk=linea.get_line.iddettordine.pk id_linea=linea.pk idtempomaster=linea.get_line.pk %}" role="button">vedi dettaglio</a>

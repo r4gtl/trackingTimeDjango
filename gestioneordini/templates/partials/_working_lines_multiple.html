@@ -13,6 +13,10 @@
     </div>
     <hr>
     <p>Ci sono <strong>{{ item.count }}</strong> prese tempo attive su questa linea</p>
+    <div class="text-end">
+        <a class="btn btn-outline-warning btn-sm" href="{% url 'gestioneordini:single-line' id_linea=linea.pk %}" role="button">Archivio</a>
+    </div>
+    
 </div>
 <div class="card-footer text-center">
     <a class="btn btn-outline-success btn-sm " href="{% url 'gestioneordini:single-line' id_linea=linea.pk %}" role="button">vedi dettaglio</a>

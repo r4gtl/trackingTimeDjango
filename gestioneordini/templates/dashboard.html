@@ -15,16 +15,18 @@
 {% if tempi_aperti_count > 0 %}
 <div class="row mb-2 justify-content-end">
     
+    
+
     <div class="col-md-2 me-2">
         
-    <button onclick="goToOpenTimes()" type="button" class="btn btn-primary btn-sm position-relative float-end ">
-        Tempi aperti
-        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
-            {{ tempi_aperti_count }}
-        <span class="visually-hidden">tempi aperti</span>
-        </span>
-    </button>
-</div>
+        <button onclick="goToOpenTimes()" type="button" class="btn btn-primary btn-sm position-relative float-end ">
+            Tempi aperti
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                {{ tempi_aperti_count }}
+            <span class="visually-hidden">tempi aperti</span>
+            </span>
+        </button>
+    </div>
 </div>
         
 {% endif %}
@@ -123,6 +125,8 @@
         document.location.href = "{% url 'gestioneordini:tempi_aperti' %}"
         
     }
+
+    
     
 </script>
 

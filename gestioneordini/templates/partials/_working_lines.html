@@ -24,8 +24,15 @@
                 <hr>
                 <div class="col-md-12" style="text-align: center;">                
                 <p class="text-muted">...non ci sono ordini in lavoro...</p>
-                <a class="btn btn-outline-primary btn-sm " href="{% url 'gestioneordini:add-to-line' id_linea=linea.pk %}" role="button">aggiungine uno</a>
+                <div class="text-end">
+                    <a class="btn btn-outline-warning btn-sm" href="{% url 'gestioneordini:single-line' id_linea=linea.pk %}" role="button">Archivio</a>
                 </div>
+
+                
+                </div>
+            </div>
+            <div class="card-footer text-center">
+                <a class="btn btn-outline-primary btn-sm " href="{% url 'gestioneordini:add-to-line' id_linea=linea.pk %}" role="button">aggiungine uno</a>
             </div>
             {% endif %} 
             
