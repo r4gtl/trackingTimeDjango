@@ -9,7 +9,8 @@
 	
     @page {
         size: a4 portrait;
-		
+		font-family: Arial, Helvetica, sans-serif;
+
         @frame header_frame {           /* Static Frame */
             -pdf-frame-content: header_content;
             left: 50pt; width: 512pt; top: 50pt; height: 40pt;
@@ -27,47 +28,89 @@
     }
 	.grid-container {
 		display: grid;
-		grid-template-columns: auto auto auto auto auto auto auto auto auto auto; 
-		background-color: #2196F3;
-		padding: 10px;
+		grid-template-columns: auto auto auto auto auto auto auto auto auto auto auto auto; 		
+		/*padding: 10px;*/
 	  }
-	  .grid-item {
-		background-color: rgba(255, 255, 255, 0.8);
+	  .grid-item {		
 		border: 1px solid rgba(0, 0, 0, 0.8);
-		padding: 20px;
+		/*padding: 20px;*/
 		font-size: 30px;
+		font-family: Arial, Helvetica, sans-serif;
 		text-align: center;
 	  }
 	  .logo-tabella {
-		grid-column: 1;
-		background-color: rgba(255, 255, 255, 0.8);
+		grid-column: 2;		
 		border: 1px solid rgba(0, 0, 0, 0.8);
-		padding: 20px;
+		/*padding: 20px;*/
 		font-size: 30px;
+		font-family: Arial, Helvetica, sans-serif;
 		text-align: center;
 	  }
 	  .ragione-sociale {
-		grid-column: 4;
-		background-color: rgba(255, 255, 255, 0.8);
+		grid-column: 10;		
 		border: 1px solid rgba(0, 0, 0, 0.8);
-		padding: 20px;
+		/*padding: 20px;*/
 		font-size: 30px;
+		font-family: Arial, Helvetica, sans-serif;
 		text-align: center;
 	  }
 	  .cod-prod {
 		/*grid-column: 1 / 6;*/
-		background-color: rgba(255, 255, 255, 0.8);
+		grid-column: 4;		
 		border: 1px solid rgba(0, 0, 0, 0.8);
-		padding: 20px;
+		/*padding: 20px;*/
 		font-size: 30px;
+		font-family: Arial, Helvetica, sans-serif;
 		text-align: center;
 	  }
 	  .commessa {
-		/*grid-column: 7 / 11;*/
-		background-color: rgba(255, 255, 255, 0.8);
+		grid-column: 4;		
 		border: 1px solid rgba(0, 0, 0, 0.8);
-		padding: 20px;
+		/*padding: 20px;*/
 		font-size: 30px;
+		font-family: Arial, Helvetica, sans-serif;
+		text-align: center;
+	  }
+	  .ordine {
+		grid-column: 4;
+		/*grid-column: 7 / 11;*/		
+		border: 1px solid rgba(0, 0, 0, 0.8);
+		/*padding: 20px;*/
+		font-size: 30px;
+		font-family: Arial, Helvetica, sans-serif;
+		text-align: center;
+	  }
+	  .st_diam {
+		grid-column: 12;
+		/*grid-column: 7 / 11;*/		
+		border: 1px solid rgba(0, 0, 0, 0.8);
+		/*padding: 20px;*/
+		font-size: 30px;
+		font-family: Arial, Helvetica, sans-serif;
+		text-align: center;
+	  }
+	  .note {
+		/*grid-column: 7 / 11;*/		
+		border: 1px solid rgba(0, 0, 0, 0.8);
+		/*padding: 20px;*/
+		font-size: 30px;
+		font-family: Arial, Helvetica, sans-serif;
+		text-align: center;
+	  }
+	  .tipo_statore {
+		/*grid-column: 7 / 11;*/		
+		border: 1px solid rgba(0, 0, 0, 0.8);
+		/*padding: 20px;*/
+		font-size: 30px;
+		font-family: Arial, Helvetica, sans-serif;
+		text-align: center;
+	  }
+	  .quantity {
+		/*grid-column: 7 / 11;*/		
+		border: 1px solid rgba(0, 0, 0, 0.8);
+		/*padding: 20px;*/
+		font-size: 30px;
+		font-family: Arial, Helvetica, sans-serif;
 		text-align: center;
 	  }
 
@@ -78,21 +121,43 @@
 <body>
     
 	<!-- Content for Static Frame 'header_frame' -->
-    <div id="header_content">
+    <!-- <div id="header_content">
 		<h3>Dennnis Ivanov Company</h3>
-    </div>
+    </div> -->
 
     <!-- Content for Static Frame 'footer_frame' -->
-    <div id="footer_content">(c) - page <pdf:pagenumber>
+    <!-- <div id="footer_content">(c) - page <pdf:pagenumber>
         of <pdf:pagecount>
-    </div>
+    </div> -->
 
     <!-- HTML Content -->
     <div class="grid-container">
 		<div class="logo-tabella">logo</div>
-		<div class="ragione-sociale">ragione sociale</div>
-		<div class="cod-prod">codice prodotto</div>  
-		<div class="commessa">commessa</div>
+		<div class="ragione-sociale">{{ dettaglio.idordine.idcliente.ragionesociale }}</div>
+		<div class="cod-prod">
+			{% if dettaglio.idcollegamento == None %}			
+				{{ dettaglio.idcomponente }}			
+			{% else %}
+			{{ dettaglio.idcollegamento }}
+			{% endif %}
+		</div>		
+		<div class="commessa">
+			{% if dettaglio.ncommessa != None %}
+				{{ dettaglio.ncommessa }}
+			{% endif %}
+		</div>
+		<div class="ordine">			
+				{{ dettaglio.idordine }}			
+		</div>
+		<div class="note">			
+			{{ dettaglio.note }}			
+		</div>
+		<div class="tipo_statore">			
+			{{ dettaglio.descrizione }} /*VERIFICARE!!!*/
+		</div>
+		<div class="quantity">			
+			{{ dettaglio.quantità }}			
+		</div>
 		
 	  </div>
 

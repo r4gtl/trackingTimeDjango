@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
-
+from gestioneordini.models import tblTempiMaster, Tbldettaglioordini
 # Import per stampa pdf
 from xhtml2pdf import pisa
 from django.template.loader import get_template
@@ -43,3 +43,17 @@ class ViewPDF(View):
 
 		pdf = render_to_pdf('pdf_template.html', data)
 		return HttpResponse(pdf, content_type='application/pdf')
+
+
+def view_grid_labels(request, iddettordine):
+        '''
+        view aggiunta per vedere i tempi aperti su una singola linea 
+        per poter selezionare quello da chiudere come da richiesta del 16/11/2022
+        '''
+        dettaglio=Tbldettaglioordini.objects.get(pk=iddettordine)
+        
+        
+        context={
+                "dettaglio": dettaglio,
+        }
+        return render(request, "grid_label.html", context)

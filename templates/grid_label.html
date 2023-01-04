@@ -1,0 +1,142 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+	
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Grid-label</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <style>
+        @page {
+            /*size: A5 landscape;*/
+			size: A4 landscape;
+			/*left: 50pt; */
+			/*left: 10pt;*/
+			/*width: 512pt; */
+			width:100%;
+			/*top: 50pt; */
+			/*top: 10pt; */
+			height: 80pt;
+		}
+		@media print {
+			body {
+				margin: 0.5em 0.7em 0.5em 0.7em ;
+								
+				}
+				.row {
+					height: 90px;
+				}
+				.logo-text {
+					font-size: 0.7rem;
+				}
+				.big-text {
+					font-size: 3em;
+				}
+		}
+		
+		@media screen {
+
+			body {
+			margin: 2em;
+			color: #fff;
+			background-color: #000;
+			}
+			.row {
+				height: 80px;
+			}
+			.logo-text {
+				font-size: 0.7rem;
+			}
+		
+		}
+			
+
+			
+    </style>
+</head>
+<body>
+    
+    	<div class="row border-top border-start border-end border-dark border-2 ">
+			<!-- Logo -->
+			<div class="col-2 text-center">
+				<img src="{%  static 'img/logo_X1.png' %}" alt="" width="100" height="65">
+			</div>
+			<div class="col-2 border-end border-dark border-2 logo-text text-start">
+				AVVOLGIMENTO<br>
+				COLLEGAMENTO<br>
+				MOTORI<br>
+				ELETTRICI<br>
+
+			</div>
+			<!-- Ragione Sociale Cliente -->
+			<div class="col-8">
+				Cliente<br>
+				<h1 class="text-center text-truncate">{{ dettaglio.idordine.idcliente.ragionesociale }}</h1>
+			</div>
+			
+		</div>
+		<div class="row border-top border-start border-end border-dark border-2">
+			<!-- Codice Prodotto -->
+			<div class="col-5 border-end border-dark border-2">
+				Codice Prodotto<br>
+				{% if dettaglio.idcollegamento == None %}			
+					<h1 class="text-center big-text">{{ dettaglio.idcomponente }}</h1>
+				{% else %}
+					<h1 class="text-center big-text">{{ dettaglio.idcollegamento }}</h1>
+				{% endif %}
+			</div>
+			<!-- Commessa -->
+		
+			<div class="col-3 border-end border-dark border-2">
+				Commessa N.<br>
+				{% if dettaglio.ncommessa != None %}
+				<h1 class="text-center big-text">{{ dettaglio.ncommessa }}</h1>
+			{% endif %}
+			</div>
+		
+			<!-- Ordine -->
+			<div class="col-4 border-dark border-2">
+				Rif. Vs. Ordine N.<br>
+				<h1 class="text-center big-text">{{ dettaglio.idordine }}</h1>
+			
+			</div>
+		
+		
+		</div>
+
+		<!-- St. Diam. -->
+		<div class="row border-top border-start border-end border-dark border-2">
+			<div class="col-12">
+				St. Diam. <br>
+				<h1 class="text-center big-text">{{ dettaglio.descrizione }}</h1>
+			</div>
+		
+		</div>
+		<!-- Note e Tipo Statore -->
+		<div class="row border-top border-start border-end border-dark border-2">
+			<div class="col-5 border-end border-dark border-2">
+				Note <br>
+				<h1 class="text-center">{{ dettaglio.note }}</h1>
+			</div> 
+			<div class="col-6">
+				Tipo Statore<br>
+				<h1 class="text-center">{{ dettaglio.note }}</h1>
+			</div>
+		
+		</div>
+		<!-- Quantità -->
+		<div class="row border-top border-start border-end border-bottom border-dark border-2">
+			<div class="col-6 border-end border-dark border-2">
+				Quantità Commessa/Lotto<br>
+				<h1 class="text-center big-text">{{ dettaglio.quantità }}</h1>
+			</div>
+			<div class="col-6">
+				Quantità Griglia<br>
+			</div>
+		
+		</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+</body>
+</html>

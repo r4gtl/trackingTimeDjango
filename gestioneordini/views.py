@@ -180,10 +180,12 @@ def view_single_line_open_times(request, id_linea):
         '''
         linea=TblLineeLav.objects.get(pk=id_linea)
         tempimaster=tblTempiMaster.objects.filter(inlavoro=True).filter(id_linea=linea)
-        print("Linea: " + str(linea))
+        tempimaster_all=tblTempiMaster.objects.filter(inlavoro=False).filter(id_linea=linea).order_by('-datatempo')
+        #print("Linea: " + str(linea))
         context={
                 "linea":linea,
-                "tempimaster": tempimaster
+                "tempimaster": tempimaster,
+                "tempimaster_all": tempimaster_all
         }
         return render(request, "single_line.html", context)
         
