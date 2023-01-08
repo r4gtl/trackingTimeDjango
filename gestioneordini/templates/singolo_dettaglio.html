@@ -10,13 +10,19 @@
 
 {% include 'modals/closeConfirmTime.html' %}
 {% include 'modals/delConfirmTime.html' %}
+{% include 'modals/askHowManyLabels.html' %}
 <br>
-<div class="row">
-    <div class="col md-2">
+<div class="row justify-content-start">
+    <div class="col-md-2">
         <a class="btn btn-outline-success btn-sm" href="{% url 'gestioneordini:dashboard' %}" role="button"                       
         ><i class="bi bi-house"></i> Homepage</a>
     </div>
-    <div class="col md-10">
+    <div class="col-md-2">
+        <button type="button" class="btn btn-outline-warning btn-sm" id="askHowManyLabels" data-bs-toggle="modal" data-bs-target="#askHowManyLabels" >
+            <span class="bi bi-printer">&nbsp;&nbsp; Tabella Griglie</span>
+        </button>
+    </div>
+    <div class="col-md-8">
         {% if linea.id_linea == None %}
             <h5 class="text-end">Cliente: {{ dettaglio.idordine.idcliente.ragionesociale }}</h5>    
         {% else %}
@@ -77,7 +83,7 @@
     
                 <!-- form chiudi-apri lavorazione -->
                 <div class="row">
-                    <div class="col-md-8">
+                    <div class="col-md-8 ">
                         
                     </div>
                     

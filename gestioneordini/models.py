@@ -102,7 +102,8 @@ class Tblclienti(models.Model):
     idnazione = models.IntegerField(blank=True, null=True)
     dichintento = models.CharField(max_length=255, blank=True, null=True)
     prezzoordine = models.BooleanField(blank=True, null=True)
-
+    visualizza_come = models.CharField(max_length=100, blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'tblclienti'
@@ -156,7 +157,8 @@ class Tblcomponenti(models.Model):
     idcave = models.IntegerField(blank=True, null=True)
     costo = models.FloatField(blank=True, null=True)
     lr = models.IntegerField(blank=True, null=True)
-
+    tipo_statore = models.CharField(max_length=255, blank=True, null=True)
+    
     class Meta:
         managed = True
         db_table = 'tblcomponenti'

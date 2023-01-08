@@ -6,7 +6,7 @@
 
 
 {% block content %}
-
+{% include 'modals/askHowManyLabels.html' %}
 <br>
     {% if linea.id_linea == None %}
         <h5 class="text-end">Cliente: {{ dettaglio.idordine.idcliente.ragionesociale }}</h5>    
@@ -51,8 +51,11 @@
             </div>
             <div class="row mb-3 justify-content-center">
                 <div class="col-md-6 ">
-                    <a class="btn btn-warning btn-xl" 
-                            href="{% url 'core:print_grid_label' iddettordine=dettaglio.iddettordine %}" target="_blank"><i class="bi bi-printer"></i>&nbsp;&nbsp; Tabella Griglie</a>
+                    <!--<a class="btn btn-warning btn-xl" 
+                            href="{% url 'core:print_grid_label' iddettordine=dettaglio.iddettordine %}" target="_blank"><i class="bi bi-printer"></i>&nbsp;&nbsp; Tabella Griglie</a> -->
+                            <button type="button" class="btn btn-warning btn-xl" id="askHowManyLabels" data-bs-toggle="modal" data-bs-target="#askHowManyLabels" >
+                                <span class="bi bi-printer">&nbsp;&nbsp; Tabella Griglie</span>
+                </button>
                 </div>
             </div>
         </div>

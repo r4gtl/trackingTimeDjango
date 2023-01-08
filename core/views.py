@@ -45,15 +45,16 @@ class ViewPDF(View):
 		return HttpResponse(pdf, content_type='application/pdf')
 
 
-def view_grid_labels(request, iddettordine):
+def view_grid_labels(request, iddettordine, labels_count):
         '''
         view aggiunta per vedere i tempi aperti su una singola linea 
         per poter selezionare quello da chiudere come da richiesta del 16/11/2022
         '''
         dettaglio=Tbldettaglioordini.objects.get(pk=iddettordine)
-        
-        
+        labels=range(labels_count)
+        print(labels)
         context={
                 "dettaglio": dettaglio,
+                "labels_count": labels
         }
         return render(request, "grid_label.html", context)

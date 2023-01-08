@@ -5,6 +5,6 @@ app_name="core"
 
 urlpatterns = [
     path('core/pdf_view/', views.ViewPDF.as_view(), name="pdf_view"),
-    path('print_grid_label/<int:iddettordine>/', views.view_grid_labels, name="print_grid_label"),
+    path('print_grid_label/<int:iddettordine>/<int:labels_count>/', views.view_grid_labels, name="print_grid_label"),
     
 ]
