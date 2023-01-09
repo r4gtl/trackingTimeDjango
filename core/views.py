@@ -51,8 +51,7 @@ def view_grid_labels(request, iddettordine, labels_count):
         per poter selezionare quello da chiudere come da richiesta del 16/11/2022
         '''
         dettaglio=Tbldettaglioordini.objects.get(pk=iddettordine)
-        labels=range(labels_count)
-        print(labels)
+        labels=range(labels_count)        
         context={
                 "dettaglio": dettaglio,
                 "labels_count": labels

@@ -1,4 +1,5 @@
 {% extends 'modals/baseModal.html' %}
+{% load static %}
 
 <!-- Modal ID -->
 {% block modal-id %} id="askHowManyLabels" {% endblock modal-id %}
@@ -27,7 +28,7 @@
 
 <!-- Modal Footer -->
 {% block modal-footer %}
-<form action="{% url 'core:print_grid_label' iddettordine=dettaglio.iddettordine labels_count=1%}" method="POST" id="label" formtarget="_blank">
+<form action="#" method="POST" id="label" formtarget="_blank">
             
     {% csrf_token %}
     <button class="btn btn-warning btn-xl" type="submit" id="printBtn" onclick="getNumberOfLabels()" formtarget="_blank" 
@@ -35,25 +36,26 @@
       
     </form>
 
+    
     <script>
-      const oneLabelCheck = document.getElementById('flexRadioDefault1');
-      const printBtn = document.getElementsByName('printBtn');
-      
-      
-      function getNumberOfLabels(){
-        var action = document.getElementById("label").action
-        if(document.getElementById('flexRadioDefault1').checked) {
-          document.getElementById("label").action="{% url 'core:print_grid_label' iddettordine=dettaglio.iddettordine labels_count=1 %}"
-          
-          
-      } else {
-        document.getElementById("label").action="{% url 'core:print_grid_label' iddettordine=dettaglio.iddettordine labels_count=2 %}"
-          
-      }
-      $('#askHowManyLabels').modal('hide');
-        
-      };
-      
-      //printBtn.addEventListener('click', getNumberOfLabels);
-      </script>
+const oneLabelCheck = document.getElementById('flexRadioDefault1');
+const printBtn = document.getElementsByName('printBtn');
+
+
+function getNumberOfLabels(){
+  var action = document.getElementById("label").action
+  console.log("Action before: " + action)
+  if(document.getElementById('flexRadioDefault1').checked) {
+    document.getElementById("label").action="{% url 'core:print_grid_label' iddettordine=dettaglio.iddettordine labels_count=1 %}";
+    console.log("Action 1: " + document.getElementById("label").action)
+  } else {
+  document.getElementById("label").action="{% url 'core:print_grid_label' iddettordine=dettaglio.iddettordine labels_count=2 %}";    
+  console.log("Action 2: " + document.getElementById("label").action)
+  }
+  $('#askHowManyLabels').modal('hide');
+
+};
+
+    </script>
+    
 {% endblock modal-footer %}

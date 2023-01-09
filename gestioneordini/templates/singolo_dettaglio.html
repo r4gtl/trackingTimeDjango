@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
+{% load static %}
 
 
 {% block head_title %}{{ block.super }} - {{ dettaglio.idordine.nordine }}{% endblock head_title %}
@@ -11,6 +12,7 @@
 {% include 'modals/closeConfirmTime.html' %}
 {% include 'modals/delConfirmTime.html' %}
 {% include 'modals/askHowManyLabels.html' %}
+
 <br>
 <div class="row justify-content-start">
     <div class="col-md-2">
@@ -18,7 +20,7 @@
         ><i class="bi bi-house"></i> Homepage</a>
     </div>
     <div class="col-md-2">
-        <button type="button" class="btn btn-outline-warning btn-sm" id="askHowManyLabels" data-bs-toggle="modal" data-bs-target="#askHowManyLabels" >
+        <button type="button" class="btn btn-outline-warning btn-sm mt-1" id="askHowManyLabels" data-bs-toggle="modal" data-bs-target="#askHowManyLabels" >
             <span class="bi bi-printer">&nbsp;&nbsp; Tabella Griglie</span>
         </button>
     </div>
@@ -150,4 +152,10 @@
 {% include 'modals/updTimeQuantity.html' %}
 
 
+
+
+
+
 {% endblock content %}
+
+
