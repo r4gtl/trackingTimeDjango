@@ -595,6 +595,7 @@ def chiudi_operatore(request, idtempo):
                 return redirect(url_match)
         
         dettaglio.orafine = current_time
+        
         dettaglio.save()
         url_match= reverse_lazy('gestioneordini:visualizza_dettaglio_da_linea', kwargs={'pk':dettaglio.iddettordine.iddettordine, 'id_linea': linea.id_linea, 'idtempomaster': tempomaster.pk})      
         return redirect(url_match)
