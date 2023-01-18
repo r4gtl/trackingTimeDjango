@@ -130,7 +130,11 @@
 		<div class="row border-top border-start border-end border-dark border-2">
 			<div class="col-12">
 				St. Diam. <br>
-				<h1 class="text-center bigger-text">{{ dettaglio.descrizione }}</h1>
+				{% if dettaglio.descrizione %}
+					<h1 class="text-center bigger-text">{{ dettaglio.descrizione }}</h1>
+				{% else %}
+					<h1 class="text-center">{{ dettaglio.idcollegamento.descrizione }}</h1>
+				{% endif %}
 			</div>
 		
 		</div>
@@ -146,6 +150,7 @@
 				Tipo Statore<br>
 				{% if dettaglio.idcomponente.tipo_statore %}
 					<h1 class="text-center">{{ dettaglio.idcomponente.tipo_statore }}</h1>
+				
 				{% endif %}
 			</div>
 		
