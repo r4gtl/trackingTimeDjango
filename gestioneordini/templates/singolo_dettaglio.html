@@ -87,6 +87,7 @@
                 <div class="row">
                     <div class="col-md-8 ">
                         
+                            
                     </div>
                     
                     <div class="col-md-4">
@@ -94,9 +95,15 @@
                             <!-- Button trigger modal -->
                             
                                 <div class="col">
+                                    {% if tempomaster.completato %}
+                                    <a href="#" class="btn btn-sm btn-outline-success disabled ">
+                                        <span class="bi bi-stopwatch-fill"> Lavorazione chiusa</span>
+                                    </a>
+                                    {% else %}
                                     <button type="button" class="btn btn-outline-success btn-sm" id="closeConfirmTime" data-bs-toggle="modal" data-bs-target="#closeConfirmTime" >
                                         <span class="bi bi-stopwatch-fill"> Chiudi Lavorazione</span>
                                     </button>
+                                    {% endif %}
                                 </div>
                                 <div class="col">
                                     <button type="button" class="btn btn-outline-danger btn-sm" id="delConfirmTime" data-bs-toggle="modal" data-bs-target="#delConfirmTime" >
