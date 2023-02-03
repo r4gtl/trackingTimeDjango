@@ -223,7 +223,7 @@ def add_line_search_order(request, id_linea):
 def visualizza_dettaglio(request, pk, id_linea, idtempomaster):
         dettaglio = get_object_or_404(Tbldettaglioordini, pk=pk)
         tempomaster=tblTempiMaster.objects.get(pk=idtempomaster)
-        operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio).order_by('-datatempo').order_by('-orainizio')
+        operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio).order_by('-datatempo','orainizio')#.order_by('orainizio')
         linea=TblLineeLav.objects.get(id_linea=id_linea)
         form=FormDettaglio(request.POST or None, instance = dettaglio)
 
@@ -256,7 +256,7 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
         
         dettaglio = get_object_or_404(Tbldettaglioordini, pk=pk)
         
-        operatori_attivi=Tbltempi.objects.filter(idtempomaster=tempomaster.pk).order_by('-datatempo').order_by('orainizio')
+        operatori_attivi=Tbltempi.objects.filter(idtempomaster=tempomaster.pk).order_by('-datatempo', 'orainizio')#.order_by('orainizio')
         
         if request.method == 'POST':
                 form=QuantityModelForm(request.POST or None, instance = tempomaster)
