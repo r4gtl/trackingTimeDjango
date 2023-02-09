@@ -50,6 +50,7 @@
                 {% endif %}
                 <hr>
                 <p>Commessa: {{ dettaglio.ncommessa|default_if_none:"Nessuna commessa" }}</p>
+                <p>Riga: {{ dettaglio.posizione|floatformat }}</p>
                 <p>Note dall'ufficio: {{ dettaglio.descrizione|default_if_none:"" }}</p>
                 <hr>
             </div>

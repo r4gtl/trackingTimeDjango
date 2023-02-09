@@ -38,10 +38,15 @@
                 {% if tempo.iddettordine.idcollegamento == None %}
                     <p class ="card-text my-0">Codice: {{ tempo.iddettordine.idcomponente }} | Descrizione: {{ tempo.iddettordine.idcomponente.descrizione|default_if_none:"" }}</p>                    
                 {% else %}
-                    <p class ="card-text my-0">Collegamento: {{ tempo.iddettordine.idcollegamento }}</p><p class ="card-text">Descrizione: {{ tempo.iddettordine.idcollegamento.codicecollegamento|default_if_none:"" }}</p>                    
+                    <p class ="card-text my-0">Collegamento: {{ tempo.iddettordine.idcollegamento }}</p>
+                    <p class ="card-text mb-0">Descrizione: {{ tempo.iddettordine.idcollegamento.codicecollegamento|default_if_none:"" }}</p>                    
                 {% endif %}  
                 {% if tempo.iddettordine.ncommessa != None %}
                     <p class="mt-0">Commessa: {{ tempo.iddettordine.ncommessa }} | Quantità: {{ tempo.iddettordine.quantità|floatformat }} | Data Consegna: <strong>{{ tempo.iddettordine.dataconsegna|date:'d/m/Y' }}</strong></p>                  
+                    <p class="mt-0">Riga: {{ tempo.iddettordine.posizione|floatformat }}</p>   
+                {% else %}
+                    <p class="mt-0 mb-0">Quantità: {{ tempo.iddettordine.quantità|floatformat }} | Data Consegna: <strong>{{ linea.get_line.iddettordine.dataconsegna|date:'d/m/Y' }}</strong></p>
+                    <p class="mt-0">Riga: {{ tempo.iddettordine.posizione|floatformat }}</p>
                 {% endif %}
             </div>
             <div class="card-footer text-center">

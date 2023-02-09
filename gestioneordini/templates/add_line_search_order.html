@@ -90,6 +90,7 @@
     <tr>        
       <th>Azioni</th>
       <th>Nr. Ordine</th>
+      <th>Riga</th>
       <th>Nr. Commessa</th>
       <th>Quantità</th>
       <th>Codice</th>
@@ -105,8 +106,9 @@
       {% for dettaglio_ordini in filter_paginated %}
           <td style="text-align: center;"><a href="{% url 'gestioneordini:add-master' pk=dettaglio_ordini.iddettordine id_linea=linea.pk %}"><i class="bi bi-pencil"></i></a></td>
           <td class="col-md-1">{{ dettaglio_ordini.idordine.nordine }}</td>
-          <td class="col-md-2">{{ dettaglio_ordini.ncommessa|default_if_none:" " }}</td>  
-          <td class="col-md-2 text-end">{{ dettaglio_ordini.quantità|default_if_none:" " }}</td>  
+          <td class="col-md-1 text-end">{{ dettaglio_ordini.posizione|floatformat }}</td>
+          <td class="col-md-2 text-end">{{ dettaglio_ordini.ncommessa|default_if_none:" " }}</td>  
+          <td class="col-md-1 text-end">{{ dettaglio_ordini.quantità|default_if_none:" " }}</td>  
           <td class="col-md-2">{{ dettaglio_ordini.idcomponente.codice|default_if_none:" "  }}</td>
           <td class="col-md-1">{{ dettaglio_ordini.idcollegamento.codicecollegamento|default_if_none:" " }}</td>
           <td class="col-md-2" style="text-align: right;">{{ dettaglio_ordini.idordine.dataordine|date:'d/m/Y' }}</td>          
