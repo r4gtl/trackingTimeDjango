@@ -333,6 +333,8 @@ class tblTempiMaster(models.Model):
     id_linea = models.ForeignKey(TblLineeLav, on_delete=models.DO_NOTHING, db_column='id_linea',blank=True, null=True)
     completato = models.BooleanField(blank=True, null=True, default=False)
     inlavoro = models.BooleanField(blank=True, null=True, default=True)
+    note_da_linea = models.CharField(max_length=240, blank=True, null=True)
+    note_da_ufficio = models.CharField(max_length=240, blank=True, null=True)
     
     class Meta:
         managed = True

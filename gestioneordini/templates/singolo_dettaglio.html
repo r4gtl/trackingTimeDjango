@@ -13,6 +13,7 @@
 {% include 'modals/delConfirmTime.html' %}
 {% include 'modals/askHowManyLabels.html' %}
 
+
 <br>
 <div class="row justify-content-start">
     <div class="col-md-2">
@@ -49,9 +50,21 @@
                 
                 {% endif %}
                 <hr>
-                <p>Commessa: {{ dettaglio.ncommessa|default_if_none:"Nessuna commessa" }}</p>
-                <p>Riga: {{ dettaglio.posizione|floatformat }}</p>
-                <p>Note dall'ufficio: {{ dettaglio.descrizione|default_if_none:"" }}</p>
+                <p class="mb-0">Commessa: {{ dettaglio.ncommessa|default_if_none:"Nessuna commessa" }}</p>
+                <p class="mb-0">Riga: {{ dettaglio.posizione|floatformat }}</p>
+                <p class="mb-0">Note dall'ufficio: {{ dettaglio.note|default_if_none:"" }}</p>
+                <p class="mb-0">Note da Linea: {{ tempomaster.note_da_linea|default_if_none:"" }}</p>
+                <!-- Spazio per pulsante trigger-modal-->
+                <!-- <div class="row justify-content-center"> -->
+                    <div class="col-3 mt-3">
+                
+                    
+                    <button type="button" class="btn btn-primary btn-sm" id="updLineNote" data-bs-toggle="modal" data-bs-target="#updateNoteModal" >
+                        <span class="bi bi-file-earmark-plus"> Note da Linea</span>
+                    </button>
+                </div>
+                <!-- </div> -->
+                <!-- Fine Spazio per pulsante trigger-modal-->
                 <hr>
             </div>
         </div>
@@ -158,6 +171,8 @@
     
 </div>
 {% include 'modals/updTimeQuantity.html' %}
+{% include 'modals/updLineNote.html' %}
+
 
 
 

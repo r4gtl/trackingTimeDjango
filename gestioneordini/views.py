@@ -14,7 +14,7 @@ from .filters import OrderFilter
 from .forms import (
         FormDettaglio, TempoModelForm,
         FormMaster, QuantityModelForm,
-        AskForCloseModelForm
+        AskForCloseModelForm, NoteLineaModelForm
 )
 from datetime import time, timedelta, date , datetime
 #import datetime
@@ -226,7 +226,7 @@ def visualizza_dettaglio(request, pk, id_linea, idtempomaster):
         operatori_attivi = Tbltempi.objects.filter(iddettordine=dettaglio).order_by('-datatempo','-orainizio')#.order_by('orainizio')
         linea=TblLineeLav.objects.get(id_linea=id_linea)
         form=FormDettaglio(request.POST or None, instance = dettaglio)
-
+        
         if request.method == 'POST':                
                 if form.is_valid():
                         dettaglio_salvato = form.save(commit=False)
@@ -259,21 +259,31 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
         operatori_attivi=Tbltempi.objects.filter(idtempomaster=tempomaster.pk).order_by('-datatempo', '-orainizio')#.order_by('orainizio')
         
         if request.method == 'POST':
+                
                 form=QuantityModelForm(request.POST or None, instance = tempomaster)
                 # form=FormDettaglio(request.POST)
                 if form.is_valid():
                         dettaglio_salvato = form.save(commit=False)
                         dettaglio_salvato.save()
+                
+                form_note=NoteLineaModelForm(request.POST or None, instance = tempomaster)
+                # form=FormDettaglio(request.POST)
+                if form_note.is_valid():
+                        note_salvate = form_note.save(commit=False)
+                        note_salvate.save()
                         
         else:
                 form=QuantityModelForm(instance = tempomaster)
+                form_note=NoteLineaModelForm(instance = tempomaster)
                 
                 
+        print("Form_note:" + str(form_note))
         
         context = {'linea': linea,                         
                 'dettaglio': dettaglio,
                 'operatori_attivi': operatori_attivi,
                 'form': form,
+                'form_note': form_note,
                 'tempomaster': tempomaster
                 }
         return render(request, 'singolo_dettaglio.html', context)
@@ -312,14 +322,21 @@ def add_master_time(request, pk, id_linea):
                                 if form.is_valid():
                                         dettaglio_salvato = form.save(commit=False)
                                         dettaglio_salvato.save()
+                                form_note=NoteLineaModelForm(request.POST or None, instance = tempomaster)
+                                # form=FormDettaglio(request.POST)
+                                if form_note.is_valid():
+                                        note_salvate = form_note.save(commit=False)
+                                        note_salvate.save()
                                         
                         else:
                                 form=QuantityModelForm(instance = tempomaster)
+                                form_note=NoteLineaModelForm(instance = tempomaster)
                         context = {"dettaglio": dettaglio, 
                         "operatori_attivi": operatori_attivi,                          
                         "linea": linea,
                         "tempomaster": tempomaster,
-                        "form": form
+                        "form": form,
+                        "form_note": form_note
                         }
                         # dettaglio_salvato.save()
                         return render(request, "singolo_dettaglio.html", context)
@@ -376,14 +393,21 @@ def add_master_time_barcode(request, id_linea):
                                                 if form.is_valid():
                                                         dettaglio_salvato = form.save(commit=False)
                                                         dettaglio_salvato.save()
+                                                form_note=NoteLineaModelForm(request.POST or None, instance = tempomaster)
+                                                # form=FormDettaglio(request.POST)
+                                                if form_note.is_valid():
+                                                        note_salvate = form_note.save(commit=False)
+                                                        note_salvate.save()
                                                         
                                         else:
                                                 form=QuantityModelForm(instance = tempomaster)
+                                                form_note=NoteLineaModelForm(instance = tempomaster)
                                         context = {"dettaglio": dettaglio, 
                                         "operatori_attivi": operatori_attivi,                          
                                         "linea": linea,
                                         "tempomaster": tempomaster,
-                                        "form": form
+                                        "form": form,
+                                        "form_note": form_note
                                         }
                                         # dettaglio_salvato.save()
                                         return render(request, "singolo_dettaglio.html", context)
@@ -630,6 +654,22 @@ def update_quantity_tempo_master(request, pk):
         
         form = QuantityModelForm(request.POST or None, instance = obj)
         
+        tempo = form.save(commit=False)                
+                
+        tempo.save()
+        
+        return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=obj.iddettordine.iddettordine, id_linea=obj.id_linea.id_linea, idtempomaster=obj.pk)
+
+def update_line_note_tempo_master(request, pk):        
+        '''
+        Aggiorno le note da linea
+        '''
+                
+        obj = get_object_or_404(tblTempiMaster, pk = pk)
+                
+        
+        form = NoteLineaModelForm(request.POST or None, instance = obj)
+        print("Form: " + str(form))
         tempo = form.save(commit=False)                
                 
         tempo.save()

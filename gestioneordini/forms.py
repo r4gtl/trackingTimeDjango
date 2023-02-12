@@ -91,6 +91,21 @@ class QuantityModelForm(forms.ModelForm):
             "quantity": forms.NumberInput(attrs={'class': 'input', 'style': 'text-align:right; ', 'required': 'true', 'autofocus': True}),             
         }
         
+        
+class NoteLineaModelForm(forms.ModelForm):
+    class Meta:
+        model = tblTempiMaster
+        fields = (
+            'idtempomaster',
+            'note_da_linea',
+            'completato',
+            'inlavoro'
+        )
+        widgets = {
+            "note_da_linea": forms.Textarea(attrs={'cols': 80, 'rows': 2, 'label':""}),             
+        }
+        
+        
 class AskForCloseModelForm(forms.ModelForm):
 
     class Meta:

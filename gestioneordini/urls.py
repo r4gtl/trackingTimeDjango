@@ -93,6 +93,10 @@ urlpatterns = [
         views.update_quantity_tempo_master,
         name="update_quantity"),
     
+    path("update-line-note/<int:pk>/",
+        views.update_line_note_tempo_master,
+        name="update_note"),
+    
     path(
         "add-to-line/<int:id_linea>/",
         views.add_line_search_order,        

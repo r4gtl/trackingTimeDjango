@@ -9,7 +9,7 @@
       <!-- Modal Body -->
 {% block modal-body %}
 <p>Stai per modificare la quantità di questa presa tempo.</p>
-<form action="{% url 'gestioneordini:update_quantity' pk=tempomaster.pk  %}" method="POST">
+<form action="{% url 'gestioneordini:update_quantity' pk=tempomaster.pk  %}" method="POST" id="formQuantity">
             
     {% csrf_token %}            
       {{ form.idtempomaster.as_hidden }}
