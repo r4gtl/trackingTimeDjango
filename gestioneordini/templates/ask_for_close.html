@@ -18,6 +18,7 @@
                     <p class="card-text">{{ tempo.idoperatore }} risulta impegnato sulla linea {{ linea.id_linea }}</p>
                     <p class="card-text">al lavoro sull'ordine {{ dettaglio.idordine }}</p>
                     <p class="card-text">del cliente: {{ dettaglio.idordine.idcliente.ragionesociale }}</p>
+                    <p class="card-text">Presa Tempo del: <strong>{{ tempo.idtempomaster.datatempo }}</strong></p>
                     <p class="card-text">Se desideri chiudere quella presa tempo e inserire l'operatore in questa,</p>
                     <p class="card-text">inserisci l'ora di chiusura e premi "Chiudi e inserisci"</p>
                     <form method="POST" novalidate> {% csrf_token %}        

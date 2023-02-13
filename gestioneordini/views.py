@@ -276,9 +276,6 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 form=QuantityModelForm(instance = tempomaster)
                 form_note=NoteLineaModelForm(instance = tempomaster)
                 
-                
-        print("Form_note:" + str(form_note))
-        
         context = {'linea': linea,                         
                 'dettaglio': dettaglio,
                 'operatori_attivi': operatori_attivi,
@@ -660,18 +657,15 @@ def update_quantity_tempo_master(request, pk):
         
         return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=obj.iddettordine.iddettordine, id_linea=obj.id_linea.id_linea, idtempomaster=obj.pk)
 
+
 def update_line_note_tempo_master(request, pk):        
         '''
         Aggiorno le note da linea
         '''
                 
         obj = get_object_or_404(tblTempiMaster, pk = pk)
-                
-        
-        form = NoteLineaModelForm(request.POST or None, instance = obj)
-        print("Form: " + str(form))
-        tempo = form.save(commit=False)                
-                
+        form = NoteLineaModelForm(request.POST or None, instance = obj)        
+        tempo = form.save(commit=False)
         tempo.save()
         
         return redirect('gestioneordini:visualizza_dettaglio_da_linea', pk=obj.iddettordine.iddettordine, id_linea=obj.id_linea.id_linea, idtempomaster=obj.pk)

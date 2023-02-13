@@ -53,7 +53,7 @@
                 <p class="mb-0">Commessa: {{ dettaglio.ncommessa|default_if_none:"Nessuna commessa" }}</p>
                 <p class="mb-0">Riga: {{ dettaglio.posizione|floatformat }}</p>
                 <p class="mb-0">Note dall'ufficio: {{ dettaglio.note|default_if_none:"" }}</p>
-                <p class="mb-0">Note da Linea: {{ tempomaster.note_da_linea|default_if_none:"" }}</p>
+                <p class="mb-0">Note da Linea: <span style="color:red">{{ tempomaster.note_da_linea|default_if_none:"" }}</span></p>
                 <!-- Spazio per pulsante trigger-modal-->
                 <!-- <div class="row justify-content-center"> -->
                     <div class="col-3 mt-3">
