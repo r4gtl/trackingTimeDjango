@@ -11,8 +11,8 @@ from django.core.exceptions import ValidationError
 Le prossime due variabili indicano ora di inizio e l'ora di fine
 del range valido per l'inserimento
 '''
-START_TIME=datetime.time(6, 00, 00)
-END_TIME=datetime.time(19, 00, 00)
+START_TIME = datetime.time(6, 00, 00)
+END_TIME = datetime.time(19, 00, 00)
 
 
 class TRicerca(models.Model):
@@ -37,15 +37,11 @@ class TRicerca(models.Model):
     def __str__(self):
         return self.nome
 
-
     class Meta:
         managed = True
         db_table = 't_ricerca'
         verbose_name = "t_ricerca"
         verbose_name_plural = "t_ricerca"
-
-    
-    
 
 
 class Tblazienda(models.Model):
@@ -97,19 +93,20 @@ class Tblclienti(models.Model):
     iban = models.CharField(max_length=255, blank=True, null=True)
     nascondi = models.BooleanField(blank=True, null=True)
     pec = models.CharField(max_length=255, blank=True, null=True)
-    codicedestinatario = models.CharField(max_length=255, blank=True, null=True)
+    codicedestinatario = models.CharField(
+        max_length=255, blank=True, null=True)
     codeori = models.CharField(max_length=255, blank=True, null=True)
     idnazione = models.IntegerField(blank=True, null=True)
     dichintento = models.CharField(max_length=255, blank=True, null=True)
     prezzoordine = models.BooleanField(blank=True, null=True)
     visualizza_come = models.CharField(max_length=100, blank=True, null=True)
-    
+
     class Meta:
         managed = True
         db_table = 'tblclienti'
         verbose_name = "tblclienti"
         verbose_name_plural = "tblclienti"
-    
+
     def __str__(self):
         return self.ragionesociale
 
@@ -126,7 +123,8 @@ class Tblcollegamenti(models.Model):
     idgruppo = models.IntegerField(blank=True, null=True)
     costo = models.FloatField(blank=True, null=True)
     grcavicliente = models.BooleanField(blank=True, null=True)
-    schedatecnica = models.CharField(max_length=10485760, blank=True, null=True)
+    schedatecnica = models.CharField(
+        max_length=10485760, blank=True, null=True)
 
     class Meta:
         managed = True
@@ -138,7 +136,6 @@ class Tblcollegamenti(models.Model):
         return self.codicecollegamento
 
 
-
 class Tblcomponenti(models.Model):
     idcomponente = models.IntegerField(primary_key=True)
     idtipocomponente = models.IntegerField(blank=True, null=True)
@@ -146,7 +143,8 @@ class Tblcomponenti(models.Model):
     codice = models.CharField(max_length=255, blank=True, null=True)
     descrizione = models.CharField(max_length=255, blank=True, null=True)
     poli1 = models.CharField(max_length=255, blank=True, null=True)
-    schedatecnica = models.CharField(max_length=10485760, blank=True, null=True)
+    schedatecnica = models.CharField(
+        max_length=10485760, blank=True, null=True)
     tempolavorazione = models.FloatField(blank=True, null=True)
     iddestinazione = models.IntegerField(blank=True, null=True)
     idgruppo = models.IntegerField(blank=True, null=True)
@@ -158,7 +156,7 @@ class Tblcomponenti(models.Model):
     costo = models.FloatField(blank=True, null=True)
     lr = models.IntegerField(blank=True, null=True)
     tipo_statore = models.CharField(max_length=255, blank=True, null=True)
-    
+
     class Meta:
         managed = True
         db_table = 'tblcomponenti'
@@ -169,13 +167,15 @@ class Tblcomponenti(models.Model):
         return self.codice
 
 
-
 class Tbldettaglioordini(models.Model):
     iddettordine = models.IntegerField(primary_key=True, unique=True)
-    idordine = models.ForeignKey('Tblordini', models.DO_NOTHING, db_column='idordine', blank=True, null= True)
-    idcollegamento = models.ForeignKey('TblCollegamenti', models.DO_NOTHING, db_column='idcollegamento',  blank=True, null= True)
+    idordine = models.ForeignKey(
+        'Tblordini', models.DO_NOTHING, db_column='idordine', blank=True, null=True)
+    idcollegamento = models.ForeignKey(
+        'TblCollegamenti', models.DO_NOTHING, db_column='idcollegamento',  blank=True, null=True)
     posizione = models.FloatField(blank=True, null=True)
-    idcomponente = models.ForeignKey('TblComponenti',models.DO_NOTHING, db_column='idcomponente',  blank=True, null= True)
+    idcomponente = models.ForeignKey(
+        'TblComponenti', models.DO_NOTHING, db_column='idcomponente',  blank=True, null=True)
     ncommessa = models.CharField(max_length=50, blank=True, null=True)
     quantità = models.FloatField(blank=True, null=True)
     prezzo = models.FloatField(blank=True, null=True)
@@ -203,7 +203,8 @@ class Tbldettaglioordini(models.Model):
 
 class Tbldettcollegamenti(models.Model):
     iddettcollegamento = models.IntegerField(primary_key=True)
-    idcollegamento = models.ForeignKey(Tblcollegamenti, models.DO_NOTHING, db_column='idcollegamento', blank=True, null=True)
+    idcollegamento = models.ForeignKey(
+        Tblcollegamenti, models.DO_NOTHING, db_column='idcollegamento', blank=True, null=True)
     idcomponente = models.IntegerField(blank=True, null=True)
     quantità = models.IntegerField(blank=True, null=True)
 
@@ -261,7 +262,7 @@ class Tbloperatori(models.Model):
     idoperatore = models.IntegerField(primary_key=True)
     cognome = models.CharField(max_length=255, blank=True, null=True)
     nome = models.CharField(max_length=255, blank=True, null=True)
-    dimesso=models.BooleanField(default=False, null=False, blank=False)
+    dimesso = models.BooleanField(default=False, null=False, blank=False)
 
     class Meta:
         managed = False
@@ -269,15 +270,18 @@ class Tbloperatori(models.Model):
         verbose_name = "tbloperatori"
         verbose_name_plural = "tbloperatori"
 
-    def __str__(self):        
+    def __str__(self):
         return str(self.cognome) + " " + str(self.nome)
-    
-    
+
+
 class Tblordini(models.Model):
     idordine = models.IntegerField(primary_key=True)
     nordine = models.CharField(max_length=50, blank=True, null=True)
-    dataordine = models.DateTimeField(db_column='dataordine', blank=True, null=True)  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.    
-    idcliente = models.ForeignKey('Tblclienti', models.DO_NOTHING, db_column='idcliente', blank=True, null= True)
+    # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.
+    dataordine = models.DateTimeField(
+        db_column='dataordine', blank=True, null=True)
+    idcliente = models.ForeignKey(
+        'Tblclienti', models.DO_NOTHING, db_column='idcliente', blank=True, null=True)
 
     class Meta:
         managed = True
@@ -287,6 +291,7 @@ class Tblordini(models.Model):
 
     def __str__(self):
         return self.nordine
+
 
 class Tblpoli(models.Model):
     idpoli = models.IntegerField(primary_key=True)
@@ -301,76 +306,98 @@ class Tblpoli(models.Model):
 
 class TblLineeLav(models.Model):
     id_linea = models.AutoField(primary_key=True)
-    descrizione_linea = models.CharField(max_length=50, blank=False, null=False)
+    descrizione_linea = models.CharField(
+        max_length=50, blank=False, null=False)
 
     class Meta:
         managed = False
         db_table = "tbl_linee_lav"
-    
+
     '''Recupero l'ordine in lavorazione'''
     # Modifica effettuata in data 04/10/2022 perchè serve prendere più tempi per un singolo dettaglio
     # def get_line(self):
-    #     tempi_object = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')                       
-    #     partial_qs=tempi_object.values('id_linea').annotate(ultimo=Max('orainizio'))        
+    #     tempi_object = Tbltempi.objects.filter(orafine__isnull = True).order_by('-orainizio')
+    #     partial_qs=tempi_object.values('id_linea').annotate(ultimo=Max('orainizio'))
     #     tempi_object=tempi_object.filter(orainizio__in=partial_qs.values('ultimo').order_by('-orainizio')).filter(id_linea=self.id_linea).first()
     #     #print("tempi_object: " + str(tempi_object))
-    #     return tempi_object 
+    #     return tempi_object
+
     def get_line(self):
-        tempi_object = tblTempiMaster.objects.filter(completato=False).order_by('-datatempo')                       
-        partial_qs=tempi_object.values('id_linea').annotate(ultimo=Max('datatempo'))        
-        tempi_object=tempi_object.filter(datatempo__in=partial_qs.values('ultimo').order_by('-datatempo')).filter(id_linea=self.id_linea).first()
-        
-        return tempi_object 
+        tempi_object = tblTempiMaster.objects.filter(
+            completato=False).order_by('-datatempo')
+        partial_qs = tempi_object.values(
+            'id_linea').annotate(ultimo=Max('datatempo'))
+        tempi_object = tempi_object.filter(datatempo__in=partial_qs.values(
+            'ultimo').order_by('-datatempo')).filter(id_linea=self.id_linea).first()
+
+        return tempi_object
 
     def __str__(self):
         return self.descrizione_linea
 
+
 class tblTempiMaster(models.Model):
     idtempomaster = models.AutoField(primary_key=True)
-    iddettordine = models.ForeignKey(Tbldettaglioordini, on_delete=models.DO_NOTHING, to_field='iddettordine', db_column='iddettordine', blank=True, null=True)
-    datatempo = models.DateField(blank=True, null=True, verbose_name="Data")  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.
-    quantity = models.FloatField(blank=True, null=True, verbose_name="Quantità Presa Tempo")
-    id_linea = models.ForeignKey(TblLineeLav, on_delete=models.DO_NOTHING, db_column='id_linea',blank=True, null=True)
+    iddettordine = models.ForeignKey(Tbldettaglioordini, on_delete=models.DO_NOTHING,
+                                     to_field='iddettordine', db_column='iddettordine', blank=True, null=True)
+    # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.
+    datatempo = models.DateField(blank=True, null=True, verbose_name="Data")
+    quantity = models.FloatField(
+        blank=True, null=True, verbose_name="Quantità Presa Tempo")
+    id_linea = models.ForeignKey(
+        TblLineeLav, on_delete=models.DO_NOTHING, db_column='id_linea', blank=True, null=True)
     completato = models.BooleanField(blank=True, null=True, default=False)
     inlavoro = models.BooleanField(blank=True, null=True, default=True)
     note_da_linea = models.CharField(max_length=240, blank=True, null=True)
     note_da_ufficio = models.CharField(max_length=240, blank=True, null=True)
-    
+
     class Meta:
         managed = True
         db_table = 'tbltempimaster'
         verbose_name = "tbltempimaster"
         verbose_name_plural = "tbltempimaster"
 
+
 class Tbltempi(models.Model):
     idtempo = models.AutoField(primary_key=True)
-    iddettordine = models.ForeignKey(Tbldettaglioordini, on_delete=models.DO_NOTHING, to_field='iddettordine', db_column='iddettordine', blank=True, null=True)
-    idoperatore = models.ForeignKey(Tbloperatori, on_delete=models.DO_NOTHING, db_column='idoperatore', blank=False, null=False)
-    idfase = models.ForeignKey(Tblfasi, on_delete=models.DO_NOTHING, db_column='idfase', blank=True, null=True)
-    datatempo = models.DateField(blank=True, null=True, verbose_name="Data")  # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.
-    orainizio = models.TimeField(blank=True, null=True, verbose_name="Ora Inizio")
+    iddettordine = models.ForeignKey(Tbldettaglioordini, on_delete=models.DO_NOTHING,
+                                     to_field='iddettordine', db_column='iddettordine', blank=True, null=True)
+    idoperatore = models.ForeignKey(
+        Tbloperatori, on_delete=models.DO_NOTHING, db_column='idoperatore', blank=False, null=False)
+    idfase = models.ForeignKey(
+        Tblfasi, on_delete=models.DO_NOTHING, db_column='idfase', blank=True, null=True)
+    # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.
+    datatempo = models.DateField(blank=True, null=True, verbose_name="Data")
+    orainizio = models.TimeField(
+        blank=True, null=True, verbose_name="Ora Inizio")
     orafine = models.TimeField(blank=True, null=True, verbose_name="Ora Fine")
-    note = models.CharField(max_length=10485760, blank=True, null=True, verbose_name="Note")
-    quantitatemporiparazione = models.FloatField(blank=True, null=True, verbose_name="Quantità Riparati")
-    id_linea = models.ForeignKey(TblLineeLav, on_delete=models.DO_NOTHING, db_column='id_linea', blank=True, null=True)
-    idtempomaster =  models.ForeignKey(tblTempiMaster, on_delete=models.CASCADE, blank=True, null=True)
+    note = models.CharField(max_length=10485760, blank=True,
+                            null=True, verbose_name="Note")
+    quantitatemporiparazione = models.FloatField(
+        blank=True, null=True, verbose_name="Quantità Riparati")
+    id_linea = models.ForeignKey(
+        TblLineeLav, on_delete=models.DO_NOTHING, db_column='id_linea', blank=True, null=True)
+    idtempomaster = models.ForeignKey(
+        tblTempiMaster, on_delete=models.CASCADE, blank=True, null=True)
 
     class Meta:
         managed = True
         db_table = 'tbltempi'
         verbose_name = "tbltempi"
         verbose_name_plural = "tbltempi"
-        
+
     def clean(self):
-        if self.orainizio<START_TIME or self.orainizio>END_TIME:
-            raise ValidationError({'orainizio':(f'L\'orario di inizio deve essere compreso tra le {START_TIME} e le {END_TIME}!') })
+        if self.orainizio < START_TIME or self.orainizio > END_TIME:
+            raise ValidationError({'orainizio': (
+                f'L\'orario di inizio deve essere compreso tra le {START_TIME} e le {END_TIME}!')})
         if self.orafine:
-            if self.orafine<START_TIME or self.orafine>END_TIME:
-                raise ValidationError({'orafine':(f'L\'orario di fine deve essere compreso tra le {START_TIME} e le {END_TIME}!') })
-            if self.orafine<self.orainizio:
-                raise ValidationError({'orafine':(f'L\'orario di fine deve essere maggiore dell\'orario di inizio!') })
-    
-    
+            if self.orafine < START_TIME or self.orafine > END_TIME:
+                raise ValidationError({'orafine': (
+                    f'L\'orario di fine deve essere compreso tra le {START_TIME} e le {END_TIME}!')})
+            if self.orafine < self.orainizio:
+                raise ValidationError(
+                    {'orafine': (f'L\'orario di fine deve essere maggiore dell\'orario di inizio!')})
+
     def get_absolute_url(self):
         return reverse("visualizza_dettaglio", kwargs={"pk": self.idtempo})
 
@@ -404,6 +431,7 @@ class Tblxrmecclienti(models.Model):
         verbose_name = "tblxrmecclienti"
         verbose_name_plural = "tblxrmecclienti"
 
+
 class Qryordiniiniziale(models.Model):
     id_dett_ord = models.AutoField(primary_key=True)
     idordine = models.IntegerField(blank=True, null=True)
@@ -429,7 +457,6 @@ class Qryordiniiniziale(models.Model):
         ordering = ['-dataordine']
 
 
-
 class Qryoperatoriattivi(models.Model):
     id_operatore = models.IntegerField(blank=True, null=True)
     cognome = models.CharField(max_length=255, blank=True, null=True)
@@ -453,6 +480,3 @@ class Qryoperatoriattivi(models.Model):
         managed = False  # Created from a view. Don't remove.
         db_table = 'qryoperatoriattivi'
         ordering = ['-dataordine']
-
-    
-

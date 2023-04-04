@@ -51,7 +51,7 @@ def check_end_time(end_time, start_time):
         codice='L\'orario di fine lavorazione deve essere compreso tra le 06.00 e le 19.00!'
         return (True, codice)    
     if end_time<start_time:
-        codice='L\'orario di fine lavorazione deve essere superiore all\'orario di inizio!'
+        codice='L\'orario di fine lavorazione deve essere superiore all\'orario di inizio!'        
         return (True, codice)  
     
     return(False,)
@@ -64,9 +64,14 @@ def check_time_range(start_time, end_time):
         return (True, codice)
     if end_time:
         if end_time<START_TIME or end_time>END_TIME:
-            codice=f'L\'orario di inizio deve essere compreso tra le {START_TIME} e le {END_TIME}!'
+            codice=f'L\'orario di fine deve essere compreso tra le {START_TIME} e le {END_TIME}!'
             return (True, codice)
     
     return(False,)
+
+def get_sec(time_str):
+    """Get seconds from time."""
+    h, m, s = time_str.split(':')
+    return int(h) * 3600 + int(m) * 60 + int(s)
     
 

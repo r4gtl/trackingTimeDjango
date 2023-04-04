@@ -20,7 +20,12 @@ from datetime import time, timedelta, date , datetime
 #import datetime
 from django.contrib import messages
 from django.utils import timezone
-from .utilities import check_barcode, check_start_time, check_end_time, check_time_range
+from .utilities import (check_barcode, 
+                        check_start_time, 
+                        check_end_time, 
+                        check_time_range, 
+                        get_sec
+)
 
 
 
@@ -205,7 +210,10 @@ def view_all_tracked(request):
 def add_line_search_order(request, id_linea):
         linea=TblLineeLav.objects.get(id_linea=id_linea)  
         
-        filterset = OrderFilter(request.GET, queryset=Tbldettaglioordini.objects.all().order_by('-iddettordine'))        
+        filterset = OrderFilter(request.GET, queryset=Tbldettaglioordini.objects.all().order_by('-iddettordine'))
+        #filterset = OrderFilter(request.GET, queryset=Tbldettaglioordini.objects.filter(iddettordine__lt=35000).order_by('-iddettordine'))
+        #print("Ordini: " + str(Tbldettaglioordini.objects.all()))        
+        
         paginator = Paginator(filterset.qs, 30)
         page = request.GET.get('page')
         try:
@@ -215,6 +223,7 @@ def add_line_search_order(request, id_linea):
         except EmptyPage:
                 filter = paginator.page(paginator.num_pages)
         context={'linea': linea, 'filter':filterset, 'filter_paginated': filter}
+        
         
         return render(request, 'add_line_search_order.html', context)
 
@@ -257,7 +266,18 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
         dettaglio = get_object_or_404(Tbldettaglioordini, pk=pk)
         
         operatori_attivi=Tbltempi.objects.filter(idtempomaster=tempomaster.pk).order_by('-datatempo', '-orainizio')#.order_by('orainizio')
-        
+        tot_tempo=0
+        for operatore in operatori_attivi:
+                if tempomaster.completato:
+                        if operatore.orafine:
+                                ora_fine=time.strftime(operatore.orafine,"%H:%M:%S")
+                                ora_inizio=get_sec(str(operatore.orainizio))
+                                ora_fine=get_sec(str(ora_fine))                
+                                tot_tempo+=(ora_fine)-(ora_inizio)
+                                tempo_medio=timedelta(seconds=round((tot_tempo/tempomaster.quantity)))
+                else:
+                        tempo_medio=0
+        print("Tempo_medio: " + str(tempo_medio))
         if request.method == 'POST':
                 
                 form=QuantityModelForm(request.POST or None, instance = tempomaster)
@@ -281,7 +301,8 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 'operatori_attivi': operatori_attivi,
                 'form': form,
                 'form_note': form_note,
-                'tempomaster': tempomaster
+                'tempomaster': tempomaster,
+                'tempo_medio': tempo_medio
                 }
         return render(request, 'singolo_dettaglio.html', context)
 
@@ -609,6 +630,7 @@ def chiudi_operatore(request, idtempo):
         orainizio=dettaglio.orainizio        
         tempomaster=tblTempiMaster.objects.get(pk=dettaglio.idtempomaster.pk) 
         current_time = datetime.time(datetime.now())
+        
         
         if check_end_time(current_time,orainizio)[0]==True:
                 messages.error(request, check_end_time(current_time,orainizio)[1])                
