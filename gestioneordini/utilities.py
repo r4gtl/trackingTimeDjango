@@ -1,4 +1,5 @@
 import datetime
+from datetime import time
 
 '''
 Le prossime due variabili indicano ora di inizio e l'ora di fine
@@ -73,5 +74,27 @@ def get_sec(time_str):
     """Get seconds from time."""
     h, m, s = time_str.split(':')
     return int(h) * 3600 + int(m) * 60 + int(s)
+
+
+def get_if_media_tempo(comp_coll):
+    if comp_coll.ore_medie_lavorazione==0 and comp_coll.minuti_medi_lavorazione==0 and comp_coll.secondi_medi_lavorazione==0:
+        messaggio_tempo = f'Nessun tempo medio assegnato al codice!'
+        return(False, messaggio_tempo)
+    else:
+        return(True,)
     
+
+def get_tempo_medio(tempo, comp_coll):
+    tempo_medio = comp_coll.ore_medie_lavorazione * 3600 + comp_coll.minuti_medi_lavorazione * 60 + comp_coll.secondi_medi_lavorazione
+    tolleranza_percentuale = comp_coll.perc_tempo
+    
+    if tolleranza_percentuale==0:
+        tempo_massimo_consentito = tempo_medio
+    else:    
+        tempo_massimo_consentito = tempo_medio + (tempo_medio * tolleranza_percentuale / 100)
+
+    if tempo <= tempo_massimo_consentito:
+        return True, tempo_medio, tempo_massimo_consentito
+    else:
+        return False, tempo_medio, tempo_massimo_consentito
 

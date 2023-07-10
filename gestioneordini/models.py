@@ -5,6 +5,7 @@ from django.urls import reverse
 from django.db.models import Max, Q, F
 import datetime
 from django.core.exceptions import ValidationError
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 '''
@@ -125,6 +126,34 @@ class Tblcollegamenti(models.Model):
     grcavicliente = models.BooleanField(blank=True, null=True)
     schedatecnica = models.CharField(
         max_length=10485760, blank=True, null=True)
+    ore_medie_lavorazione = models.IntegerField(
+        default = 0,
+        null= True,
+        blank = True,
+        validators = [
+            MinValueValidator(0),
+            MaxValueValidator(99)
+        ]
+    )
+    minuti_medi_lavorazione = models.IntegerField(
+        default = 0,
+        null= True,
+        blank = True,
+        validators = [
+            MinValueValidator(0),
+            MaxValueValidator(60)
+        ]
+    )
+    secondi_medi_lavorazione = models.IntegerField(
+        default = 0,
+        null= True,
+        blank = True,
+        validators = [
+            MinValueValidator(0),
+            MaxValueValidator(60)
+        ]
+    )
+    perc_tempo = models.FloatField(blank=True, null=True)   
 
     class Meta:
         managed = True
@@ -145,7 +174,35 @@ class Tblcomponenti(models.Model):
     poli1 = models.CharField(max_length=255, blank=True, null=True)
     schedatecnica = models.CharField(
         max_length=10485760, blank=True, null=True)
-    tempolavorazione = models.FloatField(blank=True, null=True)
+    tempolavorazione = models.TimeField(blank=True, null=True)
+    ore_medie_lavorazione = models.IntegerField(
+        default = 0,
+        null= True,
+        blank = True,
+        validators = [
+            MinValueValidator(0),
+            MaxValueValidator(99)
+        ]
+    )
+    minuti_medi_lavorazione = models.IntegerField(
+        default = 0,
+        null= True,
+        blank = True,
+        validators = [
+            MinValueValidator(0),
+            MaxValueValidator(60)
+        ]
+    )
+    secondi_medi_lavorazione = models.IntegerField(
+        default = 0,
+        null= True,
+        blank = True,
+        validators = [
+            MinValueValidator(0),
+            MaxValueValidator(60)
+        ]
+    )
+    perc_tempo = models.FloatField(blank=True, null=True)    
     iddestinazione = models.IntegerField(blank=True, null=True)
     idgruppo = models.IntegerField(blank=True, null=True)
     idmec = models.IntegerField(blank=True, null=True)
@@ -337,9 +394,21 @@ class TblLineeLav(models.Model):
 
 
 class tblTempiMaster(models.Model):
+    # Tempo Ok o Ko
+    TEMPO_OK = 'Tempo OK'
+    TEMPO_NC = 'Tempo Non Conforme'
+    TEMPO_NC_GESTITO = 'Non Conformità Gestita'
+    
+    
+    
+    CHOICES_MEDIA_TEMPO = (
+        (TEMPO_OK, 'Tempo OK'),
+        (TEMPO_NC, 'Tempo Non Conforme'),        
+        (TEMPO_NC_GESTITO, 'Non Conformità Gestita')
+    )
     idtempomaster = models.AutoField(primary_key=True)
     iddettordine = models.ForeignKey(Tbldettaglioordini, on_delete=models.DO_NOTHING,
-                                     to_field='iddettordine', db_column='iddettordine', blank=True, null=True)
+                                    to_field='iddettordine', db_column='iddettordine', blank=True, null=True)
     # Field name made lowercase. Field renamed to remove unsuitable characters. Field renamed because it started with '_'. Field renamed because it ended with '_'.
     datatempo = models.DateField(blank=True, null=True, verbose_name="Data")
     quantity = models.FloatField(
@@ -350,6 +419,8 @@ class tblTempiMaster(models.Model):
     inlavoro = models.BooleanField(blank=True, null=True, default=True)
     note_da_linea = models.CharField(max_length=240, blank=True, null=True)
     note_da_ufficio = models.CharField(max_length=240, blank=True, null=True)
+    tempo_conforme = models.CharField(max_length=50, choices=CHOICES_MEDIA_TEMPO, default='Tempo OK')    
+    note_tempo_nc = models.CharField(max_length=240, blank=True, null=True)
 
     class Meta:
         managed = True
@@ -361,7 +432,7 @@ class tblTempiMaster(models.Model):
 class Tbltempi(models.Model):
     idtempo = models.AutoField(primary_key=True)
     iddettordine = models.ForeignKey(Tbldettaglioordini, on_delete=models.DO_NOTHING,
-                                     to_field='iddettordine', db_column='iddettordine', blank=True, null=True)
+                                    to_field='iddettordine', db_column='iddettordine', blank=True, null=True)
     idoperatore = models.ForeignKey(
         Tbloperatori, on_delete=models.DO_NOTHING, db_column='idoperatore', blank=False, null=False)
     idfase = models.ForeignKey(

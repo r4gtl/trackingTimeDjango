@@ -14,7 +14,8 @@ from .filters import OrderFilter
 from .forms import (
         FormDettaglio, TempoModelForm,
         FormMaster, QuantityModelForm,
-        AskForCloseModelForm, NoteLineaModelForm
+        AskForCloseModelForm, NoteLineaModelForm,
+        FormMediaTempi
 )
 from datetime import time, timedelta, date , datetime
 #import datetime
@@ -24,7 +25,8 @@ from .utilities import (check_barcode,
                         check_start_time, 
                         check_end_time, 
                         check_time_range, 
-                        get_sec
+                        get_sec,
+                        get_if_media_tempo, get_tempo_medio,
 )
 
 
@@ -256,12 +258,111 @@ def visualizza_dettaglio(request, pk, id_linea, idtempomaster):
         return render(request, "singolo_dettaglio.html", context)
 
 
+# def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
+#         linea = TblLineeLav.objects.get(id_linea=id_linea)
+#         tempomaster=tblTempiMaster.objects.get(pk=idtempomaster)
+        
+#         query_dettaglio = linea.get_line()
+#         if tempomaster.iddettordine.idcomponente:
+#                 componente = tempomaster.iddettordine.idcomponente
+#         else:
+#                 componente = tempomaster.iddettordine.idcollegamento
+        
+        
+        
+#         dettaglio = get_object_or_404(Tbldettaglioordini, pk=pk)
+        
+#         operatori_attivi=Tbltempi.objects.filter(idtempomaster=tempomaster.pk).order_by('-datatempo', '-orainizio')#.order_by('orainizio')
+#         tot_tempo=0
+#         for operatore in operatori_attivi:
+#                 if tempomaster.completato:
+#                         if operatore.orafine:
+#                                 ora_fine=time.strftime(operatore.orafine,"%H:%M:%S")
+#                                 ora_inizio=get_sec(str(operatore.orainizio))
+#                                 ora_fine=get_sec(str(ora_fine))                
+#                                 tot_tempo+=(ora_fine)-(ora_inizio)
+#                                 #tempo_medio=timedelta(seconds=round((tot_tempo/tempomaster.quantity)))
+#                                 if tempomaster.completato and tempomaster.quantity:
+#                                         tempo_medio = timedelta(seconds=round((tot_tempo / tempomaster.quantity)))
+#                                 else:
+#                                         tempo_medio = timedelta(seconds=0)
+                
+                
+#                 else:
+#                         tempo_medio=0
+#                         tot_tempo=0
+                        
+#                 tot_tempo_min_sec=str(timedelta(seconds=tot_tempo))
+                
+#         if request.method == 'POST':
+                
+#                 form=QuantityModelForm(request.POST or None, instance = tempomaster)
+#                 # form=FormDettaglio(request.POST)
+#                 if form.is_valid():
+#                         dettaglio_salvato = form.save(commit=False)
+#                         dettaglio_salvato.save()
+                
+#                 form_note=NoteLineaModelForm(request.POST or None, instance = tempomaster)
+#                 # form=FormDettaglio(request.POST)
+#                 if form_note.is_valid():
+#                         note_salvate = form_note.save(commit=False)
+#                         note_salvate.save()
+                
+#                 form_media_tempo = FormMediaTempi(request.POST or None, instance = tempomaster)
+#                 if form_media_tempo.is_valid():
+#                         media_tempo = form_media_tempo.save(commit=False)
+#                         media_tempo.save()
+                        
+#         else:
+#                 form=QuantityModelForm(instance = tempomaster)
+#                 form_note=NoteLineaModelForm(instance = tempomaster)
+#                 form_media_tempo=FormMediaTempi(request.POST or None, instance=tempomaster)
+                
+#         if get_if_media_tempo(componente)[0]:
+#                 messaggio_tempo = True
+#                 if get_tempo_medio(tempo_medio, componente)[0]:
+#                         check_tempo=True
+#                         tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[0] 
+#                 else:
+#                         check_tempo=False
+#                         tempo_massimo_consentito='Media non presente'
+#         else:
+#                 messaggio_tempo = get_if_media_tempo(componente)[1]
+#                 check_tempo=False
+#                 tempo_massimo_consentito='Media non presente'
+#         print("Form: " + str(form_media_tempo))        
+#         context = {'linea': linea,                         
+#                 'dettaglio': dettaglio,
+#                 'operatori_attivi': operatori_attivi,
+#                 'form': form,
+#                 'form_note': form_note,
+#                 'tempomaster': tempomaster,
+#                 'tempo_medio': tempo_medio,
+#                 'tot_tempo_min_sec': tot_tempo_min_sec,
+#                 'check_tempo': check_tempo,
+#                 'messaggio_tempo': messaggio_tempo,
+#                 'tempo_massimo_consentito': tempo_massimo_consentito,
+#                 'form_media_tempo': form_media_tempo
+#                 }
+#         return render(request, 'singolo_dettaglio.html', context)
+
+
 def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
+        # form_quantity = None
+        # form_media_tempo = None
+
         linea = TblLineeLav.objects.get(id_linea=id_linea)
         tempomaster=tblTempiMaster.objects.get(pk=idtempomaster)
         
         query_dettaglio = linea.get_line()
+        if tempomaster.iddettordine.idcomponente:
+                componente = tempomaster.iddettordine.idcomponente
+        else:
+                componente = tempomaster.iddettordine.idcollegamento
         
+        form_quantity = QuantityModelForm(instance=tempomaster)
+        form_note = NoteLineaModelForm(instance=tempomaster)
+        form_media_tempo = FormMediaTempi(instance=tempomaster)
         
         dettaglio = get_object_or_404(Tbldettaglioordini, pk=pk)
         
@@ -274,39 +375,74 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                                 ora_inizio=get_sec(str(operatore.orainizio))
                                 ora_fine=get_sec(str(ora_fine))                
                                 tot_tempo+=(ora_fine)-(ora_inizio)
-                                tempo_medio=timedelta(seconds=round((tot_tempo/tempomaster.quantity)))
+                                #tempo_medio=timedelta(seconds=round((tot_tempo/tempomaster.quantity)))
+                                if tempomaster.completato and tempomaster.quantity:
+                                        tempo_medio = timedelta(seconds=round((tot_tempo / tempomaster.quantity)))
+                                else:
+                                        tempo_medio = timedelta(seconds=0)
+                
+                
                 else:
                         tempo_medio=0
-        print("Tempo_medio: " + str(tempo_medio))
+                        tot_tempo=0
+                        
+                tot_tempo_min_sec=str(timedelta(seconds=tot_tempo))
+                
         if request.method == 'POST':
+                print("request post: " + str(request))
+                if 'formQuantity' in request.POST:
+                        form_quantity=QuantityModelForm(request.POST, instance = tempomaster)
+                        # form=FormDettaglio(request.POST)
+                        if form_quantity.is_valid():
+                                dettaglio_salvato = form_quantity.save(commit=False)
+                                dettaglio_salvato.save()
+                elif 'mediaTempiForm' in request.POST:
+                        form_media_tempo = FormMediaTempi(request.POST, instance = tempomaster)
+                        if form_media_tempo.is_valid():
+                                media_tempo = form_media_tempo.save(commit=False)
+                                media_tempo.save()
+                else:
+                        form_note=NoteLineaModelForm(request.POST or None, instance = tempomaster)
+                        # form=FormDettaglio(request.POST)
+                        if form_note.is_valid():
+                                note_salvate = form_note.save(commit=False)
+                                note_salvate.save()
                 
-                form=QuantityModelForm(request.POST or None, instance = tempomaster)
-                # form=FormDettaglio(request.POST)
-                if form.is_valid():
-                        dettaglio_salvato = form.save(commit=False)
-                        dettaglio_salvato.save()
                 
-                form_note=NoteLineaModelForm(request.POST or None, instance = tempomaster)
-                # form=FormDettaglio(request.POST)
-                if form_note.is_valid():
-                        note_salvate = form_note.save(commit=False)
-                        note_salvate.save()
                         
         else:
-                form=QuantityModelForm(instance = tempomaster)
+                print("request get: " + str(request))
+                form_quantity=QuantityModelForm(instance = tempomaster)
                 form_note=NoteLineaModelForm(instance = tempomaster)
+                form_media_tempo=FormMediaTempi(request.POST or None, instance=tempomaster)
                 
+        if get_if_media_tempo(componente)[0]:
+                messaggio_tempo = True
+                if get_tempo_medio(tempo_medio, componente)[0]:
+                        check_tempo=True
+                        tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[0] 
+                else:
+                        check_tempo=False
+                        tempo_massimo_consentito='Media non presente'
+        else:
+                messaggio_tempo = get_if_media_tempo(componente)[1]
+                check_tempo=False
+                tempo_massimo_consentito='Media non presente'
+        
         context = {'linea': linea,                         
                 'dettaglio': dettaglio,
                 'operatori_attivi': operatori_attivi,
-                'form': form,
+                'form_quantity': form_quantity,
                 'form_note': form_note,
                 'tempomaster': tempomaster,
-                'tempo_medio': tempo_medio
+                'tempo_medio': tempo_medio,
+                'tot_tempo_min_sec': tot_tempo_min_sec,
+                'check_tempo': check_tempo,
+                'messaggio_tempo': messaggio_tempo,
+                'tempo_massimo_consentito': tempo_massimo_consentito,
+                'form_media_tempo': form_media_tempo
                 }
         return render(request, 'singolo_dettaglio.html', context)
-
-
 
 def add_master_time(request, pk, id_linea):
         
@@ -437,7 +573,7 @@ def add_master_time_barcode(request, id_linea):
 
 def chiudi_lavorazione(request, pk, id_linea):
         dettaglio = get_object_or_404(tblTempiMaster, pk=pk)        
-                
+        
         linea = TblLineeLav.objects.get(id_linea=id_linea)
         operatori_attivi = Tbltempi.objects.all().filter(orafine__isnull = True, idtempomaster__exact=pk, id_linea__exact=id_linea)
         dettaglio.inlavoro = False
@@ -449,8 +585,11 @@ def chiudi_lavorazione(request, pk, id_linea):
                 close_time = current_time.strftime("%H:%M:")
                 operatore.orafine = current_time
                 operatore.save()
-        
-        return redirect('gestioneordini:dashboard')
+                
+                # AGGIUNGERE IN QUESTO PUNTO IL CONTROLLO DEL RISPETTO DEL TEMPO MEDIO
+        url_match= reverse_lazy('gestioneordini:visualizza_dettaglio_da_linea', kwargs={'pk':dettaglio.iddettordine.iddettordine, 'id_linea': linea.id_linea, 'idtempomaster': dettaglio.pk})      
+        return redirect(url_match)
+        #return redirect('gestioneordini:dashboard')
 
 
 def aggiungi_operatore_attivo(request, pk, pk_linea, idtempomaster):

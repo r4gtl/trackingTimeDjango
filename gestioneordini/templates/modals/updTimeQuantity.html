@@ -12,18 +12,18 @@
 <form action="{% url 'gestioneordini:update_quantity' pk=tempomaster.pk  %}" method="POST" id="formQuantity">
             
     {% csrf_token %}            
-      {{ form.idtempomaster.as_hidden }}
-      {{ form.idlinea.as_hidden }}
-      {{ form.datatempo.as_hidden }}
-      {{ form.iddettordine.as_hidden }}
-      {{ form.quantity|as_crispy_field }}
+      {{ form_quantity.idtempomaster.as_hidden }}
+      {{ form_quantity.idlinea.as_hidden }}
+      {{ form_quantity.datatempo.as_hidden }}
+      {{ form_quantity.iddettordine.as_hidden }}
+      {{ form_quantity.quantity|as_crispy_field }}
 {% endblock modal-body %}
 
 
 <!-- Modal Footer -->
 {% block modal-footer %}
         
-<button class="btn btn-outline-danger btn-sm" type="submit" ><i class="bi bi-trash-fill"></i>&nbsp;&nbsp; Aggiorna</button>
+<button class="btn btn-outline-danger btn-sm" type="submit" name="formQuantity"><i class="bi bi-trash-fill"></i>&nbsp;&nbsp; Aggiorna</button>
 </form>
 
 {% endblock modal-footer %}

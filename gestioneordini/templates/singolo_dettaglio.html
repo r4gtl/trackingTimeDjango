@@ -99,15 +99,19 @@
     
                 <!-- form chiudi-apri lavorazione -->
                 <div class="row">
-                    <div class="col-md-8 ">
+                    <div class="col-md-3 mt-2">
                         
                             
                     </div>
-                    
+                    <div class="col-md-5 mt-2">
+                        
+                        
+                    </div>
                     <div class="col-md-4">
                         <div class="form row g-3 mt-1">                                                
                             <!-- Button trigger modal -->
                             
+                                
                                 <div class="col">
                                     {% if tempomaster.completato %}
                                     <a href="#" class="btn btn-sm btn-outline-success disabled ">
@@ -131,6 +135,63 @@
                 
                 <!-- fine form chiudi-apri lavorazione -->     
             </div>
+
+
+            <!-- Sezione statistica Tempi -->
+            {% if tempomaster.completato %}
+            <hr>
+            <h4>Statistiche tempi</h4>
+            <div class="row">
+                <div class="col-md-3 mt-2">
+                    {% if tot_tempo_min_sec %}
+                        <p>Tempo totale <strong>{{ tot_tempo_min_sec }}</strong></p>
+                    {% endif %}
+                    {% if tempo_medio %}
+                        <p>Tempo medio <strong>{{ tempo_medio }}</strong></p>
+                    {% endif %}
+                    {% if tempo_massimo_consentito %}
+                        <p>Media max consentita <strong>{{ tempo_massimo_consentito }}</strong></p>
+                    {% endif %}
+                        
+                </div>
+                <div class="col-md-3 mt-2">
+                    {% if messaggio_tempo %}
+                    {% if check_tempo %}
+                        <span><i class="bi bi-hand-thumbs-up"></i>Tempo OK</span>
+                    {% else %}
+                        <h2><span style="color:red"><i class="bi bi-hand-thumbs-down-fill"></i>  Tempo KO</span></h2>
+                    {% endif %}
+                    {% endif %}
+                    
+                </div>
+                <!-- Form media tempo -->
+                <div class="col-md-6">
+                    <form method="POST" id="mediaTempiForm">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-4">                                
+                                {{ form_media_tempo.tempo_conforme|as_crispy_field }}
+                            </div>
+                            <div class="col-8">
+                                {{ form_media_tempo.note_tempo_nc|as_crispy_field }}
+                                <!-- Aggiungi il campo nascosto per l'ID del primo form -->
+                                {{ form_media_tempo.idtempomaster.as_hidden }}
+                                <div class="col-md-2 align-self-center">
+                                    <input class="btn btn-xl btn-success " type="submit" value="Salva e continua" name="mediaTempiForm">
+                                </div>
+                            </div>
+                        </div>
+                            
+                        
+                    
+
+                </form>
+                
+                </div>
+
+
+            </div>
+            {% endif %}
         </div>
         
         

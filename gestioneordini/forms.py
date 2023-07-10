@@ -105,7 +105,27 @@ class NoteLineaModelForm(forms.ModelForm):
             "note_da_linea": forms.Textarea(attrs={'cols': 80, 'rows': 2, 'label':""}),             
         }
         
+
+class FormMediaTempi(forms.ModelForm):
+     class Meta:
+        model = tblTempiMaster
+        fields = (
+            'idtempomaster',
+            'tempo_conforme',
+            'note_tempo_nc'
+        )
+        exclude = ('quantity',)
+        widgets = {
+            "tempo_conforme": forms.Select,
+            "note_tempo_nc": forms.Textarea(attrs={'rows': 2, 'label':""})             
+        }
+        labels = {
+            "tempo_conforme": 'Assegna validità',
+            "note_tempo_nc": 'Non conformità riscontrate'
+        }
         
+
+
 class AskForCloseModelForm(forms.ModelForm):
 
     class Meta:
