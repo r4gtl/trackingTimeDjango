@@ -155,14 +155,15 @@
                         
                 </div>
                 <div class="col-md-3 mt-2">
-                    {% if messaggio_tempo %}
-                    {% if check_tempo %}
-                        <span><i class="bi bi-hand-thumbs-up"></i>Tempo OK</span>
-                    {% else %}
-                        <h2><span style="color:red"><i class="bi bi-hand-thumbs-down-fill"></i>  Tempo KO</span></h2>
-                    {% endif %}
-                    {% endif %}
                     
+                    {% if tempomaster.tempo_conforme|lower == "tempo ok" %}
+                        <h2><span style="color:green"><i class="bi bi-hand-thumbs-up-fill"></i> Tempo OK</span></h2>
+                    {% elif tempomaster.tempo_conforme|lower == "tempo non conforme" %}
+                        <h2><span style="color:red"><i class="bi bi-hand-thumbs-down-fill"></i> Tempo KO</span></h2>
+                    {% else %}
+                        <h2><span style="color:yellow"><i class="bi bi-bell-fill"></i> NC Gestita</span></h2>
+                    {% endif %}
+
                 </div>
                 <!-- Form media tempo -->
                 <div class="col-md-6">

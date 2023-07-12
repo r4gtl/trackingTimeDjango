@@ -411,13 +411,17 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 
                         
         else:
-                print("request get: " + str(request))
+                #print("request get: " + str(request))
                 form_quantity=QuantityModelForm(instance = tempomaster)
                 form_note=NoteLineaModelForm(instance = tempomaster)
                 form_media_tempo=FormMediaTempi(request.POST or None, instance=tempomaster)
                 
         if get_if_media_tempo(componente)[0]:
                 messaggio_tempo = True
+                print("Tempo medio: " + str(tempo_medio))
+                if isinstance(tempo_medio, int):
+                        tempo_medio = timedelta(seconds=tempo_medio)   
+                        
                 if get_tempo_medio(tempo_medio, componente)[0]:
                         check_tempo=True
                         tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[0] 
@@ -576,6 +580,7 @@ def chiudi_lavorazione(request, pk, id_linea):
         
         linea = TblLineeLav.objects.get(id_linea=id_linea)
         operatori_attivi = Tbltempi.objects.all().filter(orafine__isnull = True, idtempomaster__exact=pk, id_linea__exact=id_linea)
+        operatori = Tbltempi.objects.all().filter(idtempomaster__exact=pk, id_linea__exact=id_linea)
         dettaglio.inlavoro = False
         dettaglio.completato = True
         dettaglio.save()
@@ -585,8 +590,32 @@ def chiudi_lavorazione(request, pk, id_linea):
                 close_time = current_time.strftime("%H:%M:")
                 operatore.orafine = current_time
                 operatore.save()
+        
+        # Calcolo il tempo medio
+        tot_tempo=0
+        for operatore in operatori: 
+                ora_fine=time.strftime(operatore.orafine,"%H:%M:%S")
+                ora_inizio=get_sec(str(operatore.orainizio))
+                ora_fine=get_sec(str(ora_fine))                
+                tot_tempo+=(ora_fine)-(ora_inizio)       
                 
-                # AGGIUNGERE IN QUESTO PUNTO IL CONTROLLO DEL RISPETTO DEL TEMPO MEDIO
+        if dettaglio.iddettordine.idcomponente:
+                componente = dettaglio.iddettordine.idcomponente
+        else:
+                componente = dettaglio.iddettordine.idcollegamento
+        tempo_medio = timedelta(seconds=round((tot_tempo / dettaglio.quantity)))
+        
+        if get_if_media_tempo(componente)[0]:
+                if get_tempo_medio(tempo_medio, componente)[0]:
+                        check_tempo=True
+                        print("Check Tempo: " + str(check_tempo))
+                        tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[0] 
+                        dettaglio.tempo_conforme = "Tempo OK"
+                        dettaglio.save
+                else:
+                        dettaglio.tempo_conforme = "Tempo Non Conforme"
+                        dettaglio.save
+                
         url_match= reverse_lazy('gestioneordini:visualizza_dettaglio_da_linea', kwargs={'pk':dettaglio.iddettordine.iddettordine, 'id_linea': linea.id_linea, 'idtempomaster': dettaglio.pk})      
         return redirect(url_match)
         #return redirect('gestioneordini:dashboard')
