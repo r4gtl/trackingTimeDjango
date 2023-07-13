@@ -423,11 +423,15 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                         tempo_medio = timedelta(seconds=tempo_medio)   
                         
                 if get_tempo_medio(tempo_medio, componente)[0]:
+                        print("risultato funzione: " + str(get_tempo_medio(tempo_medio, componente)[0]))
                         check_tempo=True
-                        tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[0] 
+                        tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[2] 
+                        print("Check true: " + str(check_tempo) + " " + "tempoda if: " + str(tempo_massimo_consentito))
                 else:
+                        print("risultato funzione: " + str(get_tempo_medio(tempo_medio, componente)[0]))
                         check_tempo=False
                         tempo_massimo_consentito='Media non presente'
+                        print("Check False: " + str(check_tempo) + " " + "tempoda if: " + str(tempo_massimo_consentito))
         else:
                 messaggio_tempo = get_if_media_tempo(componente)[1]
                 check_tempo=False
@@ -611,10 +615,10 @@ def chiudi_lavorazione(request, pk, id_linea):
                         print("Check Tempo: " + str(check_tempo))
                         tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[0] 
                         dettaglio.tempo_conforme = "Tempo OK"
-                        dettaglio.save
+                        dettaglio.save()
                 else:
                         dettaglio.tempo_conforme = "Tempo Non Conforme"
-                        dettaglio.save
+                        dettaglio.save()
                 
         url_match= reverse_lazy('gestioneordini:visualizza_dettaglio_da_linea', kwargs={'pk':dettaglio.iddettordine.iddettordine, 'id_linea': linea.id_linea, 'idtempomaster': dettaglio.pk})      
         return redirect(url_match)

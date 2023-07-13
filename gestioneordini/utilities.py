@@ -98,7 +98,9 @@ def get_tempo_medio(tempo, comp_coll):
         tempo_massimo_consentito = tempo_medio + (tempo_medio * tolleranza_percentuale / 100)
 
     if tempo.total_seconds() <= tempo_massimo_consentito.total_seconds():
+        print("tempo medio funzione: " + str(tempo_medio) + " " + "tempo massimo: " + str(tempo_massimo_consentito))
         return True, tempo_medio, tempo_massimo_consentito
     else:
+        print("tempo medio funzione: " + str(tempo_medio) + " " + "tempo massimo: " + str(tempo_massimo_consentito))
         return False, tempo_medio, tempo_massimo_consentito
 
