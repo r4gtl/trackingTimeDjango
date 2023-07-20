@@ -368,6 +368,7 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
         
         operatori_attivi=Tbltempi.objects.filter(idtempomaster=tempomaster.pk).order_by('-datatempo', '-orainizio')#.order_by('orainizio')
         tot_tempo=0
+        tot_tempo_min_sec=0
         for operatore in operatori_attivi:
                 if tempomaster.completato:
                         if operatore.orafine:
