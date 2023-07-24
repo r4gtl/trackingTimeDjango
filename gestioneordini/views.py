@@ -369,6 +369,7 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
         operatori_attivi=Tbltempi.objects.filter(idtempomaster=tempomaster.pk).order_by('-datatempo', '-orainizio')#.order_by('orainizio')
         tot_tempo=0
         tot_tempo_min_sec=0
+        tempo_medio=0
         for operatore in operatori_attivi:
                 if tempomaster.completato:
                         if operatore.orafine:
@@ -473,12 +474,17 @@ def add_master_time(request, pk, id_linea):
                         'linea': linea,
                         
                 }
+        print("Sono qui_1")
         if request.method == 'POST':
+                
+                form_media_tempo=FormMediaTempi(request.POST or None)
                 # form=FormDettaglio(request.POST)
                 if form.is_valid():
+                        
                         dettaglio_salvato = form.save()
                         tempomaster=tblTempiMaster.objects.get(pk=dettaglio_salvato.idtempomaster)                        
                         operatori_attivi=Tbltempi.objects.filter(idtempomaster=tempomaster.pk)                        
+                        form_media_tempo=FormMediaTempi(request.POST or None, instance=tempomaster)
                         if request.method == 'POST':
                                 form=QuantityModelForm(request.POST or None, instance = tempomaster)
                                 # form=FormDettaglio(request.POST)
@@ -491,17 +497,27 @@ def add_master_time(request, pk, id_linea):
                                         note_salvate = form_note.save(commit=False)
                                         note_salvate.save()
                                         
+                                        
                         else:
                                 form=QuantityModelForm(instance = tempomaster)
                                 form_note=NoteLineaModelForm(instance = tempomaster)
+                                form_media_tempo=FormMediaTempi(request.POST or None, instance=tempomaster)
+                                #
+                                
                         context = {"dettaglio": dettaglio, 
                         "operatori_attivi": operatori_attivi,                          
                         "linea": linea,
                         "tempomaster": tempomaster,
-                        "form": form,
-                        "form_note": form_note
+                        "form_quantity": form,
+                        "form_note": form_note,
+                        "prova:" : False,
+                        'form_media_tempo': form_media_tempo,
+                        'tot_tempo_min_sec': 0,
+                        'tempo_medio': 0,
+                        'tempo_massimo_consentito': 0
                         }
                         # dettaglio_salvato.save()
+                        
                         return render(request, "singolo_dettaglio.html", context)
         
                 
