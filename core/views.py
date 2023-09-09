@@ -6,7 +6,7 @@ from xhtml2pdf import pisa
 from django.template.loader import get_template
 from io import BytesIO
 from django.views import View
-from gestioneordini.models import Tblgruppi, Tblpoli, Tblcave
+from gestioneordini.models import Tblgruppi, Tblpoli, Tblcave, tblDestinazioni
 
 
 
@@ -62,11 +62,21 @@ def view_grid_labels(request, iddettordine, labels_count):
         else:
             poli=""
             cave=""
+            
+        if dettaglio.iddestinazione:
+            if tblDestinazioni.objects.filter(iddestinazione=dettaglio.iddestinazione):
+                iddestinazione= tblDestinazioni.objects.get(iddestinazione=dettaglio.iddestinazione)
+                destinazione=iddestinazione.destinazione
+            else:
+                destinazione=""
+        else:
+            destinazione=""
 
         context={
                 "dettaglio": dettaglio,
                 "labels_count": labels,
                 "poli": poli,
-                "cave": cave
+                "cave": cave,
+                "destinazione": destinazione
         }
         return render(request, "grid_label.html", context)
