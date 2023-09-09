@@ -6,6 +6,7 @@ from xhtml2pdf import pisa
 from django.template.loader import get_template
 from io import BytesIO
 from django.views import View
+from gestioneordini.models import Tblgruppi, Tblpoli, Tblcave
 
 
 
@@ -51,9 +52,21 @@ def view_grid_labels(request, iddettordine, labels_count):
         per poter selezionare quello da chiudere come da richiesta del 16/11/2022
         '''
         dettaglio=Tbldettaglioordini.objects.get(pk=iddettordine)
-        labels=range(labels_count)        
+        labels=range(labels_count)
+        if dettaglio.idcollegamento:
+            gruppo = Tblgruppi.objects.get(idgruppo=dettaglio.idcollegamento.idgruppo)
+            idpoli = Tblpoli.objects.get(idpoli=gruppo.idpoli) 
+            poli = idpoli.poli
+            idcave = Tblcave.objects.get(idcave=gruppo.idcave)
+            cave = idcave.cave
+        else:
+            poli=""
+            cave=""
+
         context={
                 "dettaglio": dettaglio,
-                "labels_count": labels
+                "labels_count": labels,
+                "poli": poli,
+                "cave": cave
         }
         return render(request, "grid_label.html", context)

@@ -85,22 +85,50 @@ def get_if_media_tempo(comp_coll):
     
 
 def get_tempo_medio(tempo, comp_coll):
-    ore_medie = comp_coll.ore_medie_lavorazione
-    minuti_medi = comp_coll.minuti_medi_lavorazione
-    secondi_medi = comp_coll.secondi_medi_lavorazione
+    # ore_medie = comp_coll.ore_medie_lavorazione
+    # minuti_medi = comp_coll.minuti_medi_lavorazione
+    # secondi_medi = comp_coll.secondi_medi_lavorazione
 
+    # tempo_medio = timedelta(hours=ore_medie, minutes=minuti_medi, seconds=secondi_medi)
+    # tolleranza_percentuale = comp_coll.perc_tempo
+    
+    # if tolleranza_percentuale==0 or tolleranza_percentuale is None:
+    #     tempo_massimo_consentito = tempo_medio
+    # else:    
+    #     tempo_massimo_consentito = tempo_medio + (tempo_medio * tolleranza_percentuale / 100)
+
+    # if tempo.total_seconds() <= tempo_massimo_consentito.total_seconds():
+    #     print("tempo medio funzione: " + str(tempo_medio) + " " + "tempo massimo: " + str(tempo_massimo_consentito))
+    #     return True, tempo_medio, tempo_massimo_consentito
+    # else:
+    #     print("tempo medio funzione: " + str(tempo_medio) + " " + "tempo massimo: " + str(tempo_massimo_consentito))
+    #     return False, tempo_medio, tempo_massimo_consentito
+
+    if comp_coll.minuti_medi_lavorazione is None:
+        ore_medie=0
+    else:
+        ore_medie=comp_coll.ore_medie_lavorazione
+    if comp_coll.minuti_medi_lavorazione is None:
+        minuti_medi=0
+    else:
+        minuti_medi=comp_coll.minuti_medi_lavorazione
+    if comp_coll.secondi_medi_lavorazione is None:
+        secondi_medi=0
+    else:
+        secondi_medi = comp_coll.secondi_medi_lavorazione
+    
     tempo_medio = timedelta(hours=ore_medie, minutes=minuti_medi, seconds=secondi_medi)
     tolleranza_percentuale = comp_coll.perc_tempo
     
     if tolleranza_percentuale==0 or tolleranza_percentuale is None:
         tempo_massimo_consentito = tempo_medio
-    else:    
+    else:
         tempo_massimo_consentito = tempo_medio + (tempo_medio * tolleranza_percentuale / 100)
-
+    
     if tempo.total_seconds() <= tempo_massimo_consentito.total_seconds():
         print("tempo medio funzione: " + str(tempo_medio) + " " + "tempo massimo: " + str(tempo_massimo_consentito))
         return True, tempo_medio, tempo_massimo_consentito
     else:
         print("tempo medio funzione: " + str(tempo_medio) + " " + "tempo massimo: " + str(tempo_massimo_consentito))
         return False, tempo_medio, tempo_massimo_consentito
-
+        

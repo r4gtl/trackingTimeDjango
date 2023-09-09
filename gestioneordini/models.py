@@ -501,6 +501,18 @@ class Tblxrmecclienti(models.Model):
         db_table = 'tblxrmecclienti'
         verbose_name = "tblxrmecclienti"
         verbose_name_plural = "tblxrmecclienti"
+        
+class tblDestinazioni(models.Model):
+    iddestinazione = models.IntegerField(primary_key=True)
+    idcliente = models.ForeignKey(
+        Tblcave, on_delete=models.DO_NOTHING, db_column='idcliente', blank=True, null=True)
+    destinazione = models.CharField(max_length=255, blank=True, null=True)
+    
+    class Meta:
+        managed = False
+        db_table = 'tbldestinazioni'
+        verbose_name = "tbldestinazioni"
+        verbose_name_plural = "tbldestinazioni"
 
 
 class Qryordiniiniziale(models.Model):

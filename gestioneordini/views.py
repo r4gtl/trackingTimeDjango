@@ -369,7 +369,7 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
         operatori_attivi=Tbltempi.objects.filter(idtempomaster=tempomaster.pk).order_by('-datatempo', '-orainizio')#.order_by('orainizio')
         tot_tempo=0
         tot_tempo_min_sec=0
-        tempo_medio=0
+        #tempo_medio=0
         for operatore in operatori_attivi:
                 if tempomaster.completato:
                         if operatore.orafine:
@@ -417,7 +417,7 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 form_quantity=QuantityModelForm(instance = tempomaster)
                 form_note=NoteLineaModelForm(instance = tempomaster)
                 form_media_tempo=FormMediaTempi(request.POST or None, instance=tempomaster)
-                
+        tempo_medio = 0
         if get_if_media_tempo(componente)[0]:
                 messaggio_tempo = True
                 print("Tempo medio: " + str(tempo_medio))

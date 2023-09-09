@@ -86,101 +86,83 @@
 
 			</div>
 			<!-- Ragione Sociale Cliente -->
-			<div class="col-5 border-end border-dark border-2">
-				
+			<div class="col-8">
+				Cliente<br>
 				{% if dettaglio.idordine.idcliente.visualizza_come %}
 					<h1 class="text-center text-truncate big-text">{{ dettaglio.idordine.idcliente.visualizza_come }}</h1>
 				{% else %}
 					<h1 class="text-center text-truncate big-text">{{ dettaglio.idordine.idcliente.ragionesociale }}</h1>
 				{% endif %}
 			</div>
-			<!-- Destinazione -->
-			<div class="col-3 border-end border-dark border-2">
-				
-				{% if dettaglio.iddestinazione %}
-					<h1 class="text-center text-truncate big-text">{{ dettaglio.iddestinazione.destinazione }}</h1>
-					
-				{% endif %}
-			</div>
 			
 		</div>
 		<div class="row border-top border-start border-end border-dark border-2">
 			<!-- Codice Prodotto -->
-			<div class="col-12 border-end border-dark border-2">
-				Codice:<br>
+			<div class="col-5 border-end border-dark border-2">
+				Codice Prodotto<br>
 				{% if dettaglio.idcollegamento == None %}			
-					<h1 class="text-center bigger-text text-wrap">{{ dettaglio.idcomponente }}</h1>
+					<h1 class="text-center code-text text-wrap">{{ dettaglio.idcomponente }}</h1>
 				{% else %}
-					<h1 class="text-center bigger-text text-wrap">{{ dettaglio.idcollegamento }}</h1>
+					<h1 class="text-center code-text text-wrap">{{ dettaglio.idcollegamento }}</h1>
 				{% endif %}
 			</div>
+			<!-- Commessa -->
+		
+			<div class="col-3 border-end border-dark border-2">
+				Commessa N.<br>
+				{% if dettaglio.ncommessa != None %}
+				<!-- <h1 class="text-center big-text">{{ dettaglio.ncommessa }}</h1> -->
+				<span class="text-center big-text">{{ dettaglio.ncommessa }}</span>
+			{% endif %}
+			</div>
+		
+			<!-- Ordine -->
+			<div class="col-4 border-dark border-2">
+				Rif. Vs. Ordine N.<br>
+				<h1 class="text-center big-text">{{ dettaglio.idordine }}</h1>
+			
+			</div>
+		
+		
 		</div>
 
 		<!-- St. Diam. -->
 		<div class="row border-top border-start border-end border-dark border-2">
-			<div class="col-12 border-end border-dark border-2">
+			<div class="col-12">
 				St. Diam. <br>
 				{% if dettaglio.descrizione %}
 					<h1 class="text-center bigger-text">{{ dettaglio.descrizione }}</h1>
 				{% else %}
-					<h1 class="text-center bigger-text">{{ dettaglio.idcollegamento.descrizione }} {{ poli }} {{ cave }}</h1>
+					<h1 class="text-center">{{ dettaglio.idcollegamento.descrizione }}</h1>
 				{% endif %}
 			</div>
 		
 		</div>
-
-		<!-- Ordine -->
+		<!-- Note e Tipo Statore -->
 		<div class="row border-top border-start border-end border-dark border-2">
-			
-				
-			<!-- Ordine -->
-			<div class="col-4 border-end border-dark border-2">
-				Ordine N.<br>
-				<h4 class="text-center code-text">{{ dettaglio.idordine }}</h1>
-			
-			</div>
-			<!-- Data ordine -->
-			<div class="col-4 border-end border-dark border-2">
-				Data Ordine<br>
-				<h2 class="text-center ">{{ dettaglio.idordine.dataordine|date:"d/m/Y" }}</h1>
-			
-			</div>
-
-			<!-- Riga -->
-			<div class="col-2 border-end border-dark border-2">
-				Riga/Pos.<br>
-				<h1 class="text-center big-text">{{ dettaglio.posizione|floatformat:0 }}</h1>
-			
-			</div>
-
-			<!-- Tipo Statore -->
-			<div class="col-2 border-end border-dark border-2">
+			<div class="col-5 border-end border-dark border-2">
+				Note <br>
+				{% if dettaglio.note %}
+				<h1 class="text-center">{{ dettaglio.note }}</h1>
+				{% endif %}
+			</div> 
+			<div class="col-6">
 				Tipo Statore<br>
 				{% if dettaglio.idcomponente.tipo_statore %}
 					<h1 class="text-center">{{ dettaglio.idcomponente.tipo_statore }}</h1>
 				
 				{% endif %}
-			
 			</div>
-		
 		
 		</div>
-
-		
 		<!-- Quantità -->
 		<div class="row border-top border-start border-end border-bottom border-dark border-2">
-			<div class="col-3 border-end border-dark border-2">
-				Quantità Lotto<br>
+			<div class="col-6 border-end border-dark border-2">
+				Quantità Commessa/Lotto<br>
 				<h1 class="text-center big-text">{{ dettaglio.quantità }}</h1>
 			</div>
-			<div class="col-3 border-end border-dark border-2">
-				<br>
-			</div>
-			<div class="col-3 border-end border-dark border-2">
-				Q.tà Griglia<br>
-			</div>
-			<div class="col-3 border-end border-dark border-2">
-				Nr.C.P.<br>
+			<div class="col-6">
+				Quantità Griglia<br>
 			</div>
 		
 		</div> 
