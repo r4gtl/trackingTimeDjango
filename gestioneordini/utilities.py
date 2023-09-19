@@ -104,7 +104,7 @@ def get_tempo_medio(tempo, comp_coll):
     #     print("tempo medio funzione: " + str(tempo_medio) + " " + "tempo massimo: " + str(tempo_massimo_consentito))
     #     return False, tempo_medio, tempo_massimo_consentito
 
-    if comp_coll.minuti_medi_lavorazione is None:
+    if comp_coll.ore_medie_lavorazione is None:
         ore_medie=0
     else:
         ore_medie=comp_coll.ore_medie_lavorazione
