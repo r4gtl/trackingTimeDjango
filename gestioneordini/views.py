@@ -353,7 +353,8 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
 
         linea = TblLineeLav.objects.get(id_linea=id_linea)
         tempomaster=tblTempiMaster.objects.get(pk=idtempomaster)
-        
+        pezzi_tempo_master=tempomaster.quantity
+        print("pezzi_tempo_master: " + str(pezzi_tempo_master))
         query_dettaglio = linea.get_line()
         if tempomaster.iddettordine.idcomponente:
                 componente = tempomaster.iddettordine.idcomponente
@@ -380,6 +381,7 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                                 #tempo_medio=timedelta(seconds=round((tot_tempo/tempomaster.quantity)))
                                 if tempomaster.completato and tempomaster.quantity:
                                         tempo_medio = timedelta(seconds=round((tot_tempo / tempomaster.quantity)))
+                                        
                                 else:
                                         tempo_medio = timedelta(seconds=0)
                 
@@ -388,7 +390,8 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                         tempo_medio=0
                         tot_tempo=0
                         
-                tot_tempo_min_sec=str(timedelta(seconds=tot_tempo))
+                #tot_tempo_min_sec=str(timedelta(seconds=tot_tempo))
+                tot_tempo_min_sec=timedelta(seconds=tot_tempo)
                 
         if request.method == 'POST':
                 print("request post: " + str(request))
@@ -426,8 +429,11 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                         
                 if get_tempo_medio(tempo_medio, componente)[0]:
                         print("risultato funzione: " + str(get_tempo_medio(tempo_medio, componente)[0]))
+                        print("tempomedio: " + str(tempo_medio))
+                        tempo_medio=get_tempo_medio(tempo_medio, componente)[1]
                         check_tempo=True
                         tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[2] 
+                        
                         print("Check true: " + str(check_tempo) + " " + "tempoda if: " + str(tempo_massimo_consentito))
                 else:
                         print("risultato funzione: " + str(get_tempo_medio(tempo_medio, componente)[0]))
@@ -438,7 +444,13 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 messaggio_tempo = get_if_media_tempo(componente)[1]
                 check_tempo=False
                 tempo_massimo_consentito='Media non presente'
-        
+                print("Siamo qui")
+                
+        if tot_tempo_min_sec:
+                tot_tempo_min_sec_float = tot_tempo_min_sec.total_seconds()              
+                tot_tempo_min_sec=timedelta(seconds=(tot_tempo_min_sec_float/pezzi_tempo_master))
+                tot_tempo_min_sec = str(tot_tempo_min_sec).split('.')[0]
+                
         context = {'linea': linea,                         
                 'dettaglio': dettaglio,
                 'operatori_attivi': operatori_attivi,

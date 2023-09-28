@@ -144,14 +144,14 @@
             <h4>Statistiche tempi</h4>
             <div class="row">
                 <div class="col-md-3 mt-2">
-                    {% if tot_tempo_min_sec %}
-                        <p>Tempo totale <strong>{{ tot_tempo_min_sec }}</strong></p>
-                    {% endif %}
                     {% if tempo_medio %}
-                        <p>Tempo medio <strong>{{ tempo_medio }}</strong></p>
+                    <p>Tempo nominale <strong>{{ tempo_medio }}</strong></p>
                     {% endif %}
                     {% if tempo_massimo_consentito %}
-                        <p>Media max consentita <strong>{{ tempo_massimo_consentito }}</strong></p>
+                    <p>Tempo tolleranza <strong>{{ tempo_massimo_consentito }}</strong></p>
+                    {% endif %}
+                    {% if tot_tempo_min_sec %}
+                        <p>Tempo eseguito <strong>{{ tot_tempo_min_sec }}</strong></p>
                     {% endif %}
                         
                 </div>
