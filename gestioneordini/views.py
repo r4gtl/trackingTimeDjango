@@ -432,7 +432,8 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                         print("tempomedio: " + str(tempo_medio))
                         tempo_medio=get_tempo_medio(tempo_medio, componente)[1]
                         check_tempo=True
-                        tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[2] 
+                        tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[2]
+                        tempo_massimo_consentito= str(tempo_massimo_consentito).split('.')[0]
                         
                         print("Check true: " + str(check_tempo) + " " + "tempoda if: " + str(tempo_massimo_consentito))
                 else:
