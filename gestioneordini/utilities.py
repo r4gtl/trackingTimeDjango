@@ -108,13 +108,48 @@ def get_tempo_medio(tempo, comp_coll):
     
     if tolleranza_percentuale==0 or tolleranza_percentuale is None:
         tempo_massimo_consentito = tempo_medio
+        tolleranza_percentuale==0
     else:
         tempo_massimo_consentito = tempo_medio + (tempo_medio * tolleranza_percentuale / 100)
     
     if tempo.total_seconds() <= tempo_massimo_consentito.total_seconds():
         print("tempo medio funzione: " + str(tempo_medio) + " " + "tempo massimo: " + str(tempo_massimo_consentito))
-        return True, tempo_medio, tempo_massimo_consentito
+        return True, tempo_medio, tempo_massimo_consentito, tolleranza_percentuale
     else:
         print("tempo medio funzione: " + str(tempo_medio) + " " + "tempo massimo: " + str(tempo_massimo_consentito))
-        return False, tempo_medio, tempo_massimo_consentito
+        return False, tempo_medio, tempo_massimo_consentito, tolleranza_percentuale
         
+        
+# Ivano chiede la differenza tra tempo di produzione e tempo nominale. Questa differenza va calcolata
+# come percentuale sul tempo maggiorato della percentuale di tolleranza. 02/10/2023        
+def get_perc_differenza(tempo_medio_produzione, tempo_massimo_consentito, tempo_medio_nominale):
+    ore_tmp, minuti_tmp, secondi_tmp = map(int, tempo_medio_produzione.split(':'))
+    ore_tmc, minuti_tmc, secondi_tmc = map(int, tempo_massimo_consentito.split(':'))
+    #ore_tmn, minuti_tmn, secondi_tmn = map(int, tempo_medio_nominale.split(':'))
+    
+    
+    timedelta_object = tempo_medio_nominale
+    
+
+    totale_secondi_tmp = ore_tmp * 3600 + minuti_tmp * 60 + secondi_tmp
+    totale_secondi_tmc = ore_tmc * 3600 + minuti_tmc * 60 + secondi_tmc
+    #totale_secondi_tmn = ore_tmn * 3600 + minuti_tmn * 60 + secondi_tmn
+    totale_secondi_tmn=timedelta_object.total_seconds()
+    # Se si è impiegato più tempo del previsto 
+    if tempo_massimo_consentito < tempo_medio_produzione:
+        differenza_tempo = totale_secondi_tmp - totale_secondi_tmn
+        print('differenza_tempo: ' + str(differenza_tempo))
+        print("totale_secondi_tmp: " + str(totale_secondi_tmp) + 'totale_secondi_tmc: ' + str(totale_secondi_tmc))
+        differenza_percentuale = round(((differenza_tempo/totale_secondi_tmc)*100))
+        
+        return (differenza_percentuale)
+    # altrimenti
+    else:
+        differenza_tempo = totale_secondi_tmc - totale_secondi_tmp 
+        print("totale_secondi_tmp: " + str(totale_secondi_tmp) + 'totale_secondi_tmc: ' + str(totale_secondi_tmc))
+        differenza_percentuale = round(((differenza_tempo/totale_secondi_tmc)*100)*-1)
+        return (differenza_percentuale)
+        
+        
+    
+    

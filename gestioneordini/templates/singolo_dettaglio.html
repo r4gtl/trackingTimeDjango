@@ -147,11 +147,18 @@
                     {% if tempo_medio %}
                     <p>Tempo nominale <strong>{{ tempo_medio }}</strong></p>
                     {% endif %}
-                    {% if tempo_massimo_consentito %}
-                    <p>Tempo tolleranza <strong>{{ tempo_massimo_consentito }}</strong></p>
+                    {% if tolleranza_percentuale %}
+                    <p>Percentuale di tolleranza <strong>{{ tolleranza_percentuale }}%</strong></p>
                     {% endif %}
                     {% if tot_tempo_min_sec %}
-                        <p>Tempo eseguito <strong>{{ tot_tempo_min_sec }}</strong></p>
+                        <p>Tempo di produzione <strong>{{ tot_tempo_min_sec }}</strong></p>
+                    {% endif %}
+                    {% if differenza_percentuale %}
+                        {% if differenza_percentuale > 0 %}
+                            <p>Differenza percentuale <strong  style="color: red">{{ differenza_percentuale }}%</strong></p>
+                        {% else %}
+                            <p>Differenza percentuale <strong>{{ differenza_percentuale }}%</strong></p>
+                        {% endif %}
                     {% endif %}
                         
                 </div>

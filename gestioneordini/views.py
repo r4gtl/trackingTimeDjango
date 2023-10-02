@@ -27,6 +27,7 @@ from .utilities import (check_barcode,
                         check_time_range, 
                         get_sec,
                         get_if_media_tempo, get_tempo_medio,
+                        get_perc_differenza,
 )
 
 
@@ -392,7 +393,15 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                         
                 #tot_tempo_min_sec=str(timedelta(seconds=tot_tempo))
                 tot_tempo_min_sec=timedelta(seconds=tot_tempo)
+        
+        # Ottengo la media tempo al pezzo
+        if tot_tempo_min_sec:
+                tot_tempo_min_sec_float = tot_tempo_min_sec.total_seconds()              
+                tot_tempo_min_sec=timedelta(seconds=(tot_tempo_min_sec_float/pezzi_tempo_master))
+                tot_tempo_min_sec = str(tot_tempo_min_sec).split('.')[0]
                 
+        
+
         if request.method == 'POST':
                 print("request post: " + str(request))
                 if 'formQuantity' in request.POST:
@@ -431,26 +440,39 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                         print("risultato funzione: " + str(get_tempo_medio(tempo_medio, componente)[0]))
                         print("tempomedio: " + str(tempo_medio))
                         tempo_medio=get_tempo_medio(tempo_medio, componente)[1]
+                        print("tempomedio dopo trasformazione: " + str(tempo_medio))
+                        
                         check_tempo=True
                         tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[2]
                         tempo_massimo_consentito= str(tempo_massimo_consentito).split('.')[0]
-                        
+                        tolleranza_percentuale=get_tempo_medio(tempo_medio, componente)[3]
+                        if tempo_massimo_consentito != '0:00:00':
+                                differenza_percentuale = get_perc_differenza(tot_tempo_min_sec, tempo_massimo_consentito, tempo_medio)
+                        else:
+                                differenza_percentuale = 0
+                        #differenza_percentuale = 0
+                        print("differenza_percentuale: " + str(differenza_percentuale))
+                        print("tolleranza_percentuale: " + str(tolleranza_percentuale))
                         print("Check true: " + str(check_tempo) + " " + "tempoda if: " + str(tempo_massimo_consentito))
                 else:
                         print("risultato funzione: " + str(get_tempo_medio(tempo_medio, componente)[0]))
                         check_tempo=False
                         tempo_massimo_consentito='Media non presente'
+                        differenza_percentuale=0
+                        tolleranza_percentuale=get_tempo_medio(tempo_medio, componente)[3]
                         print("Check False: " + str(check_tempo) + " " + "tempoda if: " + str(tempo_massimo_consentito))
+                        print("differenza_percentuale: " + str(differenza_percentuale))
         else:
                 messaggio_tempo = get_if_media_tempo(componente)[1]
                 check_tempo=False
                 tempo_massimo_consentito='Media non presente'
-                print("Siamo qui")
+                tolleranza_percentuale=0
+                differenza_percentuale=0
+                print("differenza_percentuale: " + str(differenza_percentuale))
                 
-        if tot_tempo_min_sec:
-                tot_tempo_min_sec_float = tot_tempo_min_sec.total_seconds()              
-                tot_tempo_min_sec=timedelta(seconds=(tot_tempo_min_sec_float/pezzi_tempo_master))
-                tot_tempo_min_sec = str(tot_tempo_min_sec).split('.')[0]
+        
+        
+        
                 
         context = {'linea': linea,                         
                 'dettaglio': dettaglio,
@@ -463,7 +485,10 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 'check_tempo': check_tempo,
                 'messaggio_tempo': messaggio_tempo,
                 'tempo_massimo_consentito': tempo_massimo_consentito,
+                'tolleranza_percentuale': tolleranza_percentuale,
+                'differenza_percentuale': differenza_percentuale,
                 'form_media_tempo': form_media_tempo
+                
                 }
         return render(request, 'singolo_dettaglio.html', context)
 
