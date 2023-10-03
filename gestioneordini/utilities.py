@@ -77,6 +77,7 @@ def get_sec(time_str):
 
 
 def get_if_media_tempo(comp_coll):
+    '''Restituisce un check per sapere se è stato associato un tempo medio al codice/collegamento'''
     if comp_coll.ore_medie_lavorazione==0 and comp_coll.minuti_medi_lavorazione==0 and comp_coll.secondi_medi_lavorazione==0:
         messaggio_tempo = f'Nessun tempo medio assegnato al codice!'
         return(False, messaggio_tempo)

@@ -259,93 +259,6 @@ def visualizza_dettaglio(request, pk, id_linea, idtempomaster):
         return render(request, "singolo_dettaglio.html", context)
 
 
-# def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
-#         linea = TblLineeLav.objects.get(id_linea=id_linea)
-#         tempomaster=tblTempiMaster.objects.get(pk=idtempomaster)
-        
-#         query_dettaglio = linea.get_line()
-#         if tempomaster.iddettordine.idcomponente:
-#                 componente = tempomaster.iddettordine.idcomponente
-#         else:
-#                 componente = tempomaster.iddettordine.idcollegamento
-        
-        
-        
-#         dettaglio = get_object_or_404(Tbldettaglioordini, pk=pk)
-        
-#         operatori_attivi=Tbltempi.objects.filter(idtempomaster=tempomaster.pk).order_by('-datatempo', '-orainizio')#.order_by('orainizio')
-#         tot_tempo=0
-#         for operatore in operatori_attivi:
-#                 if tempomaster.completato:
-#                         if operatore.orafine:
-#                                 ora_fine=time.strftime(operatore.orafine,"%H:%M:%S")
-#                                 ora_inizio=get_sec(str(operatore.orainizio))
-#                                 ora_fine=get_sec(str(ora_fine))                
-#                                 tot_tempo+=(ora_fine)-(ora_inizio)
-#                                 #tempo_medio=timedelta(seconds=round((tot_tempo/tempomaster.quantity)))
-#                                 if tempomaster.completato and tempomaster.quantity:
-#                                         tempo_medio = timedelta(seconds=round((tot_tempo / tempomaster.quantity)))
-#                                 else:
-#                                         tempo_medio = timedelta(seconds=0)
-                
-                
-#                 else:
-#                         tempo_medio=0
-#                         tot_tempo=0
-                        
-#                 tot_tempo_min_sec=str(timedelta(seconds=tot_tempo))
-                
-#         if request.method == 'POST':
-                
-#                 form=QuantityModelForm(request.POST or None, instance = tempomaster)
-#                 # form=FormDettaglio(request.POST)
-#                 if form.is_valid():
-#                         dettaglio_salvato = form.save(commit=False)
-#                         dettaglio_salvato.save()
-                
-#                 form_note=NoteLineaModelForm(request.POST or None, instance = tempomaster)
-#                 # form=FormDettaglio(request.POST)
-#                 if form_note.is_valid():
-#                         note_salvate = form_note.save(commit=False)
-#                         note_salvate.save()
-                
-#                 form_media_tempo = FormMediaTempi(request.POST or None, instance = tempomaster)
-#                 if form_media_tempo.is_valid():
-#                         media_tempo = form_media_tempo.save(commit=False)
-#                         media_tempo.save()
-                        
-#         else:
-#                 form=QuantityModelForm(instance = tempomaster)
-#                 form_note=NoteLineaModelForm(instance = tempomaster)
-#                 form_media_tempo=FormMediaTempi(request.POST or None, instance=tempomaster)
-                
-#         if get_if_media_tempo(componente)[0]:
-#                 messaggio_tempo = True
-#                 if get_tempo_medio(tempo_medio, componente)[0]:
-#                         check_tempo=True
-#                         tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[0] 
-#                 else:
-#                         check_tempo=False
-#                         tempo_massimo_consentito='Media non presente'
-#         else:
-#                 messaggio_tempo = get_if_media_tempo(componente)[1]
-#                 check_tempo=False
-#                 tempo_massimo_consentito='Media non presente'
-#         print("Form: " + str(form_media_tempo))        
-#         context = {'linea': linea,                         
-#                 'dettaglio': dettaglio,
-#                 'operatori_attivi': operatori_attivi,
-#                 'form': form,
-#                 'form_note': form_note,
-#                 'tempomaster': tempomaster,
-#                 'tempo_medio': tempo_medio,
-#                 'tot_tempo_min_sec': tot_tempo_min_sec,
-#                 'check_tempo': check_tempo,
-#                 'messaggio_tempo': messaggio_tempo,
-#                 'tempo_massimo_consentito': tempo_massimo_consentito,
-#                 'form_media_tempo': form_media_tempo
-#                 }
-#         return render(request, 'singolo_dettaglio.html', context)
 
 
 def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
@@ -357,6 +270,8 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
         pezzi_tempo_master=tempomaster.quantity
         print("pezzi_tempo_master: " + str(pezzi_tempo_master))
         query_dettaglio = linea.get_line()
+        
+        # Definisco la variabile 'componente' che mi servirà per i conteggi dei tempi
         if tempomaster.iddettordine.idcomponente:
                 componente = tempomaster.iddettordine.idcomponente
         else:
@@ -381,17 +296,21 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                                 tot_tempo+=(ora_fine)-(ora_inizio)
                                 #tempo_medio=timedelta(seconds=round((tot_tempo/tempomaster.quantity)))
                                 if tempomaster.completato and tempomaster.quantity:
+                                        # Se il tempomaster risulta completato e ha una quantità,
+                                        # ottengo il tempo_medio
                                         tempo_medio = timedelta(seconds=round((tot_tempo / tempomaster.quantity)))
                                         
                                 else:
+                                        # Altrimenti il tempo medio viene settato a 0
                                         tempo_medio = timedelta(seconds=0)
                 
                 
                 else:
+                        # Se il tempoMaster non è completato, tempo_medio e tot_tempo vengono settati a 0
                         tempo_medio=0
                         tot_tempo=0
                         
-                #tot_tempo_min_sec=str(timedelta(seconds=tot_tempo))
+                # Ottengo il totale tempo di produzione in secondi
                 tot_tempo_min_sec=timedelta(seconds=tot_tempo)
         
         # Ottengo la media tempo al pezzo
@@ -406,7 +325,7 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 print("request post: " + str(request))
                 if 'formQuantity' in request.POST:
                         form_quantity=QuantityModelForm(request.POST, instance = tempomaster)
-                        # form=FormDettaglio(request.POST)
+                        
                         if form_quantity.is_valid():
                                 dettaglio_salvato = form_quantity.save(commit=False)
                                 dettaglio_salvato.save()
@@ -417,7 +336,7 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                                 media_tempo.save()
                 else:
                         form_note=NoteLineaModelForm(request.POST or None, instance = tempomaster)
-                        # form=FormDettaglio(request.POST)
+                        
                         if form_note.is_valid():
                                 note_salvate = form_note.save(commit=False)
                                 note_salvate.save()
@@ -425,50 +344,54 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 
                         
         else:
-                #print("request get: " + str(request))
+                
                 form_quantity=QuantityModelForm(instance = tempomaster)
                 form_note=NoteLineaModelForm(instance = tempomaster)
                 form_media_tempo=FormMediaTempi(request.POST or None, instance=tempomaster)
+        # Azzero la variabile tempo_medio in quanto ho già il dato in tot_tempo_min_sec
         tempo_medio = 0
+        
+        # Se il componente/collegamento ha un tempo medio associato
         if get_if_media_tempo(componente)[0]:
                 messaggio_tempo = True
-                print("Tempo medio: " + str(tempo_medio))
+                
+                # Controllo se tempo_medio è di tipo int e lo converto in timedelta
                 if isinstance(tempo_medio, int):
                         tempo_medio = timedelta(seconds=tempo_medio)   
                         
+                        
                 if get_tempo_medio(tempo_medio, componente)[0]:
                         print("risultato funzione: " + str(get_tempo_medio(tempo_medio, componente)[0]))
-                        print("tempomedio: " + str(tempo_medio))
+                        print("tempomedio prima di trasformazione: " + str(tempo_medio))
+                        
                         tempo_medio=get_tempo_medio(tempo_medio, componente)[1]
                         print("tempomedio dopo trasformazione: " + str(tempo_medio))
                         
                         check_tempo=True
+                        # Ottengo il tempo massimo consentito (tempo nominale + tolleranza)
                         tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[2]
-                        tempo_massimo_consentito= str(tempo_massimo_consentito).split('.')[0]
+                        # Lo tronco ai secondi
+                        tempo_massimo_consentito= str(tempo_massimo_consentito).split('.')[0]                        
                         tolleranza_percentuale=get_tempo_medio(tempo_medio, componente)[3]
                         if tempo_massimo_consentito != '0:00:00':
                                 differenza_percentuale = get_perc_differenza(tot_tempo_min_sec, tempo_massimo_consentito, tempo_medio)
                         else:
                                 differenza_percentuale = 0
-                        #differenza_percentuale = 0
-                        print("differenza_percentuale: " + str(differenza_percentuale))
-                        print("tolleranza_percentuale: " + str(tolleranza_percentuale))
-                        print("Check true: " + str(check_tempo) + " " + "tempoda if: " + str(tempo_massimo_consentito))
+                        
                 else:
-                        print("risultato funzione: " + str(get_tempo_medio(tempo_medio, componente)[0]))
+                        
                         check_tempo=False
                         tempo_massimo_consentito='Media non presente'
                         differenza_percentuale=0
                         tolleranza_percentuale=get_tempo_medio(tempo_medio, componente)[3]
-                        print("Check False: " + str(check_tempo) + " " + "tempoda if: " + str(tempo_massimo_consentito))
-                        print("differenza_percentuale: " + str(differenza_percentuale))
+                        
         else:
                 messaggio_tempo = get_if_media_tempo(componente)[1]
                 check_tempo=False
                 tempo_massimo_consentito='Media non presente'
                 tolleranza_percentuale=0
                 differenza_percentuale=0
-                print("differenza_percentuale: " + str(differenza_percentuale))
+                
                 
         
         
