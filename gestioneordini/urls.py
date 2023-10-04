@@ -133,11 +133,12 @@ urlpatterns = [
         name="single-line"
     ),
     
-    path(
-        "view-all-tracked/",
-        views.view_all_tracked,
-        name="view-all-tracked"
-    ),
+    # 04/10/2023 - Eliminata perchè è compresa nella precedente
+    # path(
+    #     "view-all-tracked/",
+    #     views.view_all_tracked,
+    #     name="view-all-tracked"
+    # ),
     
     
 ]

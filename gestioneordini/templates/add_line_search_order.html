@@ -126,25 +126,33 @@
       
     </tbody>
   </table>
-   <div class="pagination">
-    <span class="step-links">
-        {% if filter_paginated.has_previous %}
-            <a class="btn btn-info" href="?page=1">&laquo; Prima</a>
-            <a class="btn btn-info" href="?page={{ filter_paginated.previous_page_number }}">Precedente &raquo;</a>
-            
-        {% endif %}
 
-        <span class="current">
-            Page {{ filter_paginated.number }} of {{ filter_paginated.paginator.num_pages }}.
-        </span>
+    <div class="pagination">
+      <span class="step-links">
+          {% if filter_paginated.has_previous %}
+              <a class="btn btn-success" href="?page=1">&laquo; Prima</a>
+              <a class="btn btn-success" href="?page={{ filter_paginated.previous_page_number }}">Precedente &raquo;</a>
+              
+          {% endif %}
+  
+          <span class="current">
+              Page {{ filter_paginated.number }} of {{ filter_paginated.paginator.num_pages }}.
+          </span>
+  
+          {% if filter_paginated.has_next %}
+          
+              <a class="btn btn-success" href="?page={{ filter_paginated.next_page_number }}">Successiva</a>
+              
 
-        {% if filter_paginated.has_next %}
-        
-            <a class="btn btn-info" href="?page={{ filter_paginated.next_page_number }}">Successiva</a>
-            <a class="btn btn-info" href="?page={{ filter_paginated.paginator.num_pages }}">Ultima &raquo;</a>
-            
-        {% endif %}
-    </span>
+              <a class="btn btn-successinfo" href="?page={{ filter_paginated.paginator.num_pages }}">Ultima &raquo;</a>
+              
+          {% endif %}
+      </span>
+  </div>
+
+
+  
+   
 </div>
-
+</div>
 {% endblock content %}

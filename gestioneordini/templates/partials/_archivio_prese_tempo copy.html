@@ -1,8 +1,8 @@
-<h5>Archivio prese tempo sulla {{ linea }} (Totale n. {{ tempimaster_all_count }} prese tempo in archivio)</h5>
+<h5>Archivio prese tempo sulla {{ linea }}</h5>
 <br>
 
 <div class="row row-cols-1 row-cols-md-3 g-4">
-    {% for tempo in tempimaster_all_paginator %}    
+    {% for tempo in tempimaster_all %}    
         {% if tempo.id_linea.id_linea == linea.id_linea %}
             <div class="col">        
             <div class="card card-h mb-3 shadow rounded" style="max-width: 540px;">          
@@ -61,51 +61,5 @@
             
             </div> 
             {% endif %}
-    {% endfor %}  
-
-    </div> <!-- Fine riga -->
-
-
-    <!-- Pagination -->
-{% if tempimaster_all_paginator.has_other_pages %}
-<nav>
-  <ul class="pagination justify-content-center">
-    {% if tempimaster_all_paginator.has_previous %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ tempimaster_all_paginator.previous_page_number }}" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-        </a>
-      </li>
-    {% else %}
-      <li class="page-item disabled">
-        <span class="page-link" aria-hidden="true">&laquo;</span>
-      </li>
-    {% endif %}
-
-    {% for page in tempimaster_all_paginator.paginator.page_range %}
-      {% if page == tempimaster_all_paginator.number %}
-        <li class="page-item active">
-          <span class="page-link">{{ page }}</span>
-        </li>
-      {% else %}
-        <li class="page-item">
-          <a class="page-link" href="?page={{ page }}">{{ page }}</a>
-        </li>
-      {% endif %}
-    {% endfor %}
-
-    {% if tempimaster_all_paginator.has_next %}
-      <li class="page-item">
-        <a class="page-link" href="?page={{ tempimaster_all_paginator.next_page_number }}" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-        </a>
-      </li>
-    {% else %}
-      <li class="page-item disabled">
-        <span class="page-link" aria-hidden="true">&raquo;</span>
-      </li>
-    {% endif %}
-  </ul>
-</nav>
-{% endif %}
-<!-- End Pagination -->
+    {% endfor %}     
+    </div>

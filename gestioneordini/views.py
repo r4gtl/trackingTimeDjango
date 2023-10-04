@@ -188,36 +188,53 @@ def view_single_line_open_times(request, id_linea):
         '''
         linea=TblLineeLav.objects.get(pk=id_linea)
         tempimaster=tblTempiMaster.objects.filter(inlavoro=True).filter(id_linea=linea)
-        tempimaster_all=tblTempiMaster.objects.filter(inlavoro=False).filter(id_linea=linea).order_by('-datatempo')        
+        tempimaster_all=tblTempiMaster.objects.filter(inlavoro=False).filter(id_linea=linea).order_by('-datatempo')
+        tempimaster_all_count=tblTempiMaster.objects.filter(inlavoro=False).filter(id_linea=linea).count
+        
+        # Paginazione tempi chiusi
+        page_tempimaster_all = request.GET.get('page', 1)
+        paginator_tempimaster_all = Paginator(tempimaster_all, 30)
+        try:
+                tempimaster_all_paginator = paginator_tempimaster_all.page(page_tempimaster_all)
+        except PageNotAnInteger:
+                tempimaster_all_paginator = paginator_tempimaster_all.page(1)
+        except EmptyPage:
+                tempimaster_all_paginator = paginator_tempimaster_all.page(paginator_tempimaster_all.num_pages)
+                
         context={
                 "linea":linea,
                 "tempimaster": tempimaster,
-                "tempimaster_all": tempimaster_all
+                "tempimaster_all": tempimaster_all,
+                "tempimaster_all_paginator": tempimaster_all_paginator,
+                "tempimaster_all_count": tempimaster_all_count
+                
         }
         return render(request, "single_line.html", context)
-        
-def view_all_tracked(request):
-        '''
-        view aggiunta per vedere tutte le prese tempo come da richiesta di Ivano
-        del 20/12/2022
-        '''
-        linee=TblLineeLav.objects.all()
-        #tempimaster=tblTempiMaster.objects.filter(inlavoro=True).filter(id_linea=linea)
-        tempimaster_all=tblTempiMaster.objects.filter(inlavoro=False).order_by('-datatempo')        
-        context={
-                "linee":linee,                
-                "tempimaster_all": tempimaster_all
-        }
-        return render(request, "archivio_prese_tempo.html", context)
+
+'''04/10/2023 - Eliminata perchè integrata nella view precedente'''        
+# def view_all_tracked(request):
+#         '''
+#         view aggiunta per vedere tutte le prese tempo come da richiesta di Ivano
+#         del 20/12/2022
+#         '''
+#         linee=TblLineeLav.objects.all()
+#         #tempimaster=tblTempiMaster.objects.filter(inlavoro=True).filter(id_linea=linea)
+#         tempimaster_all=tblTempiMaster.objects.filter(inlavoro=False).order_by('-datatempo')        
+#         context={
+#                 "linee":linee,                
+#                 "tempimaster_all": tempimaster_all
+#         }
+#         return render(request, "archivio_prese_tempo.html", context)
 
 def add_line_search_order(request, id_linea):
         linea=TblLineeLav.objects.get(id_linea=id_linea)  
         
         filterset = OrderFilter(request.GET, queryset=Tbldettaglioordini.objects.all().order_by('-iddettordine'))
+        filtered_dett_ordini = filterset.qs
         #filterset = OrderFilter(request.GET, queryset=Tbldettaglioordini.objects.filter(iddettordine__lt=35000).order_by('-iddettordine'))
         #print("Ordini: " + str(Tbldettaglioordini.objects.all()))        
         
-        paginator = Paginator(filterset.qs, 30)
+        paginator = Paginator(filtered_dett_ordini, 30)
         page = request.GET.get('page')
         try:
                 filter = paginator.page(page)
@@ -268,8 +285,8 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
         linea = TblLineeLav.objects.get(id_linea=id_linea)
         tempomaster=tblTempiMaster.objects.get(pk=idtempomaster)
         pezzi_tempo_master=tempomaster.quantity
-        print("pezzi_tempo_master: " + str(pezzi_tempo_master))
-        query_dettaglio = linea.get_line()
+        print(f"pezzi_tempo_master: {pezzi_tempo_master}")
+        # query_dettaglio = linea.get_line()
         
         # Definisco la variabile 'componente' che mi servirà per i conteggi dei tempi
         if tempomaster.iddettordine.idcomponente:
