@@ -157,6 +157,15 @@ STATICFILES_DIRS = [
     
 # STATICFILES_DIRS =(os.path.join(BASE_DIR, 'static/'),)
 
+# Verifica se DEBUG è True e sovrascrivi i percorsi se necessario
+if not DEBUG:
+    # Controlla se le variabili d'ambiente sono impostate per STATIC_ROOT e MEDIA_ROOT
+    if env("STATIC_ROOT", default=None):
+        STATIC_ROOT = env("STATIC_ROOT")
+    if env("MEDIA_ROOT", default=None):
+        MEDIA_ROOT = env("MEDIA_ROOT")
+
+
 LOGIN_REDIRECT_URL = "/"
 
 # Default primary key field type
