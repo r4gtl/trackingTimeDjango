@@ -256,6 +256,12 @@ class Tbldettaglioordini(models.Model):
         db_table = 'tbldettaglioordini'
         verbose_name = "tbldettaglioordini"
         verbose_name_plural = "tbldettaglioordini"
+        
+    def __str__(self):
+        try:
+            return str(self.iddettordine)
+        except Exception as e:
+            return f"Error in __str__ for Tbldettaglioordini (id: {self.id}): {e}"
 
 
 class Tbldettcollegamenti(models.Model):
@@ -270,6 +276,8 @@ class Tbldettcollegamenti(models.Model):
         db_table = 'tbldettcollegamenti'
         verbose_name = "tbldettcollegamenti"
         verbose_name_plural = "tbldettcollegamenti"
+    
+    
 
 
 class Tblfasi(models.Model):
@@ -514,6 +522,8 @@ class tblDestinazioni(models.Model):
         verbose_name = "tbldestinazioni"
         verbose_name_plural = "tbldestinazioni"
 
+    def __str__(self):
+        return self.destinazione
 
 class Qryordiniiniziale(models.Model):
     id_dett_ord = models.AutoField(primary_key=True)

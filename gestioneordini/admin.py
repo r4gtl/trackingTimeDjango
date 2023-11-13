@@ -24,6 +24,16 @@ class TblTempiModelAdmin(admin.ModelAdmin):
     search_fields = ['orainizio']
     ordering = ['orainizio']
     
+class TbldettaglioordiniModelAdmin(admin.ModelAdmin):
+    model = Tbldettaglioordini
+    list_display = ['iddettordine', 'idordine', 'idcollegamento',
+                    'posizione', 'idcomponente', 'ncommessa', 'quantità',
+                    'dataconsegna'
+                    ]
+    search_fields = ['ncommessa', 'quantità']
+    ordering = ['iddettordine']
+    
+    
 
 admin.site.register(TRicerca)
 admin.site.register(Tblazienda)
@@ -31,7 +41,7 @@ admin.site.register(Tblcave)
 admin.site.register(Tblclienti)
 admin.site.register(Tblcollegamenti)
 admin.site.register(Tblcomponenti)
-admin.site.register(Tbldettaglioordini)
+admin.site.register(Tbldettaglioordini, TbldettaglioordiniModelAdmin)
 admin.site.register(Tbldettcollegamenti)
 admin.site.register(Tblfasi)
 admin.site.register(Tblgruppi)
