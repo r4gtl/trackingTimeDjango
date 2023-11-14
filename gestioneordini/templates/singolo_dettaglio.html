@@ -29,7 +29,7 @@
         {% if linea.id_linea == None %}
             <h5 class="text-end">Cliente: {{ dettaglio.idordine.idcliente.ragionesociale }}</h5>    
         {% else %}
-            <h5 class="text-end">Presa tempo del {{ tempomaster.datatempo }}, su {{ linea.descrizione_linea }}</h5>
+            <h5 class="text-end">Presa tempo n. {{ tempomaster.idtempomaster }} del {{ tempomaster.datatempo }}, su {{ linea.descrizione_linea }}</h5>
         {% endif %}
     </div>
 </div>

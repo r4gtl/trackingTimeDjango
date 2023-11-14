@@ -16,13 +16,13 @@ class tblTempiMasterModelAdmin(admin.ModelAdmin):
                     'quantity', 'id_linea',
                     'completato', 'inlavoro'
                     ]
-    search_fields = ["datatempo"]
+    search_fields = ["datatempo", "idtempomaster"]
 
 class TblTempiModelAdmin(admin.ModelAdmin):
     model = Tbltempi
-    list_display = ['idtempo', 'orainizio']
-    search_fields = ['orainizio']
-    ordering = ['orainizio']
+    list_display = ['idtempo', 'idtempomaster', 'iddettordine', 'idoperatore', 'datatempo', 'orainizio', 'orafine']
+    search_fields = ['idtempomaster__idtempomaster'] # Utilizza la doppia underscore notation per la ricerca su ForeignKey
+    ordering = ['-datatempo']
     
 class TbldettaglioordiniModelAdmin(admin.ModelAdmin):
     model = Tbldettaglioordini

@@ -258,10 +258,9 @@ class Tbldettaglioordini(models.Model):
         verbose_name_plural = "tbldettaglioordini"
         
     def __str__(self):
-        try:
-            return str(self.iddettordine)
-        except Exception as e:
-            return f"Error in __str__ for Tbldettaglioordini (id: {self.id}): {e}"
+        return f'Dettaglio {self.iddettordine}'
+
+
 
 
 class Tbldettcollegamenti(models.Model):
@@ -435,6 +434,9 @@ class tblTempiMaster(models.Model):
         db_table = 'tbltempimaster'
         verbose_name = "tbltempimaster"
         verbose_name_plural = "tbltempimaster"
+        
+    def __str__(self):
+        return f'{self.idtempomaster}'
 
 
 class Tbltempi(models.Model):

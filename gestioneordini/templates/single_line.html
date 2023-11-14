@@ -48,6 +48,9 @@
                     <p class="mt-0 mb-0">Quantità: {{ tempo.iddettordine.quantità|floatformat }} | Data Consegna: <strong>{{ linea.get_line.iddettordine.dataconsegna|date:'d/m/Y' }}</strong></p>
                     <p class="mt-0">Riga: {{ tempo.iddettordine.posizione|floatformat }}</p>
                 {% endif %}
+                <div class="row text-end">
+                    <div class="col" style="font-size: 9px">Presa Tempo n. {{ tempo.idtempomaster }}</div>
+                  </div>
             </div>
             <div class="card-footer text-center">
                 <a class="btn btn-outline-success btn-sm " href="{% url 'gestioneordini:visualizza_dettaglio_da_linea' pk=tempo.iddettordine.pk id_linea=tempo.id_linea.id_linea idtempomaster=tempo.pk %}" role="button">vedi dettaglio</a>                
