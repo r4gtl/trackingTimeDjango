@@ -392,7 +392,10 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                         tolleranza_percentuale=get_tempo_medio(tempo_medio, componente)[3]
                         tot_tempo_min_sec = str(tot_tempo_min_sec).split('.')[0]
                         if tempo_massimo_consentito != '0:00:00':
-                                differenza_percentuale = get_perc_differenza(tot_tempo_min_sec, tempo_massimo_consentito, tempo_medio)
+                                if operatori_attivi:
+                                        differenza_percentuale = get_perc_differenza(tot_tempo_min_sec, tempo_massimo_consentito, tempo_medio)
+                                else:
+                                        differenza_percentuale = 0
                         else:
                                 differenza_percentuale = 0
                         
