@@ -580,7 +580,7 @@ def add_master_time_barcode(request, id_linea):
 
 def chiudi_lavorazione(request, pk, id_linea):
         dettaglio = get_object_or_404(tblTempiMaster, pk=pk)        
-        
+        print("Arrivato qui")
         linea = TblLineeLav.objects.get(id_linea=id_linea)
         operatori_attivi = Tbltempi.objects.all().filter(orafine__isnull = True, idtempomaster__exact=pk, id_linea__exact=id_linea)
         operatori = Tbltempi.objects.all().filter(idtempomaster__exact=pk, id_linea__exact=id_linea)
@@ -615,13 +615,14 @@ def chiudi_lavorazione(request, pk, id_linea):
                         tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[0] 
                         dettaglio.tempo_conforme = "Tempo OK"
                         dettaglio.save()
-                else:
-                        dettaglio.tempo_conforme = "Tempo Non Conforme"
-                        dettaglio.save()
+        else:
+                print("Non esiste un tempo medio assegnato")
+                dettaglio.tempo_conforme = "Tempo Non Conforme"
+                dettaglio.save()
                 
         url_match= reverse_lazy('gestioneordini:visualizza_dettaglio_da_linea', kwargs={'pk':dettaglio.iddettordine.iddettordine, 'id_linea': linea.id_linea, 'idtempomaster': dettaglio.pk})      
         return redirect(url_match)
-        #return redirect('gestioneordini:dashboard')
+        
 
 
 def aggiungi_operatore_attivo(request, pk, pk_linea, idtempomaster):

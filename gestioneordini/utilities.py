@@ -78,10 +78,12 @@ def get_sec(time_str):
 
 def get_if_media_tempo(comp_coll):
     '''Restituisce un check per sapere se è stato associato un tempo medio al codice/collegamento'''
-    if comp_coll.ore_medie_lavorazione==0 and comp_coll.minuti_medi_lavorazione==0 and comp_coll.secondi_medi_lavorazione==0:
+    if comp_coll.ore_medie_lavorazione==0 or comp_coll.ore_medie_lavorazione is None and comp_coll.minuti_medi_lavorazione==0 or comp_coll.minuti_medi_lavorazione is None and comp_coll.secondi_medi_lavorazione==0 or comp_coll.secondi_medi_lavorazione is None:
         messaggio_tempo = f'Nessun tempo medio assegnato al codice!'
+        print(f"messaggio tempo: {messaggio_tempo}")
         return(False, messaggio_tempo)
     else:
+        print("Tempo assegnato")
         return(True,)
     
 
@@ -91,20 +93,21 @@ def get_tempo_medio(tempo, comp_coll):
         per passare poi al controllo e all'applicazione della tolleranza percentuale.
     '''
     
-    if comp_coll.ore_medie_lavorazione is None:
+    if comp_coll.ore_medie_lavorazione is None or comp_coll.ore_medie_lavorazione==0:
         ore_medie=0
     else:
         ore_medie=comp_coll.ore_medie_lavorazione
-    if comp_coll.minuti_medi_lavorazione is None:
+    if comp_coll.minuti_medi_lavorazione is None or comp_coll.minuti_medi_lavorazione==0:
         minuti_medi=0
     else:
         minuti_medi=comp_coll.minuti_medi_lavorazione
-    if comp_coll.secondi_medi_lavorazione is None:
+    if comp_coll.secondi_medi_lavorazione is None or comp_coll.secondi_medi_lavorazione==0:
         secondi_medi=0
     else:
         secondi_medi = comp_coll.secondi_medi_lavorazione
     
     tempo_medio = timedelta(hours=ore_medie, minutes=minuti_medi, seconds=secondi_medi)
+    print(f'tempo medio: {tempo_medio}')
     tolleranza_percentuale = comp_coll.perc_tempo
     
     if tolleranza_percentuale==0 or tolleranza_percentuale is None:
