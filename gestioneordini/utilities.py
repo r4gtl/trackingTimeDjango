@@ -91,6 +91,8 @@ def get_tempo_medio(tempo, comp_coll):
     '''Restituisce i dati relativi al tempo medio inserito nell'app 
         anagrafica del codice componente/collegamento. C'è un primo controllo per verificare i campi,
         per passare poi al controllo e all'applicazione della tolleranza percentuale.
+        comp_coll: passare il componente/collegamento da analizzare;
+        tempo: è il tempo medio. Serve per calcolare se siamo in media o no.
     '''
     
     if comp_coll.ore_medie_lavorazione is None or comp_coll.ore_medie_lavorazione==0:
@@ -123,7 +125,27 @@ def get_tempo_medio(tempo, comp_coll):
         print("tempo medio funzione: " + str(tempo_medio) + " " + "tempo massimo: " + str(tempo_massimo_consentito))
         return False, tempo_medio, tempo_massimo_consentito, tolleranza_percentuale
         
-        
+def get_tempo_nominale(comp_coll):
+    '''06/07/2024: richiesto da Ivano. Abbiamo aggiunto i campi al modello TempoMaster, in modo da fotografare
+        quali erano i tempi medi consentiti alla data di chiusura del tempo.
+    '''
+    
+    if comp_coll.ore_medie_lavorazione is None or comp_coll.ore_medie_lavorazione==0:
+        ore_medie=0
+    else:
+        ore_medie=comp_coll.ore_medie_lavorazione
+    if comp_coll.minuti_medi_lavorazione is None or comp_coll.minuti_medi_lavorazione==0:
+        minuti_medi=0
+    else:
+        minuti_medi=comp_coll.minuti_medi_lavorazione
+    if comp_coll.secondi_medi_lavorazione is None or comp_coll.secondi_medi_lavorazione==0:
+        secondi_medi=0
+    else:
+        secondi_medi = comp_coll.secondi_medi_lavorazione
+    tolleranza_percentuale = comp_coll.perc_tempo
+    
+    return ore_medie, minuti_medi, secondi_medi, tolleranza_percentuale
+
 # Ivano chiede la differenza tra tempo di produzione e tempo nominale. Questa differenza va calcolata
 # come percentuale sul tempo maggiorato della percentuale di tolleranza. 02/10/2023        
 def get_perc_differenza(tempo_medio_produzione, tempo_massimo_consentito, tempo_medio_nominale):

@@ -428,6 +428,35 @@ class tblTempiMaster(models.Model):
     note_da_ufficio = models.CharField(max_length=240, blank=True, null=True)
     tempo_conforme = models.CharField(max_length=50, choices=CHOICES_MEDIA_TEMPO, default='Tempo OK')    
     note_tempo_nc = models.CharField(max_length=240, blank=True, null=True)
+    ore_medie_lavorazione = models.IntegerField(
+        default = 0,
+        null= True,
+        blank = True,
+        validators = [
+            MinValueValidator(0),
+            MaxValueValidator(99)
+        ]
+    )
+    minuti_medi_lavorazione = models.IntegerField(
+        default = 0,
+        null= True,
+        blank = True,
+        validators = [
+            MinValueValidator(0),
+            MaxValueValidator(60)
+        ]
+    )
+    secondi_medi_lavorazione = models.IntegerField(
+        default = 0,
+        null= True,
+        blank = True,
+        validators = [
+            MinValueValidator(0),
+            MaxValueValidator(60)
+        ]
+    )
+    perc_tempo = models.FloatField(blank=True, null=True, default = 0)
+    data_chiusura_tempo = models.DateField(blank=True, null=True, verbose_name="Data Chiusura")
 
     class Meta:
         managed = True

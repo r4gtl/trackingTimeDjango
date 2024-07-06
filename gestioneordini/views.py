@@ -28,6 +28,7 @@ from .utilities import (check_barcode,
                         get_sec,
                         get_if_media_tempo, get_tempo_medio,
                         get_perc_differenza,
+                        get_tempo_nominale,
 )
 
 
@@ -431,7 +432,8 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 'tempo_massimo_consentito': tempo_massimo_consentito,
                 'tolleranza_percentuale': tolleranza_percentuale,
                 'differenza_percentuale': differenza_percentuale,
-                'form_media_tempo': form_media_tempo
+                'form_media_tempo': form_media_tempo,
+                
                 
                 }
         return render(request, 'singolo_dettaglio.html', context)
@@ -613,10 +615,20 @@ def chiudi_lavorazione(request, pk, id_linea):
                         check_tempo=True
                         print("Check Tempo: " + str(check_tempo))
                         tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[0] 
+                        ore_medie_lavorazione = get_tempo_nominale(componente)[0]
+                        minuti_medi_lavorazione = get_tempo_nominale(componente)[1]
+                        secondi_medi_lavorazione = get_tempo_nominale(componente)[2]
+                        perc_tempo = get_tempo_nominale(componente)[3]
+                        data_chiusura_tempo=date.today()
                         dettaglio.tempo_conforme = "Tempo OK"
                         dettaglio.save()
         else:
                 print("Non esiste un tempo medio assegnato")
+                ore_medie_lavorazione = get_tempo_nominale(componente)[0]
+                minuti_medi_lavorazione = get_tempo_nominale(componente)[1]
+                secondi_medi_lavorazione = get_tempo_nominale(componente)[2]
+                perc_tempo = get_tempo_nominale(componente)[3]
+                data_chiusura_tempo=date.today()
                 dettaglio.tempo_conforme = "Tempo Non Conforme"
                 dettaglio.save()
                 

@@ -144,12 +144,10 @@
             <h4>Statistiche tempi</h4>
             <div class="row">
                 <div class="col-md-3 mt-2">
-                    {% if tempo_medio %}
-                    <p>Tempo nominale <strong>{{ tempo_medio }}</strong></p>
-                    {% endif %}
-                    {% if tolleranza_percentuale %}
-                    <p>Percentuale di tolleranza <strong>{{ tolleranza_percentuale }}%</strong></p>
-                    {% endif %}
+                    
+                    <p>Tempo nominale <strong>{% if tempo_medio %}{{ tempo_medio }}{% else %} Nessun tempo nominale inserito {% endif %}</strong></p>                    
+                    <p>Percentuale di tolleranza <strong>{% if tolleranza_percentuale %}{{ tolleranza_percentuale }}% {% else %} Nessuna tolleranza inserita {% endif %}</strong></p>                    
+                    
                     {% if tot_tempo_min_sec %}
                         <p>Tempo di produzione <strong>{{ tot_tempo_min_sec }}</strong></p>
                     {% endif %}
