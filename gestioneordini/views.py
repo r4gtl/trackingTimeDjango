@@ -636,6 +636,7 @@ def chiudi_lavorazione(request, pk, id_linea):
         #         dettaglio.tempo_conforme = "Tempo Non Conforme"
         #         dettaglio.save()
         
+        # 07/07/2024 - Modificata per ottenere il tempo e salvarlo nell'istanza.
         check_tempo, messaggio_tempo = get_if_media_tempo(componente)
         if check_tempo:
                 tempo_medio_check, tempo_medio, tempo_massimo_consentito, tolleranza_percentuale = get_tempo_medio(tempo_medio, componente)
