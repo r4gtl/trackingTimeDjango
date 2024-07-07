@@ -288,6 +288,7 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
         pezzi_tempo_master=tempomaster.quantity
         print(f"pezzi_tempo_master: {pezzi_tempo_master}")
         # query_dettaglio = linea.get_line()
+        data_chiusura_tempo=tempomaster.data_chiusura_tempo
         
         # Definisco la variabile 'componente' che mi servirà per i conteggi dei tempi
         if tempomaster.iddettordine.idcomponente:
@@ -433,6 +434,7 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 'tolleranza_percentuale': tolleranza_percentuale,
                 'differenza_percentuale': differenza_percentuale,
                 'form_media_tempo': form_media_tempo,
+                'data_chiusura_tempo': data_chiusura_tempo,
                 
                 
                 }
@@ -610,25 +612,54 @@ def chiudi_lavorazione(request, pk, id_linea):
                 componente = dettaglio.iddettordine.idcollegamento
         tempo_medio = timedelta(seconds=round((tot_tempo / dettaglio.quantity)))
         
-        if get_if_media_tempo(componente)[0]:
-                if get_tempo_medio(tempo_medio, componente)[0]:
-                        check_tempo=True
-                        print("Check Tempo: " + str(check_tempo))
-                        tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[0] 
-                        ore_medie_lavorazione = get_tempo_nominale(componente)[0]
-                        minuti_medi_lavorazione = get_tempo_nominale(componente)[1]
-                        secondi_medi_lavorazione = get_tempo_nominale(componente)[2]
-                        perc_tempo = get_tempo_nominale(componente)[3]
-                        data_chiusura_tempo=date.today()
+        # if get_if_media_tempo(componente)[0]:
+        #         if get_tempo_medio(tempo_medio, componente)[0]:
+        #                 check_tempo=True
+        #                 print("Check Tempo: " + str(check_tempo))
+        #                 dettaglio.tempo_massimo_consentito=get_tempo_medio(tempo_medio, componente)[0] 
+        #                 dettaglio.ore_medie_lavorazione = get_tempo_nominale(componente)[0]
+        #                 dettaglio.minuti_medi_lavorazione = get_tempo_nominale(componente)[1]
+        #                 dettaglio.secondi_medi_lavorazione = get_tempo_nominale(componente)[2]
+        #                 dettaglio.perc_tempo = get_tempo_nominale(componente)[3]
+        #                 dettaglio.data_chiusura_tempo=date.today()
+        #                 print(f'data_chiusura_tempo get_tempo_medio= True: {dettaglio.data_chiusura_tempo}')
+        #                 dettaglio.tempo_conforme = "Tempo OK"
+        #                 dettaglio.save()
+        # else:
+        #         print("Non esiste un tempo medio assegnato")
+        #         dettaglio.ore_medie_lavorazione = get_tempo_nominale(componente)[0]
+        #         dettaglio.minuti_medi_lavorazione = get_tempo_nominale(componente)[1]
+        #         dettaglio.secondi_medi_lavorazione = get_tempo_nominale(componente)[2]
+        #         dettaglio.perc_tempo = get_tempo_nominale(componente)[3]
+        #         dettaglio.data_chiusura_tempo=date.today()
+        #         print(f'data_chiusura_tempo get_tempo_medio= False: {dettaglio.data_chiusura_tempo}')
+        #         dettaglio.tempo_conforme = "Tempo Non Conforme"
+        #         dettaglio.save()
+        
+        check_tempo, messaggio_tempo = get_if_media_tempo(componente)
+        if check_tempo:
+                tempo_medio_check, tempo_medio, tempo_massimo_consentito, tolleranza_percentuale = get_tempo_medio(tempo_medio, componente)
+    
+                if tempo_medio_check:
+                        print("Check Tempo: " + str(tempo_medio_check))
+                        dettaglio.tempo_massimo_consentito = tempo_massimo_consentito
+                        dettaglio.ore_medie_lavorazione, dettaglio.minuti_medi_lavorazione, dettaglio.secondi_medi_lavorazione, dettaglio.perc_tempo = get_tempo_nominale(componente)
+                        dettaglio.data_chiusura_tempo = date.today()
+                        print(f'data_chiusura_tempo get_tempo_medio= True: {dettaglio.data_chiusura_tempo}')
                         dettaglio.tempo_conforme = "Tempo OK"
+                        dettaglio.save()
+                else:
+                        print("Tempo medio non conforme")
+                        dettaglio.ore_medie_lavorazione, dettaglio.minuti_medi_lavorazione, dettaglio.secondi_medi_lavorazione, dettaglio.perc_tempo = get_tempo_nominale(componente)
+                        dettaglio.data_chiusura_tempo = date.today()
+                        print(f'data_chiusura_tempo get_tempo_medio= False: {dettaglio.data_chiusura_tempo}')
+                        dettaglio.tempo_conforme = "Tempo Non Conforme"
                         dettaglio.save()
         else:
                 print("Non esiste un tempo medio assegnato")
-                ore_medie_lavorazione = get_tempo_nominale(componente)[0]
-                minuti_medi_lavorazione = get_tempo_nominale(componente)[1]
-                secondi_medi_lavorazione = get_tempo_nominale(componente)[2]
-                perc_tempo = get_tempo_nominale(componente)[3]
-                data_chiusura_tempo=date.today()
+                dettaglio.ore_medie_lavorazione, dettaglio.minuti_medi_lavorazione, dettaglio.secondi_medi_lavorazione, dettaglio.perc_tempo = get_tempo_nominale(componente)
+                dettaglio.data_chiusura_tempo = date.today()
+                print(f'data_chiusura_tempo get_tempo_medio= False: {dettaglio.data_chiusura_tempo}')
                 dettaglio.tempo_conforme = "Tempo Non Conforme"
                 dettaglio.save()
                 
