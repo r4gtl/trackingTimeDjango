@@ -29,6 +29,7 @@ from .utilities import (check_barcode,
                         get_if_media_tempo, get_tempo_medio,
                         get_perc_differenza,
                         get_tempo_nominale,
+                        get_tempo_nominale_registrato,
 )
 
 
@@ -414,6 +415,13 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 tempo_massimo_consentito='Media non presente'
                 tolleranza_percentuale=0
                 differenza_percentuale=0
+                
+        if data_chiusura_tempo:
+                tolleranza_percentuale=tempomaster.perc_tempo
+                tempo_medio = get_tempo_nominale_registrato(tempomaster)[0]
+                tempo_massimo_consentito = get_tempo_nominale_registrato(tempomaster)[1]
+                tempo_massimo_consentito= str(tempo_massimo_consentito).split('.')[0]
+                differenza_percentuale = get_perc_differenza(tot_tempo_min_sec, tempo_massimo_consentito, tempo_medio)
                 
                 
         

@@ -101,11 +101,12 @@ def get_tempo_medio(tempo, comp_coll):
         comp_coll: passare il componente/collegamento da analizzare;
         tempo: è il tempo medio. Serve per calcolare se siamo in media o no.
     '''
-    
+    print(f"comp_coll: {comp_coll}")
     if comp_coll.ore_medie_lavorazione is None or comp_coll.ore_medie_lavorazione==0:
         ore_medie=0
     else:
         ore_medie=comp_coll.ore_medie_lavorazione
+        
     if comp_coll.minuti_medi_lavorazione is None or comp_coll.minuti_medi_lavorazione==0:
         minuti_medi=0
     else:
@@ -114,9 +115,9 @@ def get_tempo_medio(tempo, comp_coll):
         secondi_medi=0
     else:
         secondi_medi = comp_coll.secondi_medi_lavorazione
-    
+    print(f"ore_medie: {ore_medie}; minuti_medi: {minuti_medi}; secondi_medi: {secondi_medi}")
     tempo_medio = timedelta(hours=ore_medie, minutes=minuti_medi, seconds=secondi_medi)
-    print(f'tempo medio: {tempo_medio}')
+    print(f'tempo medio in get_tempo_medio: {tempo_medio}')
     tolleranza_percentuale = comp_coll.perc_tempo
     
     if tolleranza_percentuale==0 or tolleranza_percentuale is None:
@@ -135,6 +136,7 @@ def get_tempo_medio(tempo, comp_coll):
 def get_tempo_nominale(comp_coll):
     '''06/07/2024: richiesto da Ivano. Abbiamo aggiunto i campi al modello TempoMaster, in modo da fotografare
         quali erano i tempi medi consentiti alla data di chiusura del tempo.
+    FORSE ELIMINA
     '''
     
     if comp_coll.ore_medie_lavorazione is None or comp_coll.ore_medie_lavorazione==0:
@@ -150,8 +152,38 @@ def get_tempo_nominale(comp_coll):
     else:
         secondi_medi = comp_coll.secondi_medi_lavorazione
     tolleranza_percentuale = comp_coll.perc_tempo
-    
+    print(f"comp_coll: " + str(comp_coll) + " ore_medie: " + str(ore_medie) + " minuti_medi: " + str(minuti_medi) + " secondi_medi: " + str(secondi_medi) + " perc: " + str(tolleranza_percentuale))
     return ore_medie, minuti_medi, secondi_medi, tolleranza_percentuale
+
+def get_tempo_nominale_registrato(tempomaster):
+    '''23/07/2024: richiesto da Ivano. Abbiamo aggiunto i campi al modello TempoMaster, in modo da fotografare
+        quali erano i tempi medi consentiti alla data di chiusura del tempo.
+    '''
+    
+    if tempomaster.ore_medie_lavorazione is None or tempomaster.ore_medie_lavorazione==0:
+        ore_medie=0
+    else:
+        ore_medie=tempomaster.ore_medie_lavorazione
+    if tempomaster.minuti_medi_lavorazione is None or tempomaster.minuti_medi_lavorazione==0:
+        minuti_medi=0
+    else:
+        minuti_medi=tempomaster.minuti_medi_lavorazione
+    if tempomaster.secondi_medi_lavorazione is None or tempomaster.secondi_medi_lavorazione==0:
+        secondi_medi=0
+    else:
+        secondi_medi = tempomaster.secondi_medi_lavorazione
+    tolleranza_percentuale = tempomaster.perc_tempo
+    tempo_medio_registrato = timedelta(hours=ore_medie, minutes=minuti_medi, seconds=secondi_medi)
+    print(f"tempo_medio_registrato get_tempo_nominale_registrato: {tempo_medio_registrato}")
+    if tolleranza_percentuale==0 or tolleranza_percentuale is None:
+        tempo_massimo_consentito = tempo_medio_registrato
+        tolleranza_percentuale==0
+    else:
+        tempo_massimo_consentito = tempo_medio_registrato + (tempo_medio_registrato * tolleranza_percentuale / 100)
+    
+    print(f"tempo_massimo_consentito get_tempo_nominale_registrato: {tempo_massimo_consentito}")
+    print(f"ore_medie: " + str(ore_medie) + " minuti_medi: " + str(minuti_medi) + " secondi_medi: " + str(secondi_medi) + " perc: " + str(tolleranza_percentuale))
+    return tempo_medio_registrato, tempo_massimo_consentito
 
 # Ivano chiede la differenza tra tempo di produzione e tempo nominale. Questa differenza va calcolata
 # come percentuale sul tempo maggiorato della percentuale di tolleranza. 02/10/2023        
