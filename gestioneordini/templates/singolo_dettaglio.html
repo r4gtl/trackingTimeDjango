@@ -147,7 +147,7 @@
                     
                     <p>Tempo nominale: <strong>{% if tempo_medio %}{{ tempo_medio }}{% else %} Non rilevato {% endif %}</strong></p>                    
                     <p>% tolleranza: <strong>{% if tolleranza_percentuale %}{{ tolleranza_percentuale }}% {% else %} Non rilevata {% endif %}</strong></p>                    
-                    <p>Data chiusura tempo: <strong>{{ data_chiusura_tempo }}</strong></p>
+                    <p>Data chiusura tempo: {% if data_chiusura_tempo %}<strong>{{ data_chiusura_tempo }} {% else %} Non Rilevata {% endif %}</strong></p>
                     {% if tot_tempo_min_sec %}
                         <p>Tempo di produzione <strong>{{ tot_tempo_min_sec }}</strong></p>
                     {% endif %}

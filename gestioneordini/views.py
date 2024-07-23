@@ -421,7 +421,13 @@ def mostra_operatori_linea(request, pk, id_linea, idtempomaster):
                 tempo_medio = get_tempo_nominale_registrato(tempomaster)[0]
                 tempo_massimo_consentito = get_tempo_nominale_registrato(tempomaster)[1]
                 tempo_massimo_consentito= str(tempo_massimo_consentito).split('.')[0]
-                differenza_percentuale = get_perc_differenza(tot_tempo_min_sec, tempo_massimo_consentito, tempo_medio)
+                if tempo_massimo_consentito != '0:00:00':
+                        if operatori_attivi:
+                                differenza_percentuale = get_perc_differenza(tot_tempo_min_sec, tempo_massimo_consentito, tempo_medio)
+                        else:
+                                differenza_percentuale = 0
+                else:
+                        differenza_percentuale = 0
                 
                 
         
