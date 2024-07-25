@@ -26,16 +26,16 @@
             <td>{{ operatori_attivi.idoperatore }}</td>
             <td>{{ operatori_attivi.idfase }}</td>  
             <td>{{ operatori_attivi.datatempo|date:'d/m/Y' }}</td>
-            <td>{{ operatori_attivi.orainizio }}</td>
+            <td>{{ operatori_attivi.orainizio|time:"H:i:s" }}</td>
             <!-- Se c'è un'ora fine minore dell'ora inizio la metto in rosso -->
             {% if operatori_attivi.orafine %} 
                 {% if operatori_attivi.orafine < operatori_attivi.orainizio %}
-                    <td style="color: red">{{ operatori_attivi.orafine|default_if_none:" " }}</td>
+                    <td style="color: red">{{ operatori_attivi.orafine|default_if_none:" "|time:"H:i:s" }}</td>
                 {% else %}
-                    <td>{{ operatori_attivi.orafine|default_if_none:" " }}</td>
+                    <td>{{ operatori_attivi.orafine|default_if_none:" "|time:"H:i:s" }}</td>
                 {% endif %}
             {% else %}
-                <td>{{ operatori_attivi.orafine|default_if_none:" " }}</td>
+                <td>{{ operatori_attivi.orafine|default_if_none:" "|time:"H:i:s" }}</td>
             {% endif %}
             <td style="text-align: center;">
                 <!-- Button trigger modal -->
