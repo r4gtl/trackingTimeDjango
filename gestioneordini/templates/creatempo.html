@@ -64,9 +64,23 @@
 </div>
 </form>
 </div>
-<script>
-    $(function() {
-        $( "#id_date_select" ).datetimepicker();
-    });
-</script>
 {% endblock content %}
+
+
+{% block scripts %}
+{{ block.super }}
+<script>
+$(document).ready(function() {
+    $('form').submit(function(e) {
+        var idfaseVal = $('#id_idfase').val();
+        console.log("Valore fase: " + idfaseVal);
+        var quantitaVal = $('#id_quantitatemporiparazione').val().trim();
+
+        if (idfaseVal === "7" && (quantitaVal === "" || quantitaVal === "0")) {
+            alert("Se la fase selezionata è Riparazione, la quantità tempo riparazione deve essere valorizzata!");
+            e.preventDefault(); // Blocca il submit
+        }
+    });
+});
+</script>
+{% endblock scripts %}
